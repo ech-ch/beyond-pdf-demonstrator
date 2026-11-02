@@ -1,0 +1,11 @@
+---
+title: "Spike S2 – Variante A (YAML-Kopfzeile in eingebundener Datei)"
+---
+
+# Formales {#sec-formales}
+
+Wert von `bb` in den Dokument-Metadaten: «{{< meta bb >}}».
+
+{{< include bausteine/variante-a-yaml.md >}}
+
+Text nach dem Include.

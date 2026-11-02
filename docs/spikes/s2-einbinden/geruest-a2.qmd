@@ -1,0 +1,11 @@
+---
+title: "Spike S2 – Variante A2 (zwei Bausteine mit YAML)"
+---
+
+# Formales {#sec-formales}
+
+Wert von `bb` in den Dokument-Metadaten: «{{< meta bb >}}».
+
+{{< include bausteine/variante-a-yaml.md >}}
+
+{{< include bausteine/variante-a2-yaml.md >}}

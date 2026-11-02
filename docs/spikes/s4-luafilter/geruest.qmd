@@ -1,0 +1,53 @@
+---
+title: "eCH-0003 – Leitfaden zur Genehmigung von Anträgen (Spike S4)"
+---
+
+# Einleitung {#sec-einleitung}
+
+## Status {#sec-status}
+
+## Anwendungsgebiet {#sec-anwendungsgebiet}
+
+## Prozessmodule {#sec-prozessmodule}
+
+### Erarbeitung {#sec-erarbeitung}
+
+### Formale Qualitätssicherung 1 {#sec-fq1}
+
+### Inhaltliche Qualitätssicherung 1 {#sec-iq1}
+
+### Öffentliche Konsultation {#sec-oeffentliche-konsultation}
+
+# Standard {#sec-standard}
+
+# Best Practice {#sec-best-practice}
+
+# Hilfsmittel {#sec-hilfsmittel}
+
+# White Paper {#sec-white-paper}
+
+# Fachgruppendokument {#sec-fachgruppendokument}
+
+# Formales {#sec-formales}
+
+## Zuteilung einer eCH-Nummer {#sec-zuteilung-ech-nummer}
+
+## Zulässige Formate der eingereichten Dokumente {#sec-zulaessige-formate bb="ech-0003-bb-zulässige-formate"}
+
+{{< include bausteine/versionierung.md >}}
+
+{{< include bausteine/variante-b-id.md >}}
+
+## Bearbeitungsstatus eines Dokuments {#sec-bearbeitungsstatus}
+
+## Tests Variante B {#sec-tests-b}
+
+Quarto-Querverweis auf ID ohne Präfix: @ech-0003-bb-reifegrad.
+
+Markdown-Link auf ID ohne Präfix: [Reifegrad](#ech-0003-bb-reifegrad).
+
+Markdown-Link auf Div-ID: [Baustein Schema](#bb-schema-eigene-version).
+
+# Anhang F – Formale Syntax für die Versionierung {#sec-anhang-f .appendix .unnumbered}
+
+Platzhalter.
