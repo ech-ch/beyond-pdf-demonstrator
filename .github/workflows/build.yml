@@ -1,0 +1,124 @@
+# Build des Demonstrators (MVP-Spezifikation 4.1, 4.2, 8 AP2; E16, E17, E22).
+#
+#   build    Prüfen -> Rendern (alle Formate in EINEM Aufruf) -> Word
+#            nachbearbeiten -> Ausgabe als Artefakt «website»
+#   pages    Veröffentlichen auf GitHub Pages, nur von main und nur, wenn
+#            build erfolgreich war. AUSGESCHALTET, bis die Freigabe zum
+#            Veröffentlichen vorliegt (E23, AP0a). Einschalten (ca. 15 Min.):
+#              1. Repo öffentlich schalten (Gratis-Plan: Pages nur öffentlich)
+#              2. Settings -> Pages -> Source: «GitHub Actions»
+#              3. Settings -> Secrets and variables -> Actions -> Variables:
+#                 PAGES_AKTIV = true
+#   release  Bei einem Tag v* ein GitHub-Release mit dem Word (E22)
+
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  QUARTO_VERSION: "1.10.19"   # festgelegt (E16); lokal dieselbe Version
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Quarto einrichten
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: ${{ env.QUARTO_VERSION }}
+
+      - name: Versionen
+        run: |
+          quarto --version
+          python --version
+
+      # Prüfungen nach MVP-Spezifikation 3.7 (AP7): tools/pruefe.py bricht
+      # bei einem Fehler ab, bevor gerendert wird.
+      - name: Prüfen
+        run: |
+          if [ -f tools/pruefe.py ]; then
+            python tools/pruefe.py
+          else
+            echo "::notice::Noch keine CI-Prüfungen (tools/pruefe.py folgt mit AP7)"
+          fi
+
+      # Alle Formate in einem Aufruf: `quarto render --to X` löscht im
+      # Website-Projekt die übrigen Formate (Spike S1).
+      - name: Rendern
+        run: quarto render
+
+      # Word füllt Inhaltsverzeichnis und Felder beim Öffnen (E17).
+      - name: Word nachbearbeiten
+        run: find _site -name '*.docx' -print0 | xargs -0 --no-run-if-empty python tools/set_docx_updatefields.py
+
+      - name: Ausgabe als Artefakt
+        uses: actions/upload-artifact@v4
+        with:
+          name: website
+          path: _site
+          retention-days: 30
+
+      - name: Pages-Artefakt
+        if: vars.PAGES_AKTIV == 'true' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  pages:
+    needs: build
+    if: vars.PAGES_AKTIV == 'true' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Auf GitHub Pages veröffentlichen
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Artefakt holen
+        uses: actions/download-artifact@v4
+        with:
+          name: website
+          path: website
+
+      - name: Release erstellen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          dateien=$(find website -name '*.docx' -o -name 'bausteine.json')
+          gh release create "${GITHUB_REF_NAME}" $dateien \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "${GITHUB_REF_NAME}" \
+            --notes "Demonstrator, kein offizieller eCH-Standard. Stand ${GITHUB_REF_NAME} (Commit ${GITHUB_SHA::7})."

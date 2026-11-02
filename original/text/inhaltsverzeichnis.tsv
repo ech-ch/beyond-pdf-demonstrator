@@ -1,0 +1,93 @@
+ebene	nummer	titel	seite	eigener_text
+1	1	Einleitung	6	nein
+2	1.1	Status	6	ja
+2	1.2	Anwendungsgebiet	6	ja
+3	1.2.1	Beschreibungsterminologie	6	ja
+2	1.3	Prozessmodule	6	ja
+3	1.3.1	Erarbeitung	7	ja
+3	1.3.2	Formale Qualitätssicherung 1	7	ja
+3	1.3.3	Inhaltliche Qualitätssicherung 1	8	ja
+3	1.3.4	Öffentliche Konsultation	10	ja
+3	1.3.5	Einarbeitung Rückmeldungen	10	ja
+3	1.3.6	Formale Qualitätssicherung 2	11	ja
+3	1.3.7	Inhaltliche Qualitätssicherung 2	11	ja
+3	1.3.8	Genehmigung/Ablehnung	11	ja
+3	1.3.9	Publikation	12	ja
+3	1.3.10	Überprüfung	12	ja
+2	1.4	Fristen und Termine	13	ja
+1	2	Standard	14	nein
+2	2.1	Einleitung	14	ja
+3	2.1.1	Interoperabilitätsstandard	14	ja
+3	2.1.2	Verfahrensstandard	14	ja
+3	2.1.3	Referenzierter Fremdstandard	14	ja
+3	2.1.4	Datenschemata	15	ja
+2	2.2	Antragstellende	15	ja
+2	2.3	Prozess	15	ja
+3	2.3.1	Erarbeitung	15	ja
+3	2.3.2	Formale Qualitätssicherung 1	16	ja
+3	2.3.3	Inhaltliche Qualitätssicherung 1	16	ja
+3	2.3.4	Öffentliche Konsultation und Einarbeitung Rückmeldungen	16	ja
+3	2.3.5	Formale Qualitätssicherung 2	16	ja
+3	2.3.6	Inhaltliche Qualitätssicherung 2	16	ja
+3	2.3.7	Genehmigung oder Ablehnung	16	ja
+3	2.3.8	Publikation	17	ja
+3	2.3.9	Überprüfung	17	ja
+1	3	Best Practice	18	nein
+2	3.1	Einleitung	18	ja
+2	3.2	Antragstellende	18	ja
+2	3.3	Prozess	18	ja
+3	3.3.1	Erarbeitung	18	ja
+3	3.3.2	Formale Qualitätssicherung 1	19	ja
+3	3.3.3	Inhaltliche Qualitätssicherung 1	19	ja
+3	3.3.4	Öffentliche Konsultation und Einarbeitung Rückmeldungen	19	ja
+3	3.3.5	Formale Qualitätssicherung 2	19	ja
+3	3.3.6	Inhaltliche Qualitätssicherung 2	19	ja
+3	3.3.7	Genehmigung/Ablehnung	19	ja
+3	3.3.8	Publikation	20	ja
+3	3.3.9	Überprüfung	20	ja
+1	4	Hilfsmittel	21	nein
+2	4.1	Einleitung	21	ja
+2	4.2	Antragstellende	21	ja
+2	4.3	Prozess	21	ja
+3	4.3.1	Erarbeitung	21	ja
+3	4.3.2	Formale Qualitätssicherung 1	21	ja
+3	4.3.3	Inhaltliche Qualitätssicherung 1	21	ja
+3	4.3.4	Genehmigung/Ablehnung	22	ja
+3	4.3.5	Publikation	22	ja
+3	4.3.6	Überprüfung	22	ja
+1	5	White Paper	23	nein
+2	5.1	Einleitung	23	ja
+2	5.2	Antragstellende	23	ja
+2	5.3	Prozess	23	ja
+3	5.3.1	Erarbeitung	23	ja
+3	5.3.2	Formale Qualitätssicherung 1	23	ja
+3	5.3.3	Inhaltliche Qualitätssicherung 1	23	ja
+3	5.3.4	Öffentliche Konsultation und Einarbeitung Rückmeldungen	24	ja
+3	5.3.5	Formale Qualitätssicherung 2	24	ja
+3	5.3.6	Inhaltliche Qualitätssicherung 2	24	ja
+3	5.3.7	Genehmigung/Ablehnung	24	ja
+3	5.3.8	Publikation	24	ja
+3	5.3.9	Überprüfung	25	ja
+1	6	Fachgruppendokument	26	nein
+2	6.1	Einleitung	26	ja
+2	6.2	Publikation	26	ja
+1	7	Formales	27	nein
+2	7.1	Zuteilung einer eCH-Nummer	27	ja
+2	7.2	Zulässige Formate der eingereichten Dokumente	27	ja
+2	7.3	Versionierung	27	ja
+2	7.4	Reifegrad eines Dokuments	28	ja
+2	7.5	Bearbeitungsstatus eines Dokuments	29	ja
+2	7.6	Formale Änderungen	29	ja
+2	7.7	Addendum	30	ja
+2	7.8	Minor Change	30	ja
+2	7.9	Major Change	31	ja
+2	7.10	Darstellung von Voraussetzungen und Abhängigkeiten	32	ja
+1	8	Sicherheitsüberlegungen	32	ja
+1	9	Haftungsausschluss/Hinweise auf Rechte Dritter	33	ja
+1	10	Urheberrechte	33	ja
+1	Anhang A	Referenzen & Bibliographie	34	ja
+1	Anhang B	Abkürzungen	34	ja
+1	Anhang C	Glossar	34	ja
+1	Anhang D	Änderungen gegenüber Vorversion	35	ja
+1	Anhang E	Abbildungsverzeichnis	36	ja
+1	Anhang F	Formale Syntax für die Versionierung	36	ja

@@ -1,0 +1,6 @@
+--- Seite 34 ---
+Anhang A – Referenzen & Bibliographie
+
+[ISO]	Standardisation and related activities – General vocabulary. ISO/IEC Guide 2 : 1996. Trilingual version EN 45020 : 1998.
+eCH-0150	eCH-0150: Change und Releasemanagement von eCH-Standards, Version 1.0
+SemVer	Semantic Versioning (https://semver.org/)

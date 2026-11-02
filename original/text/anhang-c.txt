@@ -1,0 +1,29 @@
+--- Seite 34 ---
+Anhang C – Glossar
+
+In diesem Teil des Glossars werden jene Begriffe aufgeführt, welche im vorliegenden Dokument Anwendung finden. Um den Lesefluss zu erleichtern wird im Text jeweils nur der Begriff verwendet und hier im Glossar zusätzlich die vollständig korrekte Bezeichnung geführt.
+
+Geschäftsstelle	Geschäftsstelle des Vereins eCH
+Expertenausschuss	Expertenausschuss des Vereins eCH
+Fachgruppe(n)	Fachgruppe(n) des Vereins eCH
+Referentinnen und Referenten	Referentinnen und Referenten des Expertenausschusses
+Vorstand	Vorstand des Vereins eCH
+Webseite	Webseite des Vereins eCH
+
+In diesem Teil des Glossars sind jene Begriffe aufgeführt, welche in den als Beilagen definierten Vorlagen Verwendung finden und dadurch einen eindeutigen Bezug zu diesem Standard herstellen. Sie werden auch als Metadaten verwendet.
+
+--- Seite 35 ---
+[MUSS] Diese reservierten Begriffe dürfen in den Vorlagen nur zusammen mit der Überarbeitung dieses Standards angepasst werden.
+
+eCH-Nummer	gemäss Kapitel 7.1 Zuteilung einer eCH-Nummer
+Kategorie	Die Kategorie entspricht der Antragsform gemäss Kapitel 1.2.
+Reifegrad	gemäss Kapitel 7.4 Reifegrad eines Dokuments
+Version	Die Version entspricht der Versionsnummer gemäss Kapitel 7.3 Versionierung.
+Ausgabedatum	Datum, welches die Version näher spezifiziert (vgl. dazu Ausführungen unter den Kapiteln 7.3 Versionierung und 7.6 Formale Änderungen).
+Ersetzt Version	Versionsnummer der Dokumentversion, die mit dem neuen Dokument ersetzt wird (vgl. auch Kapitel 7.3 Versionierung).
+Status	gemäss Kapitel 7.5 Bearbeitungsstatus eines Dokuments
+Beschluss am	Datum, an welchem das zuständige Gremium den Beschluss gefällt hat (Status «Genehmigt», «Aufgehoben» oder «Sistiert»).
+Überprüft am	Datum, an welchem die letzte Überprüfung gemäss Kapitel 1.3.10 Überprüfung stattgefunden hat.
+Voraussetzungen	gemäss Kapitel 7.10 Darstellung von Voraussetzungen und Abhängigkeiten
+Beilagen	Beilagen, welche zu einem Dokument gehören und gleichzeitig publiziert sind.
+Sprachen	Sprache(n), in denen das Dokument publiziert ist (vgl. auch Kapitel 1.3.9 Publikation).

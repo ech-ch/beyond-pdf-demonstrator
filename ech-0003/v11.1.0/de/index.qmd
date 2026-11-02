@@ -1,0 +1,220 @@
+---
+title: "Leitfaden zur Genehmigung von Anträgen"
+lang: de
+abstract: "Der vorliegende Standard definiert gemäss den Statuten des Vereins eCH Art. 40 Abs. 3 den Standardisierungsprozess des Vereins eCH."
+# Sprachabhängige Ebene 0 (Deckblatt). Die sprachneutralen Werte unter `ech`
+# stehen in ../_metadata.yml; ein `ech:` hier würde sie ganz ersetzen.
+beilagen:
+  - "Vorlage je in Deutsch, Französisch und Englisch für Standard, Best Practice, Hilfsmittel, White Paper und Addendum"
+  - "XXXX_d_DRA_JJJJ-MM-TT_eCH-0XXX_Vx.x.x_Titel.docx"
+  - "XXXX_f_DRA_JJJJ-MM-TT_eCH-0XXX_Vx.x.x_Titre.docx"
+  - "XXXX_e_DRA_JJJJ-MM-TT_eCH-0XXX_Vx.x.x_Titel.docx"
+autoren:
+  - "Mitglieder des Expertenausschusses, Verein eCH"
+  - "Mitarbeitende der Geschäftsstelle, Verein eCH"
+format:
+  html: default
+  docx:
+    output-file: DEMO_eCH-0003_V11.1.0_de.docx   # bewusst kein eCH-Dateiname (E18)
+---
+
+<!--
+Gerüst von eCH-0003 V11.1.0 (E05): alle Überschriften des Originals in
+dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
+
+- Feste Anker (#sec-…) nur für Pilotkapitel und Verweisziele (1.3.4, 1.3.9,
+  1.3.10); alle übrigen Überschriften erhalten einen provisorischen Anker.
+- `.platzhalter`: Inhalt nicht überführt; filters/ech_platzhalter.lua setzt
+  den Hinweis mit Link auf die Seite im Original. Hauptkapitel ohne eigenen
+  Text haben keinen Platzhalter.
+- `.appendix`: Anhang; filters/ech_anhang.lua vergibt die Buchstaben.
+- Überführte Kapitel ersetzen ihre Überschrift durch
+  {{< include bausteine/<kurzname>.md >}} (AP5, AP12, AP13).
+-->
+
+# Einleitung {original-seite="6"}
+
+## Status {#sec-status original-seite="6"}
+
+{{< statustext >}}
+
+## Anwendungsgebiet {#sec-anwendungsgebiet .platzhalter original-seite="6"}
+
+### Beschreibungsterminologie {#sec-beschreibungsterminologie .platzhalter original-seite="6"}
+
+## Prozessmodule {.platzhalter original-seite="6"}
+
+### Erarbeitung {.platzhalter original-seite="7"}
+
+### Formale Qualitätssicherung 1 {.platzhalter original-seite="7"}
+
+### Inhaltliche Qualitätssicherung 1 {.platzhalter original-seite="8"}
+
+### Öffentliche Konsultation {#sec-oeffentliche-konsultation .platzhalter original-seite="10"}
+
+### Einarbeitung Rückmeldungen {.platzhalter original-seite="10"}
+
+### Formale Qualitätssicherung 2 {.platzhalter original-seite="11"}
+
+### Inhaltliche Qualitätssicherung 2 {.platzhalter original-seite="11"}
+
+### Genehmigung/Ablehnung {.platzhalter original-seite="11"}
+
+### Publikation {#sec-publikation .platzhalter original-seite="12"}
+
+### Überprüfung {#sec-ueberpruefung .platzhalter original-seite="12"}
+
+## Fristen und Termine {.platzhalter original-seite="13"}
+
+# Standard {original-seite="14"}
+
+## Einleitung {.platzhalter original-seite="14"}
+
+### Interoperabilitätsstandard {.platzhalter original-seite="14"}
+
+### Verfahrensstandard {.platzhalter original-seite="14"}
+
+### Referenzierter Fremdstandard {.platzhalter original-seite="14"}
+
+### Datenschemata {.platzhalter original-seite="15"}
+
+## Antragstellende {.platzhalter original-seite="15"}
+
+## Prozess {.platzhalter original-seite="15"}
+
+### Erarbeitung {.platzhalter original-seite="15"}
+
+### Formale Qualitätssicherung 1 {.platzhalter original-seite="16"}
+
+### Inhaltliche Qualitätssicherung 1 {.platzhalter original-seite="16"}
+
+### Öffentliche Konsultation und Einarbeitung Rückmeldungen {.platzhalter original-seite="16"}
+
+### Formale Qualitätssicherung 2 {.platzhalter original-seite="16"}
+
+### Inhaltliche Qualitätssicherung 2 {.platzhalter original-seite="16"}
+
+### Genehmigung oder Ablehnung {.platzhalter original-seite="16"}
+
+### Publikation {.platzhalter original-seite="17"}
+
+### Überprüfung {.platzhalter original-seite="17"}
+
+# Best Practice {original-seite="18"}
+
+## Einleitung {.platzhalter original-seite="18"}
+
+## Antragstellende {.platzhalter original-seite="18"}
+
+## Prozess {.platzhalter original-seite="18"}
+
+### Erarbeitung {.platzhalter original-seite="18"}
+
+### Formale Qualitätssicherung 1 {.platzhalter original-seite="19"}
+
+### Inhaltliche Qualitätssicherung 1 {.platzhalter original-seite="19"}
+
+### Öffentliche Konsultation und Einarbeitung Rückmeldungen {.platzhalter original-seite="19"}
+
+### Formale Qualitätssicherung 2 {.platzhalter original-seite="19"}
+
+### Inhaltliche Qualitätssicherung 2 {.platzhalter original-seite="19"}
+
+### Genehmigung/Ablehnung {.platzhalter original-seite="19"}
+
+### Publikation {.platzhalter original-seite="20"}
+
+### Überprüfung {.platzhalter original-seite="20"}
+
+# Hilfsmittel {original-seite="21"}
+
+## Einleitung {.platzhalter original-seite="21"}
+
+## Antragstellende {.platzhalter original-seite="21"}
+
+## Prozess {.platzhalter original-seite="21"}
+
+### Erarbeitung {.platzhalter original-seite="21"}
+
+### Formale Qualitätssicherung 1 {.platzhalter original-seite="21"}
+
+### Inhaltliche Qualitätssicherung 1 {.platzhalter original-seite="21"}
+
+### Genehmigung/Ablehnung {.platzhalter original-seite="22"}
+
+### Publikation {.platzhalter original-seite="22"}
+
+### Überprüfung {.platzhalter original-seite="22"}
+
+# White Paper {original-seite="23"}
+
+## Einleitung {.platzhalter original-seite="23"}
+
+## Antragstellende {.platzhalter original-seite="23"}
+
+## Prozess {.platzhalter original-seite="23"}
+
+### Erarbeitung {.platzhalter original-seite="23"}
+
+### Formale Qualitätssicherung 1 {.platzhalter original-seite="23"}
+
+### Inhaltliche Qualitätssicherung 1 {.platzhalter original-seite="23"}
+
+### Öffentliche Konsultation und Einarbeitung Rückmeldungen {.platzhalter original-seite="24"}
+
+### Formale Qualitätssicherung 2 {.platzhalter original-seite="24"}
+
+### Inhaltliche Qualitätssicherung 2 {.platzhalter original-seite="24"}
+
+### Genehmigung/Ablehnung {.platzhalter original-seite="24"}
+
+### Publikation {.platzhalter original-seite="24"}
+
+### Überprüfung {.platzhalter original-seite="25"}
+
+# Fachgruppendokument {original-seite="26"}
+
+## Einleitung {.platzhalter original-seite="26"}
+
+## Publikation {.platzhalter original-seite="26"}
+
+# Formales {#sec-formales original-seite="27"}
+
+## Zuteilung einer eCH-Nummer {#sec-zuteilung-ech-nummer .platzhalter original-seite="27"}
+
+## Zulässige Formate der eingereichten Dokumente {#sec-zulaessige-formate .platzhalter original-seite="27"}
+
+## Versionierung {#sec-versionierung .platzhalter original-seite="27"}
+
+## Reifegrad eines Dokuments {#sec-reifegrad .platzhalter original-seite="28"}
+
+## Bearbeitungsstatus eines Dokuments {#sec-bearbeitungsstatus .platzhalter original-seite="29"}
+
+## Formale Änderungen {#sec-formale-aenderungen .platzhalter original-seite="29"}
+
+## Addendum {#sec-addendum .platzhalter original-seite="30"}
+
+## Minor Change {#sec-minor-change .platzhalter original-seite="30"}
+
+## Major Change {#sec-major-change .platzhalter original-seite="31"}
+
+## Darstellung von Voraussetzungen und Abhängigkeiten {#sec-voraussetzungen-abhaengigkeiten .platzhalter original-seite="32"}
+
+# Sicherheitsüberlegungen {#sec-sicherheitsueberlegungen .platzhalter original-seite="32"}
+
+# Haftungsausschluss/Hinweise auf Rechte Dritter {#sec-haftungsausschluss .platzhalter original-seite="33"}
+
+# Urheberrechte {#sec-urheberrechte .platzhalter original-seite="33"}
+
+# Referenzen & Bibliographie {#sec-referenzen .appendix .platzhalter original-seite="34"}
+
+# Abkürzungen {.appendix .platzhalter original-seite="34"}
+
+# Glossar {#sec-glossar .appendix .platzhalter original-seite="34"}
+
+# Änderungen gegenüber Vorversion {.appendix .platzhalter original-seite="35"}
+
+# Abbildungsverzeichnis {.appendix .platzhalter original-seite="36"}
+
+# Formale Syntax für die Versionierung {#sec-formale-syntax .appendix .platzhalter original-seite="36"}
+

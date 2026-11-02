@@ -1,0 +1,11 @@
+# Erzeugt von Quarto (MVP-Spezifikation 4.5). «/.quarto/» genau so, sonst
+# hängt Quarto die Zeile beim Rendern selbst an.
+_site/
+/.quarto/
+*_files/
+**/*.quarto_ipynb
+
+# Lokale Ausgaben und Werkzeuge
+__pycache__/
+*.pyc
+~$*.docx

@@ -1,0 +1,65 @@
+# Deckblatt, Vorlage-Fassung 2022 (ADR 0005, E14, MVP-Spezifikation 5.2).
+#
+# Beschriftungen, Reihenfolge und Herausgeber/Vertrieb wie auf dem Deckblatt
+# von eCH-0003 V11.1.0 (Seite 1). Die Codes der Metadaten
+# (ech-0003/v11.1.0/_metadata.yml) werden hier in Werte übersetzt; die
+# Werte stammen aus demselben Original:
+#   kategorie   Kap. 1.2 und Beilagen (Antragsformen mit Vorlage)
+#   reifegrad   Kap. 7.4
+#   status      Kap. 7.5
+#   aenderung   Kap. 7.8, 7.9 und Deckblatt («11.0.0 – Minor Change»)
+#   sprache     Deckblatt (Sprachen, Beilagen)
+# Ein Code ohne Wert bricht den Build ab.
+
+de:
+  reihenfolge: [name, nummer, kategorie, reifegrad, version, status, beschluss-am,
+    ausgabedatum, ersetzt, voraussetzungen, beilagen, sprachen, autoren, herausgeber]
+  beschriftungen:
+    name: Name
+    nummer: eCH-Nummer
+    kategorie: Kategorie
+    reifegrad: Reifegrad
+    version: Version
+    status: Status
+    beschluss-am: Beschluss am
+    ausgabedatum: Ausgabedatum
+    ersetzt: Ersetzt Version
+    voraussetzungen: Voraussetzungen
+    beilagen: Beilagen
+    sprachen: Sprachen
+    autoren: Autoren
+    herausgeber: Herausgeber / Vertrieb
+    zusammenfassung: Zusammenfassung
+  leer: "-"
+  kategorie:
+    standard: Standard
+    best-practice: Best Practice
+    hilfsmittel: Hilfsmittel
+    white-paper: White Paper
+    addendum: Addendum
+  reifegrad:
+    definiert: Definiert
+    implementiert: Implementiert
+    verbreitet: Verbreitet
+    auslaufend: Auslaufend
+  status:
+    in-arbeit: In Arbeit
+    entwurf: Entwurf
+    vorschlag: Vorschlag
+    genehmigt: Genehmigt
+    abgeloest: Abgelöst
+    aufgehoben: Aufgehoben
+    sistiert: Sistiert
+  aenderung:
+    minor: Minor Change
+    major: Major Change
+  sprache:
+    de: Deutsch
+    fr: Französisch
+    en: Englisch
+  original: Original
+  uebersetzung: Übersetzung
+  herausgeber:
+    - Verein eCH, Mainaustrasse 30, Postfach, 8034 Zürich
+    - T 044 388 74 64, F 044 388 71 80
+    - www.ech.ch / info@ech.ch

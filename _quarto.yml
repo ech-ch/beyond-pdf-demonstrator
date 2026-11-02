@@ -1,0 +1,76 @@
+# Website-Projekt des Demonstrators (MVP-Spezifikation 4.1, 4.3, 4.5).
+#
+# Alle Formate entstehen in EINEM Aufruf `quarto render` (Spike S1:
+# `quarto render --to X` löscht im Website-Projekt die anderen Formate).
+# Die render-Liste ist explizit: docs/ und original/ werden nicht gerendert.
+
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - ech-0003/v11.1.0/de/index.qmd
+  resources:
+    - original/eCH-0003_V11.1.0_d.pdf   # Linkziel der Platzhalter (E05)
+
+lang: de
+
+# Basis-URL für Links im Word (Platzhalter auf das Original-PDF). Gleich wie
+# website.site-url, das Lua-Filter nicht sehen.
+demonstrator-url: https://ech-ch.github.io/beyond-pdf-demonstrator/
+
+website:
+  title: "Beyond PDF – Demonstrator"
+  site-url: https://ech-ch.github.io/beyond-pdf-demonstrator/
+  repo-url: https://github.com/ech-ch/beyond-pdf-demonstrator
+  favicon: assets/favicon.svg
+  navbar:
+    background: dark
+    logo: assets/ech.svg
+    logo-alt: eCH
+    left:
+      - text: Startseite
+        href: index.qmd
+      - text: eCH-0003 V11.1.0
+        href: ech-0003/v11.1.0/de/index.qmd
+    right:
+      - icon: github
+        href: https://github.com/ech-ch/beyond-pdf-demonstrator
+        aria-label: GitHub
+  # Hinweis auf jeder Seite (D5, E03)
+  announcement:
+    icon: exclamation-triangle
+    dismissable: false
+    type: warning
+    content: "**Demonstrator, kein offizieller eCH-Standard.** Massgebend ist allein die auf [ech.ch](https://www.ech.ch) publizierte Fassung."
+
+# Filter: vor `quarto` Metadaten, Anhänge und Platzhalter; nach `quarto`
+# Titelverweise und (nur Word) die Nummerierung durch die Vorlage.
+filters:
+  - filters/ech_metadata.lua      # Deckblatt der Website (FOAG)
+  - filters/ech_anhang.lua        # Anhangsbuchstaben und Verweise (E15)
+  - filters/ech_platzhalter.lua   # Platzhalter unter nicht überführten Überschriften (E05)
+  - quarto
+  - filters/ech_titelref.lua      # [-@sec-x]{.mit-titel} (E11)
+  - filters/ech_docx_nummern.lua  # nur DOCX: Word nummeriert (Spike S3, Lösung A)
+shortcodes:
+  - filters/ech_shortcodes.lua    # {{< statustext >}} (E14)
+
+number-sections: true
+
+format:
+  html:
+    theme:
+      light: [cosmo, assets/ech.scss]
+      dark: [cosmo, assets/ech.scss, assets/ech_dark.scss]
+    template-partials:
+      - assets/title-metadata.html
+    toc: true
+    toc-depth: 3
+    toc-title: Inhaltsverzeichnis
+    reference-location: margin
+  docx:
+    reference-doc: vorlage/word/ech-vorlage-d-2025-11-28.docx   # lokale Kopie (E16)
+    toc: true          # bis zum Deckblatt-Filter (E17, AP6)
+    toc-depth: 3
+    toc-title: Inhaltsverzeichnis

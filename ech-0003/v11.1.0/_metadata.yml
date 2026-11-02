@@ -1,0 +1,31 @@
+# Ebene 0 von eCH-0003 V11.1.0, sprachneutral (MVP-Spezifikation 5.4).
+#
+# Gilt für alle Seiten unter ech-0003/v11.1.0/. Die Werte sind Codes; die
+# Beschriftungen liefert die Vorlage-Fassung (vorlage/<fassung>/deckblatt.yml,
+# ADR 0005). Sprachabhängige Werte (Name, Zusammenfassung, Beilagen, Autoren)
+# stehen in der Kopfzeile der Sprachfassung, z.B. de/index.qmd (eigene Felder,
+# weil ein `ech:` dort diesen Block ganz ersetzen würde).
+
+ech:
+  nummer: eCH-0003
+  kategorie: standard          # Codes: vorlage/<fassung>/deckblatt.yml
+  reifegrad: verbreitet
+  version: 11.1.0
+  status: genehmigt            # braucht einen Statustext in der Vorlage-Fassung
+  beschluss-am: "2022-06-22"
+  ausgabedatum: "2022-07-25"
+  ersetzt:
+    version: 11.0.0
+    aenderung: minor
+  voraussetzungen: []
+  sprachen:
+    original: de
+    uebersetzungen: [fr]
+
+# Vorlage-Fassung (ADR 0005): Vorlagentexte, Statustexte, Deckblatt
+vorlage: "2022"
+
+# Herkunft (E09): Original, aus dem der Standard überführt wird. Ohne
+# Original (direkt im neuen Ansatz verfasst) fallen beide Felder weg.
+original: eCH-0003 V11.1.0
+original-pdf: original/eCH-0003_V11.1.0_d.pdf   # Pfad ab Projektordner

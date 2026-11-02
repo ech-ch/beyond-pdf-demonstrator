@@ -1,0 +1,17 @@
+---
+title: "Beyond PDF – Demonstrator"
+subtitle: "eCH-Standards aus Bausteinen"
+format: html
+number-sections: false
+toc: false
+---
+
+::: {.callout-warning appearance="simple"}
+**Demonstrator, kein offizieller eCH-Standard.** Diese Website zeigt einen Versuch des Vereins eCH. Massgebend ist allein die auf [ech.ch](https://www.ech.ch) publizierte Fassung von eCH-0003.
+:::
+
+Der Demonstrator zerlegt den Standard eCH-0003 V11.1.0 «Leitfaden zur Genehmigung von Anträgen» in Bausteine mit stabiler ID. Aus den Bausteinen entstehen wieder ein Word-Dokument und diese Website.
+
+- [eCH-0003 V11.1.0 ansehen](ech-0003/v11.1.0/de/index.qmd)
+
+Die Website ist im Aufbau. Abschnitte, die noch nicht in Bausteine überführt sind, tragen einen Platzhalter mit Verweis auf die entsprechende Seite im Original.

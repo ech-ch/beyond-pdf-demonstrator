@@ -1,0 +1,8 @@
+# Statustexte für 1.1 «Status», Vorlage-Fassung 2022 (ADR 0005, E14).
+#
+# Der Statustext ist ein fester Satz der Vorlage, nicht aus Kap. 7.5
+# abgeleitet. Von der Fassung 2022 ist nur belegt, was im Original sichtbar
+# ist: eCH-0003 V11.1.0, Seite 6. Ein Status ohne Eintrag bricht den Build ab.
+
+de:
+  genehmigt: "Genehmigt: Das Dokument wurde vom Vorstand genehmigt. Es hat für das definierte Einsatzgebiet im festgelegten Gültigkeitsbereich normative Kraft."

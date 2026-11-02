@@ -1,0 +1,20 @@
+--- Seite 6 ---
+1 Einleitung
+
+1.1 Status
+
+Genehmigt: Das Dokument wurde vom Vorstand genehmigt. Es hat für das definierte Einsatzgebiet im festgelegten Gültigkeitsbereich normative Kraft.
+
+1.2 Anwendungsgebiet
+
+Der vorliegende Standard definiert die Prozesse («Lebenszyklen») um die normativen und materiellen Antragsformen des Vereins eCH: Standards, Best Practices, Hilfsmittel und White Papers. Durch Definition der Abläufe, Akteure, und Fristen soll die Verbindlichkeit gestärkt, durch Festlegung von einheitlichen Beurteilungskriterien die objektive Bewertung der eingereichten Dokumente ermöglicht werden.
+
+1.2.1 Beschreibungsterminologie
+
+Um den normativen Charakter eines eCH-Standards möglichst unmissverständlich zu beschreiben, gilt die folgende Terminologie:
+
+Richtlinie	Eine Richtlinie ist eine zwingende Vorgabe, welche eingehalten werden muss, um den Standard zu erfüllen. Sie ist durch die Schlüsselworte MUSS beziehungsweise DARF NICHT gekennzeichnet.
+Empfehlung	Eine Empfehlung ist eine nicht zwingende Vorgabe. Sie sollte für eine verbesserte Interoperabilität eingehalten werden, hat aber hinsichtlich der Erfüllung des Standards keine Wirkung. Sie ist durch das Schlüsselwort SOLLTE gekennzeichnet.
+MUSS	Dieses Schlüsselwort bedeutet, dass die formulierte Richtlinie in jedem Fall erfüllt sein muss.
+DARF NICHT	Dieses Schlüsselwort bedeutet, dass die formulierte Richtlinie ein absolutes Verbot darstellt.
+SOLLTE	Dieses Schlüsselwort bedeutet, dass unter Umständen gute Gründe existieren, die formulierte Empfehlung nicht umzusetzen. Es müssen jedoch sämtliche Auswirkungen verstanden und sorgfältig abgewogen werden, bevor die Empfehlung nicht befolgt wird.

@@ -1,0 +1,183 @@
+--- Seite 27 ---
+7 Formales
+
+7.1 Zuteilung einer eCH-Nummer
+
+[MUSS] Bevor die Arbeiten an einem Standard, einer Best Practice, einem Hilfsmittel oder einem White Paper beginnen, beantragen die Antragstellenden bei der Geschäftsstelle (info@ech.ch) eine eCH-Nummer.
+
+[DARF NICHT] Es besteht hierbei kein Anspruch auf eine bestimmte Nummer, diese werden nach Eingang vergeben.
+
+[SOLLTE] Zugeteilte eCH-Nummern, welche nicht innerhalb von 18 Monaten zu einem Antrag an den Expertenausschuss führen, werden von der Geschäftsstelle wieder freigegeben.
+
+7.2 Zulässige Formate der eingereichten Dokumente
+
+[MUSS] Es werden nur Dokumente in bearbeitbaren Formaten angenommen, also keine PDF- oder Bilddateien.
+
+[SOLLTE] Diagramme oder Grafiken werden im jeweiligen Ursprungsformat unaufgefordert beigelegt, damit die Überarbeitung für zukünftige Versionen sichergestellt und die Übersetzung der Diagramme oder Grafiken möglich ist.
+
+[MUSS] Sind Diagramme oder Grafiken im Ursprungsformat nicht (mehr) vorhanden, können diese als Bilddatei in einem gängigen Format wie JPG oder PNG eingereicht werden.
+
+[MUSS] Die Antragstellenden stellen sicher, dass die Übersetzungsdienste die Diagramme und Grafiken unabhängig von spezifischen Programmen und Werkzeugen übersetzen können oder sorgen selbst für eine professionelle Übersetzung.
+
+7.3 Versionierung
+
+[MUSS] Bei der Versionierung sämtlicher Antragsformen gilt das Prinzip der Zielversion. Das heisst ein Dokument behält über sämtliche Prozessschritte die gleiche Versionsnummer. Diese wird durch den Bearbeitungsstatus (siehe Kapitel 7.5) sowie das Ausgabedatum weiter spezifiziert.
+
+[MUSS] Die Struktur erfolgt gemäss «Semantic Versioning»[SemVer]. eCH setzt nur die Hauptelemente dieses Versionierungsschemas ein und nutzt die optionalen nicht. Es handelt sich um:
+
+- Hauptversionsnummer (engl. «major version»)
+- Nebenversionsnummer (engl. «minor version») auf inhaltlicher Ebene
+- Nebenversionsnummer (engl. «patch version») auf formaler Ebene.
+
+Die einzelnen Nummern erscheinen nacheinander und sind durch einen Punkt getrennt, z.B. «3.7.1»
+
+Die Nummer sind nicht als Zahlen im mathematischen Sinn zu interpretieren, sondern als Codierungen. Die formale Syntax für das von eCH verwendete Schema ist Anhang F unten zu entnehmen.
+
+Hauptversionen (Major) werden durch eine ganze Versionsnummer ausgedrückt, Nebenversionen (Minor) durch «Zehntel» und Patches durch «Hundertstel». Die erste Version eines eCH-Dokuments oder eines eCH-Datenschemas ist demnach die Version 1.0.0.
+
+--- Seite 28 ---
+Es ist nicht gestattet, Versionsnummer zu überspringen. Unabhängig davon, ob es sich um eine Hauptversion, eine inhaltliche Nebenversion oder eine formale Nebenversion handelt, wird der numerische Wert der vorangehenden Version um den Wert 1 erhöht. Es ergibt sich in jedem Fall eine lückenlose Nummerierung.
+
+Ein Vergleich zwischen Versionen findet von rechts nach links statt, ausgehend von der formalen Nebenversion über die inhaltliche Nebenversion bis zur Hauptversion. Bei jedem Schritt wird der numerische Wert der ersten Version mit dem numerischen Wert der zweiten Version an der jeweiligen Stelle verglichen. Ist ein Wert höher, wenn die anderen gleich oder tiefer sind, gilt diese Version insgesamt als «höher» in Bezug zur anderen.
+
+[MUSS] Bei eCH-Dokumenten führt eine punktuelle Überarbeitung gemäss Kapitel 7.8 in der Regel zu einer neuen inhaltlichen Nebenversion (als erste Version 1.1.0) und eine umfassende Überarbeitung gemäss Kapitel 7.9 zu einer neuen Hauptversion (Version 2.0.0). Typografische Anpassungen oder sprachlich-formale Änderungen führen zu einer neuen formalen Nebenversion (als erste Version 1.0.1).
+
+[MUSS] Besteht nebst einem eCH-Dokument auch ein Schema, so erhalten das Dokument und das Schema je eine eigene, unabhängige Versionsnummer.
+
+[MUSS] Bei Datenschemata führen gegenüber der Vorversion inkompatible Änderungen oder neue, zwingende Attribute zu einer neuen Hauptversion, kompatible Änderungen oder neue, optionale Attribute zu einer inhaltlichen Nebenversion und formale Änderungen ohne Auswirkung auf Implementierung oder Anwendung zu einer formalen Nebenversion.
+
+[MUSS] Im eCH-Dokument ist festzuhalten, welche Version(en) des Schemas mit der Version des Dokuments korrespondieren.
+
+[MUSS] Referenziert ein eCH-Dokument eine externe Quelle (gedruckt oder online), sind Änderungen der externen Quelle im eCH-Dokument festzuhalten oder diesbezüglich auf ein öffentlich verfügbares Protokoll in Textform zu verweisen. Die Versionierung des eCH-Dokuments erfolgt gemäss Kapitel 7.3. Trägt die externe Quelle eine eigene Versionsnummer (z.B. Home (admin.ch)), ist die Versionierung des eCH-Dokuments mit der externen Quelle zu synchronisieren. Ändert sich die Hauptversion der externen Quelle, ändert sich zwingend auch die Hauptversion des eCH-Dokuments, unabhängig von weiteren Änderungen im eCH-Dokument. In der Folge ist gemäss Unterkapitel 1.3.4 eine öffentliche Konsultation durchzuführen.
+
+7.4 Reifegrad eines Dokuments
+
+Der Reifegrad gibt über die Erprobtheit der Dokumente Auskunft.
+
+[MUSS] Die Reifegrade werden folgendermassen definiert:
+
+- Definiert: Der Standard ist für die Implementierung freigegeben, jedoch noch nicht oder erst teilweise in der Praxis erprobt.
+- Implementiert: Der Standard war an mehreren Orten über ein volles Kalenderjahr produktiv im Einsatz, d.h. auch mindestens ein Jahr formal in Kraft.
+
+--- Seite 29 ---
+- Verbreitet: Der Standard findet bei einem namhaften Teil des Zielpublikums Verwendung und ist seit mehr als ein Jahr im produktiven Einsatz, d.h. auch mehr als ein Jahr formal in Kraft.
+- Auslaufend: Die Verbreitung des Standards in dieser Version ist abnehmend, da neuere Versionen vorliegen, die den Reifegrad «Verbreitet» haben.
+
+[SOLLTE] Der Reifegrad eines Standards in einer bestimmten Version soll durch die Fachgruppe jährlich überprüft werden. Nötige Anpassungen des Reifegrads werden der Geschäftsstelle gemeldet.
+
+7.5 Bearbeitungsstatus eines Dokuments
+
+Der Bearbeitungsstatus dient dazu, aufzuzeigen, in welchem Prozessschritt sich ein Dokument befindet.
+
+[MUSS] Es werden dazu folgende Status verwendet:
+
+- In Arbeit: Der Gebrauch ist nur innerhalb der Fachgruppe, beziehungsweise im Expertenausschuss zugelassen.
+- Entwurf: Das Dokument wurde von den zuständigen Referentinnen und Referenten aus dem Expertenausschuss zur öffentlichen Konsultation freigegeben und entsprechend publiziert. Bleibt das Dokument mehr als neun Monate in diesem Status, kann die Geschäftsstelle dem Expertenausschuss die Sistierung beantragen.
+- Vorschlag: Das Dokument wird dem Expertenausschuss zur Genehmigung vorgelegt, ist aber normativ noch nicht gültig. Wurde eine öffentliche Konsultation durchgeführt, werden die beantworteten Rückmeldungen ebenfalls vorgelegt.
+- Genehmigt: Das Dokument wurde vom Expertenausschuss genehmigt und hat für das definierte Einsatzgebiet im festgelegten Gültigkeitsbereich normative Kraft.
+- Abgelöst: Das Dokument wurde durch eine neue, aktuellere Version ersetzt, d.h. eine Version mit höherer Nummer. Die Benutzung ist zwar noch möglich, es wird aber empfohlen, die neuere Version einzusetzen.
+- Aufgehoben: Das Dokument wurde von eCH zurückgezogen. Er darf nicht mehr genutzt werden. Ein allfällig zugehöriges Datenschema wird aus dem Namensraum entfernt.
+- Sistiert: Das Dokument wurde von eCH zurückgezogen. Es darf nicht genutzt werden. Ein allfällig zugehöriges Datenschema wird aus dem Namensraum entfernt. Im Unterschied zum Status «Aufgehoben» hat das Dokument die ordentlichen Prozessschritte nicht durchlaufen oder hat den Status «Genehmigt» nicht erreicht.
+
+[MUSS] Soll ein Dokument ohne eine Nachfolgeversion aufgehoben werden, wird es mit dem Bearbeitungsstatus «Aufgehoben» oder «Sistiert», aber einer unveränderten Versionsnummer bei der Geschäftsstelle eingereicht. Ansonsten ist das Vorgehen analog wie bei einem Minor Change.
+
+7.6 Formale Änderungen
+
+[SOLLTE] Die Geschäftsstelle ist ermächtigt, auf Antrag der Fachgruppe oder der externen Antragstellenden offensichtliche Orthografiefehler sowie die Anpassung des Reifegrads in Dokumenten selbstständig zu ändern und zu publizieren.
+
+--- Seite 30 ---
+[MUSS] Die Publikation erfolgt mit einer um den Wert 1 erhöhten numerischen Wert der formalen Nebenversion und mit angepasstem Ausgabedatum.
+
+7.7 Addendum
+
+[SOLLTE] Soll ein Standard präzisiert werden, kann ein «Addendum» eingereicht werden. Dies kann etwa dann nötig sein, wenn sich herausstellt, dass der Text des Standards in der Umsetzung zu viele Varianten offenlässt, er missverständlich ist oder ein definiertes Datenschema nicht umgesetzt werden kann.
+
+[MUSS] Ein Addendum kann nur für die Antragsform Standard eingereicht werden.
+
+[MUSS] Es enthält nur Präzisierungen. Über ein Addendum kann auch das Datenschema korrigiert werden, dessen Fehler die Umsetzung verunmöglicht. In diesem Fall darf die zugrundeliegende genehmigte und publizierte Version höchstens den Reifegrad «Definiert» aufweisen.
+
+[DARF NICHT] Neue Inhalte sind nicht erlaubt.
+
+[MUSS] Es betrifft immer eine bestehende, bereits genehmigte und publizierte Version eines Standards.
+
+[DARF NICHT] Ein Addendum führt zu keiner neuen Version des Standards oder Datenschemas auf den es sich bezieht.
+
+[SOLLTE] Der Inhalt eines Addendums wird bei der Erstellung einer Nachfolgeversion des Standards, sofern noch relevant, in diese eingearbeitet.
+
+[MUSS] Ein Addendum bleibt so lange gültig beziehungsweise im Status «Genehmigt», wie der Standard, auf den es sich bezieht, nicht ausser Kraft gesetzt wird (Status «Aufgehoben»). Erhält ein Standard den Status «Aufgehoben», gilt dieser automatisch auch für alle auf ihn bezogenen Addenda.
+
+[SOLLTE] Ein Addendum zu einem Standard wird nach Prüfung durch die Referentinnen und Referenten durch die Geschäftsstelle publiziert.
+
+[MUSS] Der Entscheid der Referentinnen und Referenten über die Genehmigung eines Addendums wird an der nächsten Sitzung des Expertenausschusses formal protokolliert.
+
+7.8 Minor Change
+
+[SOLLTE] Ein Änderungsantrag für einen Standard, eine Best Practice oder eine White Paper kann als Minor Change behandelt werden, wenn aus einer öffentlichen Konsultation keine substantielle Rückmeldung zu erwarten ist.
+
+[SOLLTE] Dies ist in der Regel der Fall, wenn lediglich
+
+- erkannte Fehler inhaltlicher Natur behoben werden;
+- Sachverhalte präzisiert werden beziehungsweise ein Addendum eingepflegt wird;
+- eine neue Version nötig wurde, weil der Standard oder die Best Practice angepasst werden musste, um neue Versionen referenzierter Standards oder Best Practices zu berücksichtigen;
+- gesetzliche Vorgaben nachvollzogen werden müssen;
+
+--- Seite 31 ---
+- das Dokument ohne Nachfolgeversion aufgehoben wird.
+
+[DARF NICHT] Mit einem Minor Change darf eine öffentliche Konsultation nicht umgangen werden.
+
+[MUSS] Da der Minor Change inhaltlicher Natur ist, wird die inhaltliche Nebenversion numerisch um den Wert 1 erhöht. Der Wert der formalen Nebenversion wird auf 0 gesetzt (vgl. Kapitel 7.3). Änderungen der formalen Nebenversion betreffen nicht ein «Minor Change», sondern eine formale Änderung (vgl. Kapitel 7.6).
+
+[MUSS] Ein so überarbeitetes Dokument prüfen die Referentinnen und Referenten auf Gültigkeit bezüglich Anspruchs auf Minor Change.
+
+Wird der Anspruch auf Minor Change seitens der Referentinnen und Referenten gutgeheissen und der Antrag vom Expertenausschuss genehmigt, veröffentlicht die Geschäftsstelle das geänderte Dokument mit einer Einsprachefrist von vier Wochen ab Publikation. Gegebenenfalls (etwa in der Ferienzeit) kann diese Frist von der Geschäftsstelle auf maximal sechs Wochen verlängert werden.
+
+[MUSS] Diese Änderung und die entsprechende Einsprachefrist (Beginn und Ende) wird auf der Webseite (Frontseite, News) publiziert.
+
+Wird innerhalb der Frist keine Einsprache erhoben, gilt der Minor Change als genehmigt.
+
+[SOLLTE] Geht innerhalb der Einsprachefrist ein begründeter, die Sache betreffender Einwand ein, wird nach Rücksprache mit den Referentinnen und Referenten eine ordentliche öffentliche Konsultation (siehe 1.3.4) gestartet. Ist der Einwand unbegründet, nicht die Sache betreffend oder offensichtlich willkürlich oder bewusst verzögernd für dringend notwendige und begründete Änderungen, kann der Expertenausschuss diesen als nichtig zurückweisen. Wird eine Einsprache abgewiesen, wird die Person, welche die Einsprache erhoben hat, von der Geschäftsstelle informiert und die Ablehnung seitens des Expertenausschusses schriftlich begründet.
+
+[MUSS] Die Geschäftsstelle publiziert nach Abschluss der Frist alle eingegangenen Einsprachen inklusive der Antworten der Referentinnen und Referenten beziehungsweise des Expertenausschusses auf der Webseite.
+
+[MUSS] Wird der Anspruch auf Minor Change seitens der Referentinnen und Referenten nicht gutgeheissen, wird der Antrag nach dem Verfahren des Major Change behandelt.
+
+[MUSS] Sämtliche inhaltlichen Änderungen zur Vorversion sind unter dem Titel «Änderungen gegenüber Vorversion» aufgeführt und erläutert.
+
+[MUSS] Das Verfahren und die Organisation von Minor Changes richtet sich nach dem Standard «eCH-0150: Change und Releasemanagement von eCH-Standards».
+
+7.9 Major Change
+
+[MUSS] Soll ein Dokument beziehungsweise ein Standard als Ganzes überarbeitet werden oder kann der Antrag nicht als Minor Change behandelt werden, wird das Verfahren des Major Change angewandt.
+
+[MUSS] Bei einem Major Change wird die Hauptversion nummerisch um den Wert 1 erhöht. Der Wert der inhaltlichen und formalen Nebenversionen werden auf 0 gesetzt (vgl. Kapitel 7.3).
+
+--- Seite 32 ---
+[MUSS] Sämtliche inhaltlichen Änderungen zur Vorversion sind unter dem Titel «Änderungen gegenüber Vorversion» aufgeführt und erläutert.
+
+[MUSS] Das Verfahren und die Organisation von Major Changes richtet sich nach dem Standard «eCH-0150: Change und Releasemanagement von eCH-Standards».
+
+7.10 Darstellung von Voraussetzungen und Abhängigkeiten
+
+[MUSS] Basiert ein Standard auf anderen Standards und setzt diese zwingend voraus, werden sie unter «Voraussetzungen» aufgeführt.
+
+[MUSS] Basiert ein Hilfsmittel oder eine Best Practice auf Standards oder Hilfsmitteln und setzt diese zwingend voraus, werden sie unter «Voraussetzungen» aufgeführt.
+
+[DARF NICHT] Eine normative Antragsform darf keine nicht normative Antragsform voraussetzen (z. B. Standard setzt Hilfsmittel voraus).
+
+[MUSS] Es werden nur die direkt vorausgesetzten Dokumente referenziert.
+
+[DARF NICHT] Allfällig indirekt vorausgesetzte Dokumente werden nicht referenziert (keine Kaskade).
+
+[MUSS] Es kann nur auf eine bestimmte Version eines genehmigten oder abgelösten Dokuments Bezug genommen werden.
+
+[DARF NICHT] Die Bezugnahme auf noch nicht genehmigte Dokumente ist nicht erlaubt.
+
+[SOLLTE] Ausnahmen von dieser Regel sind:
+
+- Die referenzierten Dokumente werden vorgängig oder gleichzeitig zum referenzierenden Dokument in die öffentliche Konsultation gegeben.
+- Sie werden dem Expertenausschuss vorgängig oder gleichzeitig zur Genehmigung vorgelegt.
+
+[MUSS] Soll das Zusammenspiel beziehungsweise die Abhängigkeiten unterschiedlicher Standards, Best Practices oder Hilfsmittel zum besseren Verständnis dargestellt werden, erfolgt dies in einem separaten Hilfsmittel.
+
+[DARF NICHT] Das Zusammenspiel beziehungsweise die Abhängigkeiten werden nicht in den betroffenen Standards, Best Practices oder Hilfsmitteln ausgeführt.
