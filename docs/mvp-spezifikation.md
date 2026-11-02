@@ -51,19 +51,23 @@ Stand: 2.11.2026 (Grilling-Session 1, laufend nachgeführt). Alle Festlegungen g
 | Datum | Lieferung |
 |---|---|
 | sofort | URL und QR-Code stehen fest und ändern sich nicht |
-| Mi 4.11. | Website online (Gerüst und Kap. 7) |
+| Mi 4.11. | Meeting mit dem Vorgesetzten (verschoben vom 2.11.). Website online, sobald die Freigabe zum Veröffentlichen vorliegt. Bis dahin: Build in der CI und lokale Vorschau. |
 | Fr 6.11. | Vorschau mit Screenshots, Feedback-Knopf und Word; Go/No-Go des Vorgesetzten |
 | Mo 9.11. | Definitives Folienpaket (früher, falls nötig) |
 
 **Rückfall:** Läuft am Do 5.11. die Word-Erzeugung nicht, wird der Umfang reduziert. Der Termin bleibt.
 
-**Vom Vorgesetzten zu klären:**
+**Vom Vorgesetzten zu klären** (Meeting Mi 4.11., verschoben vom 2.11.):
 
 1. Bis wann braucht er das Material definitiv?
-2. Freigabe, das Repo öffentlich zu schalten. Es ist heute privat. Pages und Feedback-Issues von Besuchenden setzen ein öffentliches Repo voraus.
-3. Wer sichtet die Issues nach der Versammlung (F30)?
-4. Ist es in Ordnung, dass Feedback ein GitHub-Konto voraussetzt (F06)?
-5. Welche Lizenz gilt für das öffentliche Repo (F36)? Nachgetragen am 2.11.2026 nach Q19.
+2. Freigabe, das Repo öffentlich zu schalten. Es ist heute privat, und die Organisation `ech-ch` hat nach Einschätzung der Projektleitung den Gratis-Plan. Pages und Feedback-Issues von Besuchenden setzen damit ein öffentliches Repo voraus. Laut Projektleitung ist ein öffentliches, kollaboratives Projekt ohnehin beabsichtigt.
+3. Welche Lizenz gilt für das öffentliche Repo (F36)? Vorschlag zur Diskussion: Code (Filter, Skripte, CI) unter MIT; eigene Dokumentation unter CC BY 4.0; Standardtext eCH-0003 nach den eCH-Bestimmungen (Kap. 10); übernommene FOAG-Teile bleiben CC BY 4.0, die CSL CC BY-SA 3.0.
+4. Word-Original von V11.1.0 über ihn bei der Geschäftsstelle anfragen (E19).
+
+**Nicht mehr für den Vorgesetzten (Entscheid Projektleitung 2.11.):** Sichtung der Issues (F30) und GitHub-Konto als Hürde (F06) betreffen den Weiterbetrieb nach dem MVP. Im MVP gibt es dafür nur zwei Massnahmen:
+
+- Die Startseite sagt offen, dass Feedback ein kostenloses GitHub-Konto braucht.
+- Das Issue-Formular sagt, dass Feedback gesammelt und nach dem 12.11. gesichtet wird, ohne Zusage einer Antwort (Wortlaut in Session 3).
 
 ### Material für das Folienpaket
 
@@ -448,7 +452,7 @@ Website: Das Deckblatt-Partial `title-metadata.html` (FOAG) verwendet dieselben 
 
 | Punkt | Festlegung |
 |---|---|
-| Startseite `…/beyond-pdf-demonstrator/` (Ziel des QR-Codes) | Was das ist; Hinweis «kein offizieller eCH-Standard»; Hinweis auf Platzhalter. Rundgang mit Links: (1) Schema-Regel ansehen, direkt auf `#ech-0003-bb-schema-eigene-version`, (2) Feedback geben, (3) Word herunterladen. Links zu Repo, Fragenlog, Registry. |
+| Startseite `…/beyond-pdf-demonstrator/` (Ziel des QR-Codes) | Was das ist; Hinweis «kein offizieller eCH-Standard»; Hinweis auf Platzhalter; Hinweis, dass Feedback ein kostenloses GitHub-Konto braucht (F06). Rundgang mit Links: (1) Schema-Regel ansehen, direkt auf `#ech-0003-bb-schema-eigene-version`, (2) Feedback geben, (3) Word herunterladen. Links zu Repo, Fragenlog, Registry. |
 | Standardseite | `…/ech-0003/v11.1.0/de/`: Deckblatt, Inhaltsverzeichnis am Rand, alle Kapitel des Gerüsts, Anker = Baustein-ID |
 | Feedback-Darstellung | grober Baustein: Knopf auf der Zeile der Überschrift; feiner Baustein: dezentes Symbol am rechten Rand; Baustein-ID beim Darüberfahren sichtbar (Details Session 3) |
 | Downloads | Word `DEMO_eCH-0003_V11.1.0_de.docx` (bewusst kein eCH-Dateiname) und `bausteine.json`, verlinkt auf der Standardseite |
@@ -617,7 +621,7 @@ Gemäss E06.
 
 **Regeln zur Treue:**
 
-- Fehler des Originals bleiben zeichengleich erhalten. Beispiele: «Die Nummer sind» (7.3), «nummerisch» (7.9), «Referentinnen und Referentinnen und Referenten» (Anhang C) und das abschliessende «):» in Anhang F.
+- Fehler des Originals bleiben zeichengleich erhalten. Beispiele: «Die Nummer sind» (7.3), «nummerisch» (7.9), «Er darf nicht mehr genutzt werden» (7.5, Status «Aufgehoben») und das abschliessende «):» in Anhang F.
 - Nur Artefakte der PDF-Extraktion werden bereinigt: Silbentrennung (alte Trennung «lük-kenlose» wird zu «lückenlose»), Kopf- und Fusszeilen sowie Aufzählungszeichen.
 - Der Demonstrator-Hinweis im Word ist eine bewusste Abweichung vom Original. Ohne ihn liesse sich ein erzeugtes Word mit «Status: Genehmigt» mit der offiziellen Fassung verwechseln.
 
@@ -639,14 +643,16 @@ Der Vorgesetzte gibt am Fr 6.11. das Go und zeigt am Anlass mindestens eine Foli
 
 Abgestimmt auf den Zeitplan bis 12.11.2026. «PL» = Projektleitung. Verweise auf Entscheide in Klammern.
 
-### Mo 2.11. (heute, PL)
+### Aufgaben der Projektleitung (Stand 2.11. abends)
 
-| # | Aufgabe | Ergebnis |
-|---|---|---|
-| AP0a | Meeting mit dem Vorgesetzten: Lieferzusage (E04); definitiver Termin fürs Folienpaket; Freigabe zum Veröffentlichen; Lizenz (F36); Sichtung der Issues (F30); GitHub-Konto (F06) | Antworten im Fragenlog |
-| AP0b | DOCX von V11.1.0 bei der Geschäftsstelle anfragen (E19) | Gegenprobe, falls es kommt |
-| AP0c | Zweites GitHub-Konto ohne Mitgliedschaft in `ech-ch` bereitstellen (D2) | Testkonto |
-| AP0d | Kurznamen in [kap7-bausteine.md](kap7-bausteine.md) durchsehen, besonders die 11 unsicheren | freigegebene ID-Liste (Voraussetzung für AP5) |
+| # | Aufgabe | Wann | Ergebnis |
+|---|---|---|---|
+| AP0a | Meeting mit dem Vorgesetzten: Lieferzusage (E04) und Stand der Umsetzung zeigen; definitiver Termin fürs Folienpaket; Freigabe zum Veröffentlichen; Lizenz (F36) | **Mi 4.11.** (verschoben) | Antworten im Fragenlog; danach Repo öffentlich und Pages aktiv |
+| AP0b | Word-Original von V11.1.0 über den Vorgesetzten bei der Geschäftsstelle anfragen (E19) | ab Mi 4.11. | Gegenprobe, falls es kommt |
+| AP0c | Testkonto ohne Mitgliedschaft in `ech-ch` und ohne Schreibrechte im Repo (D2). **Nicht** das eigene Konto weitergeben, denn es hat Schreibrechte, und der Test wäre wertlos. Am besten legt die Vertrauensperson ein eigenes Konto an und macht damit auch gleich den Fremdtest (AP16). | vor Do 5.11. | Testkonto; zusätzlich ein echter Befund zur Hürde «GitHub-Konto» (F06) |
+| AP0d | Kurznamen in [kap7-bausteine.md](kap7-bausteine.md) durchsehen, besonders die 11 unsicheren | vor Mi 4.11. | freigegebene ID-Liste (Voraussetzung für AP5) |
+
+**Folge der Verschiebung:** Bis zum Meeting wird umgesetzt, was ohne Freigabe geht. Das Meeting stützt sich dann auf einen laufenden Stand statt auf einen Plan. Ohne Freigabe läuft nur keine öffentliche Website.
 
 ### Di 3.11. – Repo, Build, Pages
 
@@ -657,7 +663,11 @@ Abgestimmt auf den Zeitplan bis 12.11.2026. «PL» = Projektleitung. Verweise au
 | AP3 | Extraktionsskript (Schritt 1) und Rohtext für 1.1–1.2.1, Kap. 7–10, Anhang A, C, F | E19 |
 | AP4 | Gerüst `de/index.qmd` mit allen rund 92 Überschriften, `original-seite`, festen `sec-`-Ankern für Verweisziele, Platzhalter-Shortcode; `ech_anhang.lua` auf Klasse umstellen und Buchstaben vergeben | E05, E15 |
 
-**Risiko AP2:** GitHub Pages setzt bei Organisationen mit Gratis-Plan ein öffentliches Repo voraus. Bleibt das Repo privat (F36, Freigabe offen), läuft am Di nur der Build; Pages folgt mit der Freigabe.
+**Pages und privates Repo:** Bei Organisationen mit Gratis-Plan setzt GitHub Pages ein öffentliches Repo voraus. Bis zur Freigabe am Mi 4.11. gilt deshalb:
+
+- Die CI baut und prüft, die Ausgabe gibt es als Download-Artefakt des Workflows.
+- Angeschaut wird lokal mit `quarto preview`.
+- Der Pages-Schritt ist vorbereitet und wird nach der Freigabe eingeschaltet, etwa 15 Minuten Aufwand.
 
 ### Mi 4.11. – Kap. 7, Word, Querverweise
 
