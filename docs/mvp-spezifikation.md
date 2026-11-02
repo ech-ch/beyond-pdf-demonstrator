@@ -401,7 +401,7 @@ Dieselbe Erkennung liefert die Zählung für D4.
 | `{{< vorlagentext … >}}` | Vorlagentext der gewählten Fassung einfügen | neu | E13 |
 | Platzhalter | Platzhalter unter nicht überführten Überschriften | neu | E05 |
 | Deckblatt-Filter (DOCX) | Titel, Hinweis, Metadatentabelle, Zusammenfassung, Inhaltsverzeichnis-Feld, Textmarken der Fusszeile | neu; Textmarken aus Spike S3 | E17 |
-| `set_docx_updatefields.py` | Word aktualisiert Felder beim Öffnen | Politische Geschäfte | E17 |
+| `aktualisiere_felder_beim_oeffnen.py` | Word aktualisiert Felder beim Öffnen | neu (F40) | E17 |
 | CI-Prüfungen | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein genau eine Kennzeichnung; Zählung 36/11/8; unaufgelöste Verweise als Fehler | neu | E07, E08, E11, E12, D4 |
 
 ## 4. Verzeichnisstruktur und Build-Pipeline
@@ -440,7 +440,7 @@ Zusätzlich:
 
 - Derselbe Filter setzt die Textmarken der Fusszeile.
 - Pandoc-Titelblock und `toc` sind für DOCX abgeschaltet.
-- Nach dem Rendern setzt `set_docx_updatefields.py` (Politische Geschäfte, nur Standardbibliothek) das Flag, damit Word Felder und Inhaltsverzeichnis beim Öffnen aktualisiert. Word fragt dabei einmal nach.
+- Nach dem Rendern setzt `tools/aktualisiere_felder_beim_oeffnen.py` (nur Standardbibliothek) das Flag, damit Word Felder und Inhaltsverzeichnis beim Öffnen aktualisiert. Word fragt dabei einmal nach.
 - Bekannte Einschränkung: Pandoc verwendet eine eigene Tabellenformatvorlage, das Deckblatt hat deshalb womöglich Rahmenlinien. Für den MVP akzeptiert.
 - Die Inhaltssteuerelemente der Original-Vorlage werden nicht nachgebildet (F23, vor Abnahme).
 
@@ -493,7 +493,7 @@ beyond-pdf-demonstrator/
 │   └── text/                     extrahierter Rohtext je Kapitel
 ├── filters/                      Lua-Filter und Shortcodes (eigene und von FOAG übernommene, mit Herkunftsvermerk)
 ├── assets/                       SCSS, Logos, HTML-Partial, Typst (FOAG)
-├── tools/                        Python: Extraktion, CI-Prüfungen, set_docx_updatefields.py
+├── tools/                        Python: Extraktion, CI-Prüfungen, Nachbearbeitung Word
 ├── .github/workflows/build.yml   Prüfen → Rendern → Word nachbearbeiten → Pages
 ├── docs/                         Projektdoku (wird nicht gerendert)
 └── _site/                        erzeugt, in .gitignore
@@ -659,7 +659,7 @@ Abgestimmt auf den Zeitplan bis 12.11.2026. «PL» = Projektleitung. Verweise au
 | # | Aufgabe | Grundlage |
 |---|---|---|
 | AP1 | Repo-Grundgerüst nach 4.5: Ordner, `.gitattributes`, `.gitignore`, README (Zweck, Abgrenzung, Namensnennung FOAG), `_quarto.yml` mit expliziter `render`-Liste, FOAG-Dateien übernehmen und auf die Vorlage-Fassung umstellen, lokale Word-Vorlage, Original-PDF | E16, E20 |
-| AP2 | CI `build.yml`: Quarto 1.10.19 und Python 3.11 festlegen; Prüfen → Rendern (alle Formate in einem Aufruf) → `set_docx_updatefields.py` → Pages nur bei Erfolg; Releases bei Tags | E16, E17, E22 |
+| AP2 | CI `build.yml`: Quarto 1.10.19 und Python 3.11 festlegen; Prüfen → Rendern (alle Formate in einem Aufruf) → `aktualisiere_felder_beim_oeffnen.py` → Pages nur bei Erfolg; Releases bei Tags | E16, E17, E22 |
 | AP3 | Extraktionsskript (Schritt 1) und Rohtext für 1.1–1.2.1, Kap. 7–10, Anhang A, C, F | E19 |
 | AP4 | Gerüst `de/index.qmd` mit allen rund 92 Überschriften, `original-seite`, festen `sec-`-Ankern für Verweisziele, Platzhalter-Shortcode; `ech_anhang.lua` auf Klasse umstellen und Buchstaben vergeben | E05, E15 |
 

@@ -51,14 +51,14 @@ quarto render
 ```
 
 ```bash
-py -3.11 tools/set_docx_updatefields.py _site/ech-0003/v11.1.0/de/DEMO_eCH-0003_V11.1.0_de.docx
+py -3.11 tools/aktualisiere_felder_beim_oeffnen.py _site/ech-0003/v11.1.0/de/DEMO_eCH-0003_V11.1.0_de.docx
 ```
 
 ```bash
 quarto preview
 ```
 
-`quarto render` erzeugt HTML und Word in einem Aufruf nach `_site/`. Nicht `quarto render --to docx` verwenden: Im Website-Projekt löscht das die übrigen Formate (Spike S1). Das Word heisst bewusst `DEMO_eCH-0003_V11.1.0_de.docx` und nicht nach eCH-Konvention (E18). Das Skript `set_docx_updatefields.py` sorgt dafür, dass Word beim Öffnen das Inhaltsverzeichnis füllt; Word fragt dabei einmal nach.
+`quarto render` erzeugt HTML und Word in einem Aufruf nach `_site/`. Nicht `quarto render --to docx` verwenden: Im Website-Projekt löscht das die übrigen Formate (Spike S1). Das Word heisst bewusst `DEMO_eCH-0003_V11.1.0_de.docx` und nicht nach eCH-Konvention (E18). Das Skript `aktualisiere_felder_beim_oeffnen.py` sorgt dafür, dass Word beim Öffnen das Inhaltsverzeichnis füllt; Word fragt dabei einmal nach.
 
 Den Rohtext erneut aus dem PDF ziehen (nur nötig, wenn sich das Skript ändert):
 
@@ -98,7 +98,6 @@ GitHub Pages ist vorbereitet, aber ausgeschaltet, bis die Freigabe zum Veröffen
 **Weitere Quellen:**
 
 - `filters/ech_anhang.lua`, `ech_titelref.lua`, `ech_docx_nummern.lua`: aus den eigenen Spikes ([docs/spikes/](docs/spikes/README.md)), angepasst.
-- `tools/set_docx_updatefields.py`: aus [swiss/political-affairs-ech-group](https://github.com/swiss/political-affairs-ech-group) (`.github/workflows/scripts/`, Stand Commit `f201797`), unverändert. Das Quell-Repo nennt keine Lizenz (F40).
 - `vorlage/word/ech-vorlage-d-2025-11-28.docx`: eCH-Vorlage (Beilage zu eCH-0003, Stand 28.11.2025), unverändert.
 - `original/eCH-0003_V11.1.0_d.pdf`: eCH-0003 V11.1.0, Verein eCH, unverändert.
 

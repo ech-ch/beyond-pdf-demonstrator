@@ -70,7 +70,7 @@ jobs:
 
       # Word füllt Inhaltsverzeichnis und Felder beim Öffnen (E17).
       - name: Word nachbearbeiten
-        run: find _site -name '*.docx' -print0 | xargs -0 --no-run-if-empty python tools/set_docx_updatefields.py
+        run: find _site -name '*.docx' -print0 | xargs -0 --no-run-if-empty python tools/aktualisiere_felder_beim_oeffnen.py
 
       - name: Ausgabe als Artefakt
         uses: actions/upload-artifact@v4
