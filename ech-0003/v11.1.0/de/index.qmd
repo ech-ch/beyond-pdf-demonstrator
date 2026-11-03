@@ -180,25 +180,25 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
 # Formales {#sec-formales original-seite="27"}
 
-## Zuteilung einer eCH-Nummer {#sec-zuteilung-ech-nummer .platzhalter original-seite="27"}
+{{< include bausteine/zuteilung-ech-nummer.md >}}
 
-## Zulässige Formate der eingereichten Dokumente {#sec-zulaessige-formate .platzhalter original-seite="27"}
+{{< include bausteine/zulaessige-formate.md >}}
 
-## Versionierung {#sec-versionierung .platzhalter original-seite="27"}
+{{< include bausteine/versionierung.md >}}
 
-## Reifegrad eines Dokuments {#sec-reifegrad .platzhalter original-seite="28"}
+{{< include bausteine/reifegrad.md >}}
 
-## Bearbeitungsstatus eines Dokuments {#sec-bearbeitungsstatus .platzhalter original-seite="29"}
+{{< include bausteine/bearbeitungsstatus.md >}}
 
-## Formale Änderungen {#sec-formale-aenderungen .platzhalter original-seite="29"}
+{{< include bausteine/formale-aenderungen.md >}}
 
-## Addendum {#sec-addendum .platzhalter original-seite="30"}
+{{< include bausteine/addendum.md >}}
 
-## Minor Change {#sec-minor-change .platzhalter original-seite="30"}
+{{< include bausteine/minor-change.md >}}
 
-## Major Change {#sec-major-change .platzhalter original-seite="31"}
+{{< include bausteine/major-change.md >}}
 
-## Darstellung von Voraussetzungen und Abhängigkeiten {#sec-voraussetzungen-abhaengigkeiten .platzhalter original-seite="32"}
+{{< include bausteine/voraussetzungen-abhaengigkeiten.md >}}
 
 # Sicherheitsüberlegungen {#sec-sicherheitsueberlegungen .platzhalter original-seite="32"}
 

@@ -49,6 +49,7 @@ website:
 filters:
   - filters/ech_metadata.lua      # Deckblatt der Website (FOAG)
   - filters/ech_anhang.lua        # Anhangsbuchstaben und Verweise (E15)
+  - filters/ech_referenzen.lua    # Zitate auf Anhang A, z.B. [@SemVer] (E15)
   - filters/ech_platzhalter.lua   # Platzhalter unter nicht überführten Überschriften (E05)
   - quarto
   - filters/ech_titelref.lua      # [-@sec-x]{.mit-titel} (E11)

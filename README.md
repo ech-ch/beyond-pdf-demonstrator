@@ -18,7 +18,8 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Platzhalter mit Link auf die Seite im Original-PDF | vorhanden |
 | 1.1 Status, erzeugt aus Status und Vorlage-Fassung 2022 | vorhanden |
 | Rohtext aus dem PDF für 1.1–1.2.1, Kap. 7–10, Anhang A, C, F | vorhanden ([original/text/](original/text/README.md)) |
-| Kap. 7 als Bausteine, Deckblatt im Word, Feedback, Registry | folgt (AP5–AP14) |
+| Kap. 7 als 10 grobe und 54 feine Bausteine (55 Klauseln), Querverweise erzeugt | vorhanden |
+| Deckblatt im Word, Feedback, Registry, Anhang A und F | folgt (AP6–AP14) |
 
 Das Original-PDF liegt unter [original/eCH-0003_V11.1.0_d.pdf](original/eCH-0003_V11.1.0_d.pdf). Kap. 10 des Standards erlaubt die Weiterverbreitung.
 

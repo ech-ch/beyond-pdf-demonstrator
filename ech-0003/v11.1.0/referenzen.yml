@@ -1,0 +1,19 @@
+# Anhang A – Referenzen & Bibliographie von eCH-0003 V11.1.0 (E15).
+#
+# Daten, keine Bausteine. Je Eintrag:
+#   schluessel  für Zitate im Text, z.B. «Semantic Versioning»[@SemVer]
+#   kuerzel     Anzeige-Kürzel wie in der linken Spalte des Originals
+#   text        wörtlich aus original/text/anhang-a.txt (Seite 34)
+# Zitate löst filters/ech_referenzen.lua auf; die Tabelle in Anhang A
+# erzeugt ein Filter mit AP13.
+
+referenzen:
+  - schluessel: ISO
+    kuerzel: "[ISO]"
+    text: "Standardisation and related activities – General vocabulary. ISO/IEC Guide 2 : 1996. Trilingual version EN 45020 : 1998."
+  - schluessel: eCH-0150
+    kuerzel: "eCH-0150"
+    text: "eCH-0150: Change und Releasemanagement von eCH-Standards, Version 1.0"
+  - schluessel: SemVer
+    kuerzel: "SemVer"
+    text: "Semantic Versioning (https://semver.org/)"

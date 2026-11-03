@@ -407,7 +407,7 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | `ech_docx_nummern.lua` | im DOCX: Word nummeriert, Quarto-Textnummern entfernen, unnummerierte Überschriften und Anhänge in eCH-Formatvorlagen | Spike S3 (Lösung A) | Block C |
 | `feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML; Anker = Baustein-ID | Spike S4; umstellen von `.baustein` auf `bb` | E08, E09, Session 3 |
 | Registry-Filter | `bausteine.json`: Metadaten, Fundstelle, Herkunft, Verbindlichkeit, Beziehungen | neu | E09, E10 |
-| Anhang-A-Filter | Tabelle aus `referenzen.yml` | neu | E15 |
+| `ech_referenzen.lua` (Anhang-A-Filter) | Zitate `[@key]` aus `referenzen.yml` auflösen (umgesetzt mit AP5); Tabelle für Anhang A (AP13) | neu | E15, E32 |
 | `{{< statustext >}}` | Statustext 1.1 aus Vorlage-Fassung | FOAG `{{< ech status >}}` | E14 |
 | `{{< vorlagentext … >}}` | Vorlagentext der gewählten Fassung einfügen | neu | E13 |
 | Platzhalter | Platzhalter unter nicht überführten Überschriften | neu | E05 |
