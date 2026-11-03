@@ -1,7 +1,7 @@
 # Build des Demonstrators (MVP-Spezifikation 4.1, 4.2, 8 AP2; E16, E17, E22).
 #
-#   build    Prüfen -> Rendern (alle Formate in EINEM Aufruf) -> Word
-#            nachbearbeiten -> Ausgabe als Artefakt «website»
+#   build    Prüfen (Quelle) -> Rendern (alle Formate in EINEM Aufruf) ->
+#            Prüfen (Ausgabe) -> Word nachbearbeiten -> Artefakt «website»
 #   pages    Veröffentlichen auf GitHub Pages, nur von main und nur, wenn
 #            build erfolgreich war. AUSGESCHALTET, bis die Freigabe zum
 #            Veröffentlichen vorliegt (E23, AP0a). Einschalten (ca. 15 Min.):
@@ -53,20 +53,23 @@ jobs:
           quarto --version
           python --version
 
-      # Prüfungen nach MVP-Spezifikation 3.7 (AP7): tools/pruefe.py bricht
-      # bei einem Fehler ab, bevor gerendert wird.
-      - name: Prüfen
-        run: |
-          if [ -f tools/pruefe.py ]; then
-            python tools/pruefe.py
-          else
-            echo "::notice::Noch keine CI-Prüfungen (tools/pruefe.py folgt mit AP7)"
-          fi
+      # Prüfungen nach MVP-Spezifikation 3.7 (AP7, tools/pruefe.toml): IDs,
+      # Kennzeichnungen, Nummern von Hand, bezug; bricht vor dem Rendern ab.
+      - name: Prüfen (Quelle)
+        run: python tools/pruefe.py quelle
 
       # Alle Formate in einem Aufruf: `quarto render --to X` löscht im
-      # Website-Projekt die übrigen Formate (Spike S1).
+      # Website-Projekt die übrigen Formate (Spike S1). Das Log braucht die
+      # Prüfung der Ausgabe (Warnung «Unable to resolve crossref», K3).
       - name: Rendern
-        run: quarto render
+        run: |
+          set -o pipefail
+          quarto render 2>&1 | tee render.log
+
+      # Zählung 36/11/8, Textvergleich mit original/text/ (E19), keine
+      # unaufgelösten Verweise (K3), in HTML und Word.
+      - name: Prüfen (Ausgabe)
+        run: python tools/pruefe.py ausgabe --log render.log
 
       # Word füllt Inhaltsverzeichnis und Felder beim Öffnen (E17).
       - name: Word nachbearbeiten

@@ -1,0 +1,22 @@
+# Konfiguration für tools/pruefe.py (AP7, MVP-Spezifikation 3.7). Pfade ab Projektordner.
+
+[[standard]]
+name = "eCH-0003 V11.1.0 (de)"
+quelle = "ech-0003/v11.1.0/de"                       # Gerüst index.qmd und bausteine/
+metadaten = "ech-0003/v11.1.0/_metadata.yml"
+id_praefix = "ech-0003-bb-"                          # R1
+kennzeichnungen = ["MUSS", "SOLLTE", "DARF NICHT"]   # V4, Vokabular von V11.1.0
+inhaltsverzeichnis = "original/text/inhaltsverzeichnis.tsv"
+html = "_site/ech-0003/v11.1.0/de/index.html"
+docx = "_site/ech-0003/v11.1.0/de/DEMO_eCH-0003_V11.1.0_de.docx"
+# Elemente der Website, die nicht zum Text gehören (z.B. Feedback-Knöpfe, AP9)
+html_ignorieren = ["platzhalter-hinweis", "feedback"]
+
+# Überführte Kapitel: gerenderter Klartext = Rohtext (E19), Zählung (D4).
+# Ein Kapitel reicht vom Anker `von` bis vor den Anker `bis`.
+[[standard.kapitel]]
+name = "7 Formales"
+von = "sec-formales"
+bis = "sec-sicherheitsueberlegungen"
+rohtext = "original/text/kap07.txt"
+zaehlung = { "MUSS" = 36, "SOLLTE" = 11, "DARF NICHT" = 8 }

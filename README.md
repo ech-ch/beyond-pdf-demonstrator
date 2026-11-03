@@ -19,7 +19,9 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | 1.1 Status, erzeugt aus Status und Vorlage-Fassung 2022 | vorhanden |
 | Rohtext aus dem PDF für 1.1–1.2.1, Kap. 7–10, Anhang A, C, F | vorhanden ([original/text/](original/text/README.md)) |
 | Kap. 7 als 10 grobe und 54 feine Bausteine (55 Klauseln), Querverweise erzeugt | vorhanden |
-| Deckblatt im Word, Feedback, Registry, Anhang A und F | folgt (AP6–AP14) |
+| Word mit Deckblatt, Demonstrator-Hinweis, Inhaltsverzeichnis und Fusszeile | vorhanden |
+| CI-Prüfungen für Quelle und Ausgabe (`tools/pruefe.py`) | vorhanden |
+| Feedback, Registry, Anhang A und F | folgt (AP9–AP14) |
 
 Das Original-PDF liegt unter [original/eCH-0003_V11.1.0_d.pdf](original/eCH-0003_V11.1.0_d.pdf). Kap. 10 des Standards erlaubt die Weiterverbreitung.
 
@@ -50,7 +52,15 @@ docs/                       Projektdokumentation (wird nicht gerendert)
 Voraussetzungen: Quarto 1.10.19 (enthält Pandoc und Typst), Python 3.11.
 
 ```bash
+py -3.11 tools/pruefe.py quelle
+```
+
+```bash
 quarto render
+```
+
+```bash
+py -3.11 tools/pruefe.py ausgabe
 ```
 
 ```bash
@@ -62,6 +72,8 @@ quarto preview
 ```
 
 `quarto render` erzeugt HTML und Word in einem Aufruf nach `_site/`. Nicht `quarto render --to docx` verwenden: Im Website-Projekt löscht das die übrigen Formate (Spike S1). Das Word heisst bewusst `DEMO_eCH-0003_V11.1.0_de.docx` und nicht nach eCH-Konvention (E18). Das Skript `aktualisiere_felder_beim_oeffnen.py` sorgt dafür, dass Word beim Öffnen das Inhaltsverzeichnis füllt; Word fragt dabei einmal nach.
+
+`tools/pruefe.py` prüft vor dem Rendern die Quelle (IDs, Kennzeichnungen, Nummern von Hand, `bezug`) und nach dem Rendern die Ausgabe: Zählung, Textvergleich mit `original/text/` und unaufgelöste Verweise. Welche Kapitel verglichen werden, steht in `tools/pruefe.toml`. Mit `--log` liest die Prüfung der Ausgabe zusätzlich die Warnungen von `quarto render`.
 
 Den Rohtext erneut aus dem PDF ziehen (nur nötig, wenn sich das Skript ändert):
 

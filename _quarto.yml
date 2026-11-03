@@ -15,6 +15,9 @@ project:
 
 lang: de
 
+# Demonstrator-Hinweis auf dem Deckblatt des Words (D5, filters/ech_deckblatt.lua)
+demonstrator-hinweis: "**Demonstrator, kein offizieller eCH-Standard.** Dieses Dokument ist automatisch aus den Bausteinen des Demonstrators «Beyond PDF» erzeugt. Massgebend ist allein die auf www.ech.ch publizierte Fassung von eCH-0003 V11.1.0."
+
 # Basis-URL für Links im Word (Platzhalter auf das Original-PDF). Gleich wie
 # website.site-url, das Lua-Filter nicht sehen.
 demonstrator-url: https://ech-ch.github.io/beyond-pdf-demonstrator/
@@ -54,6 +57,7 @@ filters:
   - quarto
   - filters/ech_titelref.lua      # [-@sec-x]{.mit-titel} (E11)
   - filters/ech_docx_nummern.lua  # nur DOCX: Word nummeriert (Spike S3, Lösung A)
+  - filters/ech_deckblatt.lua     # nur DOCX: Deckblatt, Inhaltsverzeichnis, Textmarken (E17)
 shortcodes:
   - filters/ech_shortcodes.lua    # {{< statustext >}} (E14)
 
@@ -72,6 +76,6 @@ format:
     reference-location: margin
   docx:
     reference-doc: vorlage/word/ech-vorlage-d-2025-11-28.docx   # lokale Kopie (E16)
-    toc: true          # bis zum Deckblatt-Filter (E17, AP6)
-    toc-depth: 3
+    toc: false         # Inhaltsverzeichnis setzt filters/ech_deckblatt.lua (E17)
+    toc-depth: 3       # Tiefe des Word-Felds TOC, wie im Original
     toc-title: Inhaltsverzeichnis

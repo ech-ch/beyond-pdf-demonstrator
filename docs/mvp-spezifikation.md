@@ -413,7 +413,7 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | Platzhalter | Platzhalter unter nicht überführten Überschriften | neu | E05 |
 | Deckblatt-Filter (DOCX) | Titel, Hinweis, Metadatentabelle, Zusammenfassung, Inhaltsverzeichnis-Feld, Textmarken der Fusszeile | neu; Textmarken aus Spike S3 | E17 |
 | `aktualisiere_felder_beim_oeffnen.py` | Word aktualisiert Felder beim Öffnen | neu (F40) | E17 |
-| CI-Prüfungen | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein höchstens eine Kennzeichnung (G4-Bausteine ohne, E29); Zählung 36/11/8; unaufgelöste Verweise als Fehler | neu | E07, E08, E11, E12, D4 |
+| CI-Prüfungen (`tools/pruefe.py`, `tools/pruefe.toml`) | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein höchstens eine Kennzeichnung (G4-Bausteine ohne, E29); `bezug`-Ziele; Zählung 36/11/8; Textvergleich mit dem Rohtext; unaufgelöste Verweise als Fehler | neu (umgesetzt mit AP7) | E07, E08, E11, E12, D4, E34 |
 
 ## 4. Verzeichnisstruktur und Build-Pipeline
 
@@ -441,7 +441,7 @@ Ein Deckblatt-Filter erzeugt nur im DOCX, in dieser Reihenfolge:
 
 1. Titel «eCH-0003 – Leitfaden zur Genehmigung von Anträgen» (Formatvorlage «Titel»)
 2. Demonstrator-Hinweis (D5)
-3. Zweispaltige Tabelle: Beschriftungen aus `vorlage/2022/deckblatt.yml`, Werte aus den Metadaten des Standards, Zellen «Tabellentext»
+3. Zweispaltige Tabelle: Beschriftungen aus `vorlage/2022/deckblatt.yml`, Werte aus den Metadaten des Standards; Beschriftungen in «Tabellentitel», Werte in «Tabellentext» wie in der eCH-Vorlage und im Original (E33)
 4. «Zusammenfassung» und Text
 5. Seitenumbruch
 6. Inhaltsverzeichnis als Word-Feld unter «Inhaltsverzeichnis» («TitelInhaltsverzeichnis»)
