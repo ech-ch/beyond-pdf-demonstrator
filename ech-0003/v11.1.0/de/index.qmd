@@ -13,7 +13,17 @@ autoren:
   - "Mitglieder des Expertenausschusses, Verein eCH"
   - "Mitarbeitende der Geschäftsstelle, Verein eCH"
 format:
-  html: default
+  html:
+    # Downloads auf der Standardseite (E18): Word und Original-PDF. Die
+    # automatischen Format-Links sind aus, sonst steht das Word doppelt da.
+    format-links: false
+    other-links:
+      - text: Word herunterladen
+        href: DEMO_eCH-0003_V11.1.0_de.docx
+        icon: file-earmark-word
+      - text: Original-PDF (eCH-0003 V11.1.0)
+        href: ../../../original/eCH-0003_V11.1.0_d.pdf
+        icon: file-earmark-pdf
   docx:
     output-file: DEMO_eCH-0003_V11.1.0_de.docx   # bewusst kein eCH-Dateiname (E18)
 ---

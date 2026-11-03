@@ -405,7 +405,8 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | `ech_anhang.lua` | Buchstaben der Anhänge vergeben («Anhang F – …»), Verweise auf `.appendix`-Ziele auflösen, mit `-@` nur den Buchstaben | Spike S3; umstellen von ID-Präfix auf Klasse | E11, E15 |
 | `ech_titelref.lua` | Verweis «Nummer + Titel» (`.mit-titel`) | Spike S3 | E11 |
 | `ech_docx_nummern.lua` | im DOCX: Word nummeriert, Quarto-Textnummern entfernen, unnummerierte Überschriften und Anhänge in eCH-Formatvorlagen | Spike S3 (Lösung A) | Block C |
-| `feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML; Anker = Baustein-ID | Spike S4; umstellen von `.baustein` auf `bb` | E08, E09, Session 3 |
+| `ech_anker.lua` | Anker = Baustein-ID, nur HTML; bei Mehrfachverwendung nur an der ersten Fundstelle (umgesetzt mit AP8) | neu | R6, E27, E35 |
+| `feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML | Spike S4; umstellen von `.baustein` auf `bb` | E08, E09, Session 3 |
 | Registry-Filter | `bausteine.json`: Metadaten, Fundstelle, Herkunft, Verbindlichkeit, Beziehungen | neu | E09, E10 |
 | `ech_referenzen.lua` (Anhang-A-Filter) | Zitate `[@key]` aus `referenzen.yml` auflösen (umgesetzt mit AP5); Tabelle für Anhang A (AP13) | neu | E15, E32 |
 | `{{< statustext >}}` | Statustext 1.1 aus Vorlage-Fassung | FOAG `{{< ech status >}}` | E14 |

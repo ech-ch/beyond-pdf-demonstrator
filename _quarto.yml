@@ -56,6 +56,7 @@ filters:
   - filters/ech_platzhalter.lua   # Platzhalter unter nicht überführten Überschriften (E05)
   - quarto
   - filters/ech_titelref.lua      # [-@sec-x]{.mit-titel} (E11)
+  - filters/ech_anker.lua         # nur HTML: Anker = Baustein-ID (R6)
   - filters/ech_docx_nummern.lua  # nur DOCX: Word nummeriert (Spike S3, Lösung A)
   - filters/ech_deckblatt.lua     # nur DOCX: Deckblatt, Inhaltsverzeichnis, Textmarken (E17)
 shortcodes:

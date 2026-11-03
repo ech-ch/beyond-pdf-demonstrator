@@ -3,7 +3,8 @@
 // Herkunft: FOAG-Template blw-ofag-ufag/semantic-web-template,
 // docs/assets/ech.scss (CC BY 4.0, Stand Commit 659b85f). Angepasst für den
 // Demonstrator: Regel zum Ausblenden der Anhänge im Inhaltsverzeichnis
-// entfernt (das Original führt sie dort auf); Platzhalter (E05) ergänzt.
+// entfernt (das Original führt sie dort auf); Platzhalter (E05), Sprungziele
+// der Bausteine (R6) und Umbruch langer Werte im Deckblatt ergänzt.
 //
 // eCH look for the Quarto website: Noto Sans, eCH red for links, a dark
 // header, plain headings and PDF-like tables. The colours below are the light
@@ -48,6 +49,10 @@ $grid-margin-width: 375px;
   width: auto;
   margin-right: 0.6rem;
 }
+// Auf dem Handy drückt der Titel sonst den Link um das Logo zusammen («eCI»).
+.navbar .navbar-brand-logo {
+  flex-shrink: 0;
+}
 
 // Title block: document title, then the eCH metadata as a borderless
 // key-value list. The summary follows as an unnumbered chapter.
@@ -62,7 +67,9 @@ $grid-margin-width: 375px;
 
   .ech-metadata {
     display: grid;
-    grid-template-columns: max-content 1fr;
+    // minmax(0, 1fr): lange Werte ohne Trennstelle (Dateinamen der Beilagen)
+    // dürfen die Seite auf dem Handy nicht verbreitern
+    grid-template-columns: max-content minmax(0, 1fr);
     column-gap: 2rem;
     row-gap: 0.4rem;
     margin: 0 0 1.75rem;
@@ -77,6 +84,7 @@ $grid-margin-width: 375px;
     }
     dd {
       margin: 0;
+      overflow-wrap: anywhere;
       p {
         margin: 0;
       }
@@ -97,6 +105,8 @@ $grid-margin-width: 375px;
   h4 {
     font-weight: 700;
     color: $ech-text;
+    // lange Wörter («Haftungsausschluss/Hinweise») sprengen sonst das Handy
+    overflow-wrap: break-word;
   }
   h1:not(.title) {
     font-size: 1.5rem;
@@ -287,6 +297,20 @@ $grid-margin-width: 375px;
 .sidebar nav[role="doc-toc"] ul > li > a,
 .sidebar nav[role="doc-toc"] ul > li > ul > li > a {
   color: $ech-text;
+}
+
+// Bausteine: Sprungziel #<baustein-id> (filters/ech_anker.lua) unterhalb der
+// festen Kopfzeile; der angesprungene Baustein ist dezent markiert.
+#quarto-content div[data-bb],
+#quarto-content .baustein-anker {
+  scroll-margin-top: 7rem;
+}
+#quarto-content div[data-bb]:target {
+  background: rgba($ech-red, 0.06);
+  border-left: 3px solid $ech-red;
+  padding: 0.3rem 0.6rem;
+  margin-left: calc(-0.6rem - 3px);
+  margin-right: -0.6rem;
 }
 
 // Platzhalter unter nicht überführten Überschriften (E05,

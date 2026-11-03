@@ -21,6 +21,7 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Kap. 7 als 10 grobe und 54 feine Bausteine (55 Klauseln), Querverweise erzeugt | vorhanden |
 | Word mit Deckblatt, Demonstrator-Hinweis, Inhaltsverzeichnis und Fusszeile | vorhanden |
 | CI-Prüfungen für Quelle und Ausgabe (`tools/pruefe.py`) | vorhanden |
+| Startseite mit Rundgang; jeder Baustein unter `#<baustein-id>` erreichbar | vorhanden |
 | Feedback, Registry, Anhang A und F | folgt (AP9–AP14) |
 
 Das Original-PDF liegt unter [original/eCH-0003_V11.1.0_d.pdf](original/eCH-0003_V11.1.0_d.pdf). Kap. 10 des Standards erlaubt die Weiterverbreitung.
@@ -93,7 +94,7 @@ GitHub Pages ist vorbereitet, aber ausgeschaltet, bis die Freigabe zum Veröffen
 
 | Datei hier | Datei im FOAG-Template | Änderung |
 |---|---|---|
-| `assets/ech.scss` | `docs/assets/ech.scss` | Regel zum Ausblenden der Anhänge im Inhaltsverzeichnis entfernt; Stil für Platzhalter ergänzt |
+| `assets/ech.scss` | `docs/assets/ech.scss` | Regel zum Ausblenden der Anhänge im Inhaltsverzeichnis entfernt; Stile für Platzhalter und Sprungziele der Bausteine ergänzt; lange Werte im Deckblatt brechen auf dem Handy um |
 | `assets/ech_dark.scss` | `docs/assets/ech_dark.scss` | keine |
 | `assets/ech.svg`, `assets/favicon.svg` | `docs/assets/` | keine |
 | `assets/title-metadata.html` | `docs/assets/title-metadata.html` | keine |

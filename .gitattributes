@@ -10,6 +10,7 @@
 *.svg   text eol=lf
 *.txt   text eol=lf
 *.tsv   text eol=lf
+*.toml  text eol=lf
 
 # Binärdateien
 *.pdf   binary

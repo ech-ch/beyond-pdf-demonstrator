@@ -1,17 +1,29 @@
 ---
 title: "Beyond PDF – Demonstrator"
-subtitle: "eCH-Standards aus Bausteinen"
+subtitle: "Ein eCH-Standard aus Bausteinen"
 format: html
 number-sections: false
 toc: false
 ---
 
 ::: {.callout-warning appearance="simple"}
-**Demonstrator, kein offizieller eCH-Standard.** Diese Website zeigt einen Versuch des Vereins eCH. Massgebend ist allein die auf [ech.ch](https://www.ech.ch) publizierte Fassung von eCH-0003.
+**Demonstrator, kein offizieller eCH-Standard.** Diese Website ist automatisch aus den Bausteinen des Demonstrators «Beyond PDF» erzeugt. Massgebend ist allein die auf [www.ech.ch](https://www.ech.ch) publizierte Fassung von eCH-0003 V11.1.0.
 :::
 
-Der Demonstrator zerlegt den Standard eCH-0003 V11.1.0 «Leitfaden zur Genehmigung von Anträgen» in Bausteine mit stabiler ID. Aus den Bausteinen entstehen wieder ein Word-Dokument und diese Website.
+Der Demonstrator zerlegt den Standard eCH-0003 V11.1.0 «Leitfaden zur Genehmigung von Anträgen» in Bausteine. Jede Regel erhält eine eigene, feste Adresse. Aus denselben Bausteinen entstehen diese Website und ein Word-Dokument.
 
-- [eCH-0003 V11.1.0 ansehen](ech-0003/v11.1.0/de/index.qmd)
+[eCH-0003 V11.1.0 ansehen](ech-0003/v11.1.0/de/index.qmd){.btn .btn-primary}
 
-Die Website ist im Aufbau. Abschnitte, die noch nicht in Bausteine überführt sind, tragen einen Platzhalter mit Verweis auf die entsprechende Seite im Original.
+## Rundgang in drei Schritten
+
+1. **Eine Regel ansehen.** [Diese Regel zur Versionierung](ech-0003/v11.1.0/de/index.qmd#ech-0003-bb-schema-eigene-version) hat die feste Adresse `ech-0003-bb-schema-eigene-version`. Die Adresse soll bleiben, auch wenn die Regel in einer neuen Version anders formuliert ist oder in einem anderen Kapitel steht.
+
+2. **Feedback geben.** Feedback landet direkt beim Baustein, statt bei «Kapitel X, Seite Y». Der Feedback-Knopf an jeder Regel **folgt in Kürze**. Für Feedback braucht es ein kostenloses GitHub-Konto.
+
+3. **Word herunterladen.** [DEMO_eCH-0003_V11.1.0_de.docx](ech-0003/v11.1.0/de/DEMO_eCH-0003_V11.1.0_de.docx) entsteht automatisch aus denselben Bausteinen, mit Deckblatt, Inhaltsverzeichnis und Querverweisen. Word fragt beim Öffnen, ob es die Felder aktualisieren soll; mit «Ja» erscheint das Inhaltsverzeichnis.
+
+## Gut zu wissen
+
+- **Platzhalter:** Kapitel, die noch nicht in Bausteine überführt sind, sind als Platzhalter markiert. Sie verweisen auf die entsprechende Seite im [Original-PDF](original/eCH-0003_V11.1.0_d.pdf).
+- **Vorschlag:** Die Regeln für Bausteine und IDs sind ein Vorschlag und eine Diskussionsgrundlage für eCH, keine verbindliche Regel.
+- **Mehr dazu:** [Repository auf GitHub](https://github.com/ech-ch/beyond-pdf-demonstrator) · [Fragen und Entscheide](https://github.com/ech-ch/beyond-pdf-demonstrator/blob/main/docs/fragenlog.md) · Liste aller Bausteine zum Herunterladen (Registry): folgt

@@ -29,6 +29,7 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
      als Abweichung (E11)
   3. kein unaufgelöster Verweis: «?@…», «@sec-…» im Text oder die
      Quarto-Warnung «Unable to resolve crossref» im Log (K3)
+  4. auf der Website hat jeder Baustein genau einen Anker #<baustein-id> (R6)
 """
 import argparse
 import difflib
@@ -419,6 +420,13 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
             if "Unable to resolve crossref" in zeile:
                 ohne_farben = re.sub(r"\x1b\[[0-9;]*m", "", zeile).strip()
                 b.fehler_(f"Quarto: {ohne_farben} (K3)", log, nr)
+
+    # 4. Anker = Baustein-ID auf der Website, genau einmal (R6, E27)
+    ids = re.findall(r'\sid="([^"]+)"', html_roh)
+    for bb in sorted(set(re.findall(r'data-bb="([^"]+)"', html_roh))):
+        n = ids.count(bb)
+        if n != 1:
+            b.fehler_(f"HTML: Baustein «{bb}» hat {n} Anker #{bb}, erwartet genau einen (R6)", html_pfad)
 
     # 1.–2. je überführtem Kapitel
     for kap in std.get("kapitel", []):
