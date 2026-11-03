@@ -8,6 +8,8 @@ Der Demonstrator zerlegt einen textbasierten eCH-Standard in **Bausteine** mit s
 
 Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/mvp-spezifikation.md](docs/mvp-spezifikation.md) und [docs/fragenlog.md](docs/fragenlog.md).
 
+**Stellenwert der Regeln:** Wie der Demonstrator Bausteine bildet, IDs vergibt und Beziehungen ableitet, ist ein **Vorschlag und eine Diskussionsgrundlage**. Es ist keine verbindliche Regel. Wie Bausteine und IDs künftig geregelt werden, entscheiden die Fachgruppen, Fachleute und zuständigen Gremien des Vereins eCH, voraussichtlich in einem eigenen Standard oder einem Zusatz zu einem bestehenden.
+
 ## Stand
 
 | Teil | Stand |

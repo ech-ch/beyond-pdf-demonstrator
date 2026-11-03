@@ -14,7 +14,11 @@ _Vermeiden_: Building Block (im deutschen Text), Modul, Abschnitt
 Ein Baustein, der ein ganzes Kapitel oder Unterkapitel umfasst.
 
 **Feiner Baustein**:
-Ein Baustein im Text eines groben Bausteins. Jede normative Klausel ist ein feiner Baustein. Andere Absätze oder Sätze werden es nur bei Bedarf. Er ist ein vollwertiger Baustein mit eigener ID.
+Ein Baustein im Text eines groben Bausteins. Jede normative Klausel ist ein feiner Baustein, samt den Absätzen, die sie erläutern. Ein eigenständiger Absatz ohne Kennzeichnung wird ebenfalls ein feiner Baustein. Er ist ein vollwertiger Baustein mit eigener ID.
+
+**Mehrfachverwendung**:
+Ein Baustein, der an mehreren Stellen eines Standards vorkommt, weil der Text dort zeichengleich ist. Er hat eine ID und mehrere Fundstellen.
+_Vermeiden_: Kopie, Duplikat (für einen mehrfach verwendeten Baustein)
 
 **Verfeinern**:
 Einen Textteil eines groben Bausteins nachträglich als feinen Baustein auszeichnen. Bestehende IDs, Beziehungen und Rückmeldungen bleiben dabei gültig. Das Gegenteil, eine veröffentlichte ID wieder zu entfernen, ist nicht erlaubt.
@@ -40,6 +44,9 @@ _Vermeiden_: Link (für den fachlichen Verweis)
 
 **Verbindlichkeit**:
 Die Stufe einer normativen Klausel, abgeleitet aus ihrer Kennzeichnung ([MUSS], [SOLLTE], [DARF NICHT]). Absätze ohne Kennzeichnung haben keine Verbindlichkeit.
+
+**Rückbezug**:
+Stelle, an der ein feiner Baustein nur mit dem Text davor verständlich ist («hierbei», «Dies», «Diese Änderung»). Ein Rückbezug auf einen anderen feinen Baustein wird als Beziehung `depends_on` festgehalten.
 
 **Einbettung**:
 Die Beziehung eines feinen Bausteins zum groben Baustein, in dessen Text er steht (`is_part_of`). Sie ergibt sich aus der Position im Text und wird erzeugt.
@@ -107,7 +114,7 @@ _Vermeiden_: Migration, Konvertierung
 Angabe, aus welchem Original und von welcher Seite ein überführter Baustein stammt. Sie ist historisch und bleibt auch dann stehen, wenn sich der Baustein später ändert.
 
 **Fundstelle**:
-Kapitel und Titel eines Bausteins im erzeugten Dokument einer bestimmten Version. Sie ist erzeugter Inhalt.
+Kapitel und Titel eines Bausteins im erzeugten Dokument einer bestimmten Version. Sie ist erzeugter Inhalt. Ein mehrfach verwendeter Baustein hat mehrere Fundstellen.
 _Vermeiden_: Quelle (für die Fundstelle)
 
 **Registry**:

@@ -1,6 +1,6 @@
 # MVP-Spezifikation Demonstrator «Beyond PDF»
 
-Stand: 2.11.2026 (Grilling-Session 1, laufend nachgeführt). Alle Festlegungen gelten vorläufig (MVP) und werden nach dem 12.11.2026 überprüft. Begriffe gemäss [CONTEXT.md](../CONTEXT.md), Entscheide im [Fragenlog](fragenlog.md).
+Stand: 2.11.2026 (Grilling-Session 1, laufend nachgeführt). Alle Festlegungen gelten vorläufig (MVP) und werden nach dem 12.11.2026 überprüft. Die Regeln zu Bausteinen, IDs und Beziehungen sind ein Vorschlag und eine Diskussionsgrundlage für eCH, keine verbindliche Regel. Wie IDs künftig verwaltet werden, entscheiden die zuständigen Gremien des Vereins eCH (E28, F41). Begriffe gemäss [CONTEXT.md](../CONTEXT.md), Entscheide im [Fragenlog](fragenlog.md).
 
 ## 1. Zielbild und Präsentation
 
@@ -133,6 +133,7 @@ Umfang gemäss E02 und E04:
 | Gerüst | eine Datei je Sprache. Enthält Hauptkapitel ohne eigenen Text, Platzhalter und die Einbindung der Baustein-Dateien |
 | Grober Baustein | eine Datei je Unterkapitel mit eigenem Text; beginnt mit der eigenen Überschrift |
 | Feiner Baustein | `:::`-Block in der Datei des groben Bausteins, bei einem Satz mitten im Absatz eine Inline-Markierung `[…]{…}` (F34) |
+| Mehrfach verwendeter feiner Baustein (E27) | zeichengleiche Klausel an mehreren Stellen: einmal in `bausteine/mehrfach/<kurzname>.md`, an jeder Stelle eingebunden; mehrere Fundstellen |
 | Hauptkapitel ohne eigenen Text (z.B. «1 Einleitung», «7 Formales») | kein Baustein, nur im Gerüst, kein Feedback-Knopf |
 | YAML-Kopfzeile in Baustein-Dateien | verboten, die CI prüft das (Spike S2) |
 
@@ -210,8 +211,8 @@ Die Auslöser für eine Neubeurteilung stehen in ADR 0001.
 |---|---|
 | R1 Format | `ech-0003-bb-<kurzname>`. Das Präfix enthält die Standardnummer, aber keine Version. |
 | R2 Zeichen | `a–z`, `0–9`, Bindestrich. Umlaute werden ausgeschrieben (ä→ae, ö→oe, ü→ue). |
-| R3 Inhalt | Der Kurzname beschreibt den Inhalt in 1–4 deutschen Wörtern, auch für Übersetzungen. Er enthält keine Kapitelnummer, keine Version und kein Präfix des Elternbausteins. Prüffrage: «Stimmt der Name noch, wenn der Baustein in ein anderes Kapitel wandert?» Zahlen sind nur als Inhalt erlaubt. |
-| R4 Stabilität | Einmal vergeben, wird eine ID nie geändert, auch wenn sich der Wortlaut ändert. |
+| R3 Inhalt | Der Kurzname beschreibt den Inhalt in 1–4 deutschen Wörtern, auch für Übersetzungen. Feststehende Fachbegriffe bleiben in der Sprache des Originals, z.B. «semver», «minor», «major» (3.11.2026). Er enthält keine Kapitelnummer, keine Version und kein Präfix des Elternbausteins. Prüffrage: «Stimmt der Name noch, wenn der Baustein in ein anderes Kapitel wandert?» Zahlen sind nur als Inhalt erlaubt. |
+| R4 Stabilität | Ab der ersten Veröffentlichung (Release oder Pages) wird eine ID nie geändert, auch wenn sich der Wortlaut ändert. Vorher darf sie noch angepasst werden (E27). |
 | R5 Eindeutigkeit | Die ID ist eindeutig im Standard. Bei Kollisionen kommt ein unterscheidendes Inhaltswort hinzu, kein Zähler. |
 | R6 Ort | Die ID steht bei jedem Baustein im Attribut `bb`. Grobe Bausteine tragen an der Überschrift zusätzlich den Anker `#sec-<kurzname>` mit demselben Kurznamen. Die CI prüft Eindeutigkeit und Übereinstimmung. Auf der Website ist jeder Baustein unter `…#<baustein-id>` erreichbar; den Anker setzt ein Filter. |
 | R7 Kein Baustein | Gerüst-Überschriften ohne Baustein tragen nur einen `sec-`-Anker (z.B. die Verweisziele 1.3.4, 1.3.9, 1.3.10). |
@@ -242,6 +243,7 @@ Die Auslöser für eine Neubeurteilung stehen in ADR 0001.
 | `id` | `bb="…"` | `bb="…"` | Attribut, Pflicht |
 | `building_block_type` | `typ="…"` | `typ="…"` | Attribut, Pflicht (Zuordnung in B8) |
 | `name` | Überschrift | `name="…"` | beim feinen Baustein optional; fehlt es, erzeugt der Build den Namen aus den ersten Wörtern (E12) |
+| `relationships` (`depends_on`) | – | `bezug="…"` | Attribut, nur bei Rückbezug im Text (E30) |
 | `herkunft.seite` (Erweiterung) | `original-seite="27"` | `original-seite="28"` | Attribut. Pflicht nur, solange ein Standard aus einem Original überführt wird; auch an Gerüst-Überschriften (Platzhalter-Link) |
 | `standard`, Dokumentversion, `herkunft.dokument` | – | – | einmal global in den Metadaten des Standards (`original: eCH-0003 V11.1.0`) |
 | `status` | – | – | global `draft`, Attribut nur bei Abweichung |
@@ -262,7 +264,7 @@ Ausgelassene Stellen sind mit «…» markiert. Absatzgrenzen und Wortlaut legt 
 [MUSS] Bei der Versionierung sämtlicher Antragsformen gilt das Prinzip der Zielversion. Das heisst ein Dokument behält über sämtliche Prozessschritte die gleiche Versionsnummer. Diese wird durch den Bearbeitungsstatus (siehe Kapitel -@sec-bearbeitungsstatus) sowie das Ausgabedatum weiter spezifiziert.
 :::
 
-::: {bb="ech-0003-bb-semver-hauptelemente" typ="requirement" original-seite="27"}
+::: {bb="ech-0003-bb-struktur-versionsschema-semver" typ="requirement" original-seite="27"}
 [MUSS] Die Struktur erfolgt gemäss «Semantic Versioning»[@SemVer]. eCH setzt nur die Hauptelemente dieses Versionierungsschemas ein und nutzt die optionalen nicht. Es handelt sich um:
 
 - Hauptversionsnummer (engl. «major version»)
@@ -304,7 +306,7 @@ Daraus erzeugt der Build unter anderem:
 | Querverweise (E11) | «(siehe Kapitel 7.5)», «Anhang F unten», «gemäss Kapitel 7.8», «gemäss Unterkapitel 1.3.4», «Semantic Versioning»[SemVer], alle zeichengleich |
 | Einbettung (E10, W4) | 7 feine Bausteine `is_part_of` `ech-0003-bb-versionierung` |
 | Verbindlichkeit (E10, V2) | grob: 7× MUSS; jeder feine Baustein: MUSS |
-| Beziehungen (E10, W1–W5) | `prinzip-zielversion` → `bearbeitungsstatus`; `semver-hauptelemente` → Literatureintrag SemVer; `versionierung` (grob) → `formale-syntax` (Absatz ohne Kennzeichnung); `versionsstufe-dokument` → `minor-change`, `major-change`; `externe-quelle-versionierung` → 1.3.4 («noch kein Baustein»); Selbstverweis auf 7.3 nicht erfasst |
+| Beziehungen (E10, W1–W5) | `prinzip-zielversion` → `bearbeitungsstatus`; `struktur-versionsschema-semver` → Literatureintrag SemVer; `versionierung` (grob) → `formale-syntax` (Absatz ohne Kennzeichnung); `versionsstufe-dokument` → `minor-change`, `major-change`; `externe-quelle-versionierung` → 1.3.4 («noch kein Baustein»); Selbstverweis auf 7.3 nicht erfasst |
 | Name des feinen Bausteins (E12) | aus den ersten Wörtern, z.B. «Besteht nebst einem eCH-Dokument auch ein Schema …» |
 | Herkunft (E09) | eCH-0003 V11.1.0, Seite 27 bzw. 28 |
 | Website (E18) | Anker `#ech-0003-bb-schema-eigene-version`, Feedback-Symbol am Rand, ID beim Darüberfahren |
@@ -333,7 +335,8 @@ Dieselbe Erkennung liefert die Zählung für D4.
 | W3 | Verweise auf andere eCH-Standards werden markiert, ohne den Text zu ändern: `[«eCH-0150: Change und Releasemanagement von eCH-Standards»]{standard="eCH-0150"}`. Daraus entsteht eine Beziehung zum Standard. |
 | W4 | Die Umkehrung «wird referenziert von» wird erzeugt. Die Einbettung `is_part_of` / `has_part` ergibt sich aus der Verschachtelung. |
 | W5 | Selbstverweise werden nicht erfasst. |
-| W6 | Manuelle Beziehungen mit Bedeutung kommen erst nach dem MVP (ADR 0003). |
+| W6 | Manuelle Beziehungen mit Bedeutung kommen erst nach dem MVP (ADR 0003). Ausnahme: Rückbezüge im Text (E30). |
+| W7 | Rückbezüge zwischen feinen Bausteinen («hierbei», «Dies», «Diese Änderung» …) werden am abhängigen Baustein als `bezug="ech-0003-bb-…"` erfasst und ergeben `depends_on` samt Umkehrung. Rückbezüge auf das Thema des eigenen groben Bausteins werden nicht erfasst (E30). |
 
 **Stufen:** Registry mit Verbindlichkeit und Beziehungen: Stufe 1 (geplant). Sichtbar auf der Website: Stufe 2.
 
@@ -360,9 +363,18 @@ Dieselbe Erkennung liefert die Zählung für D4.
 
 ### 3.6 Feinschnitt (E12, [ADR 0004](adr/0004-feine-bausteine-normative-klauseln.md))
 
-**Regel:** Jede normative Klausel ist ein feiner Baustein. Eine Klausel umfasst den Absatz mit der Kennzeichnung und eine unmittelbar folgende Aufzählung, auch wenn der Absatz nicht mit «:» endet (Fall 7.8, präzisiert in E14). Absätze ohne Kennzeichnung bleiben beim groben Baustein; sie werden nur bei Bedarf verfeinert.
+**Regel:** Jede normative Klausel ist ein feiner Baustein. Grenzen (E29, präzisiert E12/E14):
 
-**Kap. 7:** 55 feine Bausteine (36 MUSS, 11 SOLLTE, 8 DARF NICHT) und 10 grobe. Entwurf aller Baustein-IDs mit Auffälligkeiten: [kap7-bausteine.md](kap7-bausteine.md) (zur Durchsicht).
+| Regel | Inhalt |
+|---|---|
+| G1 | Ein feiner Baustein reicht von seiner Kennzeichnung bis zur nächsten Kennzeichnung oder zum Ende des Unterkapitels, inklusive Aufzählungen (auch ohne «:») und Absätzen ohne Kennzeichnung, sofern sie sich auf die Klausel beziehen. |
+| G2 | Absätze vor der ersten Klausel eines Unterkapitels sind Einleitung und gehören zum groben Baustein. |
+| G3 | Verbindlichkeit = die der Kennzeichnung; angehängte Absätze erläutern sie, der Build interpretiert nichts. |
+| G4 | Ein Absatz ohne Kennzeichnung ohne Bezug zur vorangehenden Klausel wird ein eigener feiner Baustein (z.B. Typ `descriptive`, Verbindlichkeit «ohne Kennzeichnung»). Beurteilt wird beim Überführen; festgehalten in `kap7-bausteine.md`. |
+
+In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehende Klausel (3× 7.3-2, je 1× 7.8-5 und 7.8-6); es entsteht kein G4-Baustein. Zur Rückmeldung des Vorgesetzten: F42.
+
+**Kap. 7:** 55 normative Klauseln (36 MUSS, 11 SOLLTE, 8 DARF NICHT) in 54 feinen Bausteinen, davon einer mehrfach verwendet (E27), und 10 grobe. Entwurf aller Baustein-IDs mit Auffälligkeiten: [kap7-bausteine.md](kap7-bausteine.md) (zur Durchsicht).
 
 **Beispiele mit belegter öK-Rückmeldung zu V12.0.0** (für das Folienpaket):
 
@@ -370,8 +382,7 @@ Dieselbe Erkennung liefert die Zählung für D4.
 |---|---|---|---|
 | 7.3 | [MUSS] Besteht nebst einem eCH-Dokument auch ein Schema … | 4 Rückmeldungen, verortet als «7.5», S. 31/32 | `ech-0003-bb-schema-eigene-version` |
 | 7.3 | [MUSS] Referenziert ein eCH-Dokument eine externe Quelle … | «Versionierung externe Versionsnummern», 7.5, S. 31 | `ech-0003-bb-externe-quelle-versionierung` |
-| 7.8 | [MUSS] Sämtliche inhaltlichen Änderungen zur Vorversion … | «inhaltliche Änderungen zur Vorversion beschreiben», 7.51/7.5.2 | `ech-0003-bb-aenderungen-vorversion-minor` |
-| 7.9 | dieselbe Klausel, wortgleich | dieselbe Rückmeldung | `ech-0003-bb-aenderungen-vorversion-major` |
+| 7.8 und 7.9 | [MUSS] Sämtliche inhaltlichen Änderungen zur Vorversion … (wortgleich an beiden Stellen) | «inhaltliche Änderungen zur Vorversion beschreiben», 7.51/7.5.2 | `ech-0003-bb-aenderungen-vorversion` (ein Baustein, zwei Fundstellen, E27) |
 
 **Typen (ZHAW):**
 
@@ -383,7 +394,7 @@ Dieselbe Erkennung liefert die Zählung für D4.
 | `governance` | 7.6, 7.7 |
 | `rule` | 7.2, 7.3, 7.10 |
 
-**CI-Prüfung:** Jeder feine Baustein enthält genau eine Kennzeichnung, und jede Kennzeichnung steht in einem feinen Baustein.
+**CI-Prüfung:** Jeder feine Baustein enthält höchstens eine Kennzeichnung; feine Bausteine ohne Kennzeichnung (G4) haben einen Typ ausser `requirement`. Jede Kennzeichnung steht in einem feinen Baustein (E29).
 
 **Verfeinern statt Vergröbern:** Ein Textteil kann jederzeit nachträglich fein werden, ohne dass bestehende IDs, Beziehungen oder Issues brechen. Eine veröffentlichte ID wird nie entfernt.
 
@@ -402,7 +413,7 @@ Dieselbe Erkennung liefert die Zählung für D4.
 | Platzhalter | Platzhalter unter nicht überführten Überschriften | neu | E05 |
 | Deckblatt-Filter (DOCX) | Titel, Hinweis, Metadatentabelle, Zusammenfassung, Inhaltsverzeichnis-Feld, Textmarken der Fusszeile | neu; Textmarken aus Spike S3 | E17 |
 | `aktualisiere_felder_beim_oeffnen.py` | Word aktualisiert Felder beim Öffnen | neu (F40) | E17 |
-| CI-Prüfungen | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein genau eine Kennzeichnung; Zählung 36/11/8; unaufgelöste Verweise als Fehler | neu | E07, E08, E11, E12, D4 |
+| CI-Prüfungen | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein höchstens eine Kennzeichnung (G4-Bausteine ohne, E29); Zählung 36/11/8; unaufgelöste Verweise als Fehler | neu | E07, E08, E11, E12, D4 |
 
 ## 4. Verzeichnisstruktur und Build-Pipeline
 
@@ -650,7 +661,7 @@ Abgestimmt auf den Zeitplan bis 12.11.2026. «PL» = Projektleitung. Verweise au
 | AP0a | Meeting mit dem Vorgesetzten: Lieferzusage (E04) und Stand der Umsetzung zeigen; definitiver Termin fürs Folienpaket; Freigabe zum Veröffentlichen; Lizenz (F36) | **Mi 4.11.** (verschoben) | Antworten im Fragenlog; danach Repo öffentlich und Pages aktiv |
 | AP0b | Word-Original von V11.1.0 über den Vorgesetzten bei der Geschäftsstelle anfragen (E19) | ab Mi 4.11. | Gegenprobe, falls es kommt |
 | AP0c | Testkonto ohne Mitgliedschaft in `ech-ch` und ohne Schreibrechte im Repo (D2). **Nicht** das eigene Konto weitergeben, denn es hat Schreibrechte, und der Test wäre wertlos. Am besten legt die Vertrauensperson ein eigenes Konto an und macht damit auch gleich den Fremdtest (AP16). | vor Do 5.11. | Testkonto; zusätzlich ein echter Befund zur Hürde «GitHub-Konto» (F06) |
-| AP0d | Kurznamen in [kap7-bausteine.md](kap7-bausteine.md) durchsehen, besonders die 11 unsicheren | vor Mi 4.11. | freigegebene ID-Liste (Voraussetzung für AP5) |
+| AP0d | Kurznamen in [kap7-bausteine.md](kap7-bausteine.md) durchsehen, besonders die 11 unsicheren | **erledigt 3.11.** (E27–E31) | freigegebene ID-Liste (Voraussetzung für AP5) |
 
 **Folge der Verschiebung:** Bis zum Meeting wird umgesetzt, was ohne Freigabe geht. Das Meeting stützt sich dann auf einen laufenden Stand statt auf einen Plan. Ohne Freigabe läuft nur keine öffentliche Website.
 
@@ -673,7 +684,7 @@ Abgestimmt auf den Zeitplan bis 12.11.2026. «PL» = Projektleitung. Verweise au
 
 | # | Aufgabe | Grundlage |
 |---|---|---|
-| AP5 | Kap. 7 als 10 grobe und 55 feine Bausteine (IDs aus AP0d), Querverweise in der Schreibweise aus E11, eCH-0150 als markierter Verweis (W3), `[@SemVer]` | E07–E12 |
+| AP5 | Kap. 7 als 10 grobe und 54 feine Bausteine (einer mehrfach verwendet, E27) (IDs aus AP0d), Querverweise in der Schreibweise aus E11, eCH-0150 als markierter Verweis (W3), `[@SemVer]` | E07–E12 |
 | AP6 | Word: `ech_docx_nummern.lua` (Lösung A), Deckblatt-Filter mit `vorlage/2022/deckblatt.yml` und Metadaten, Textmarken der Fusszeile, Demonstrator-Hinweis | E14, E17, D5 |
 | AP7 | CI-Prüfungen nach 3.7: YAML-Verbot, ID-Regeln, keine Nummern von Hand, eine Kennzeichnung je feinem Baustein, Zählung 36/11/8, unaufgelöste Verweise als Fehler, normalisierter Textvergleich | E07–E12, E19 |
 | AP8 | Startseite mit Rundgang und Hinweisen | E18 |

@@ -18,6 +18,14 @@ Für den MVP gilt folgende Ablage:
 
 Damit bleibt die Quelle lesbar wie der Standard. Gleichzeitig ist jede Beziehung unabhängig von der Grösse eines Bausteins direkt modellierbar.
 
+## Ergänzung 3.11.2026: Mehrfachverwendung (E27)
+
+Zeichengleiche Klauseln an mehreren Stellen sind **ein** Baustein mit mehreren Fundstellen. Ein Beispiel ist «Sämtliche inhaltlichen Änderungen zur Vorversion …» in 7.8 und 7.9.
+
+- Ein solcher Baustein liegt einmal in `bausteine/mehrfach/` und wird an jeder Stelle eingebunden.
+- Die Einbettung ist damit kein strenger Baum mehr: Ein feiner Baustein kann in mehreren groben Bausteinen eingebettet sein.
+- Ähnliche, aber nicht zeichengleiche Klauseln bleiben getrennte Bausteine.
+
 ## Considered Options
 
 - **Eine Datei pro Sprache (FOAG-Template):** einfachster Build, aber kein Änderungsverlauf je Baustein.
@@ -38,5 +46,5 @@ Damit bleibt die Quelle lesbar wie der Standard. Gleichzeitig ist jede Beziehung
 
 - Eine Umsetzung nach dem ZHAW-Modell wird ersichtlich oder verlangt, etwa Versionierung je Baustein oder eine Datei je Baustein. Dann ist «jeder Baustein eine eigene Datei» zu prüfen.
 - Ein Baustein braucht nicht zusammenhängenden Text. Dann sind strukturierte Daten zu prüfen.
-- Derselbe Baustein soll in mehreren Standards vorkommen (gemeinsame oder parametrisierte Bausteine, F26).
+- Derselbe Baustein soll in mehreren Standards vorkommen (gemeinsame oder parametrisierte Bausteine, F26). Innerhalb eines Standards ist das mit der Mehrfachverwendung (E27) für zeichengleiche Klauseln bereits gelöst.
 - Übersetzungen weichen in der Struktur vom Original ab.

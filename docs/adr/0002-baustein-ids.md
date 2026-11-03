@@ -6,13 +6,15 @@ status: accepted (vorläufig, MVP; Überprüfung nach 12.11.2026)
 
 Baustein-IDs folgen dem ZHAW-Schema `ech-0003-bb-<kurzname>`. Für den Kurznamen gelten drei Regeln:
 
-- Er beschreibt den **Inhalt** in 1–4 deutschen Wörtern. Kapitelnummer, Version und Präfix des Elternbausteins kommen nicht vor.
-- Er wird beim ersten Vergeben **eingefroren** und nie geändert, auch wenn sich der Wortlaut ändert.
+- Er beschreibt den **Inhalt** in 1–4 deutschen Wörtern. Feststehende Fachbegriffe bleiben im Original, z.B. «semver», «minor» und «major». Kapitelnummer, Version und Präfix des Elternbausteins kommen nicht vor.
+- Er wird mit der ersten Veröffentlichung (Release oder Pages) **eingefroren** und danach nie geändert, auch wenn sich der Wortlaut ändert. Vorher, solange er nur in der Doku steht, darf er noch angepasst werden (präzisiert 3.11.2026, E27).
 - Er ist eindeutig im Standard. Kollisionen werden mit einem Inhaltswort gelöst, nicht mit einem Zähler.
 
 Grund: Nach ADR 0001 bestimmt allein die ID die Identität eines Bausteins. Position und Wortlaut ändern sich zwischen Versionen, etwa 7.3 → 7.5, «Schema» → «Implementationshilfe» oder Addendum 7.7 → 2.4. Deshalb dürfen beide die ID nicht prägen.
 
 Die ID steht bei jedem Baustein im Attribut `bb`. Querverweise in Quarto verlangen bei Überschriften einen Anker mit Präfix `sec-` (Spike S2). Grobe Bausteine tragen deshalb zusätzlich `#sec-<kurzname>` mit demselben Kurznamen. Die CI prüft Eindeutigkeit und Übereinstimmung.
+
+**Stellenwert (E28):** Diese Regeln sind ein Vorschlag und eine Diskussionsgrundlage. Wie IDs künftig gebildet und verwaltet werden, regelt voraussichtlich ein eigener eCH-Standard oder ein Zusatz zu einem bestehenden. Darüber entscheiden die zuständigen Gremien des Vereins eCH (F41).
 
 ## Considered Options
 
