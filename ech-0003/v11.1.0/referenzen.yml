@@ -3,9 +3,10 @@
 # Daten, keine Bausteine. Je Eintrag:
 #   schluessel  für Zitate im Text, z.B. «Semantic Versioning»[@SemVer]
 #   kuerzel     Anzeige-Kürzel wie in der linken Spalte des Originals
-#   text        wörtlich aus original/text/anhang-a.txt (Seite 34)
-# Zitate löst filters/ech_referenzen.lua auf; die Tabelle in Anhang A
-# erzeugt ein Filter mit AP13.
+#   text        wörtlich aus original/text/anhang-a.txt (Seite 34), Markdown;
+#               der Link auf semver.org steht auch im Original
+# Zitate löst filters/ech_referenzen.lua auf; die Tabelle in Anhang A erzeugt
+# der Shortcode {{< referenzen >}} (filters/ech_shortcodes.lua).
 
 referenzen:
   - schluessel: ISO
@@ -16,4 +17,4 @@ referenzen:
     text: "eCH-0150: Change und Releasemanagement von eCH-Standards, Version 1.0"
   - schluessel: SemVer
     kuerzel: "SemVer"
-    text: "Semantic Versioning (https://semver.org/)"
+    text: "Semantic Versioning (<https://semver.org/>)"

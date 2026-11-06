@@ -79,13 +79,39 @@ local function read_yaml(path)
   return yaml_cache[path]
 end
 
--- Liest einen Teil der Vorlage-Fassung des Dokuments (z.B. "deckblatt") in
--- der Sprache des Dokuments. Gibt den Teil und den Namen der Fassung zurück.
-function M.vorlage(meta, teil)
+-- Name der Vorlage-Fassung des Dokuments (Metadatum `vorlage`, ADR 0005).
+function M.vorlage_fassung(meta)
   local fassung = meta.vorlage and stringify(meta.vorlage) or ""
   if fassung == "" then
     error("eCH-Metadaten: `vorlage` (Vorlage-Fassung) fehlt, siehe ADR 0005")
   end
+  return fassung
+end
+
+-- Einträge von Anhang A aus referenzen.yml im Ordner der Version, eine Ebene
+-- über der Sprachfassung: Liste von { schluessel, kuerzel, text } (E15).
+function M.referenzen()
+  local input = quarto.doc.input_file
+  if not input then return {} end
+  local pfad = pandoc.path.join({ pandoc.path.directory(input), "..", "referenzen.yml" })
+  local datei = io.open(pfad, "r")
+  if datei == nil then return {} end
+  datei:close()
+  local eintraege = {}
+  for _, e in ipairs(read_yaml(pfad).referenzen or {}) do
+    table.insert(eintraege, {
+      schluessel = stringify(e.schluessel),
+      kuerzel = to_inlines(e.kuerzel),
+      text = to_inlines(e.text),
+    })
+  end
+  return eintraege
+end
+
+-- Liest einen Teil der Vorlage-Fassung des Dokuments (z.B. "deckblatt") in
+-- der Sprache des Dokuments. Gibt den Teil und den Namen der Fassung zurück.
+function M.vorlage(meta, teil)
+  local fassung = M.vorlage_fassung(meta)
   local lang = meta.lang and stringify(meta.lang) or "de"
   local path = quarto.utils.resolve_path("../vorlage/" .. fassung .. "/" .. teil .. ".yml")
   local entry = read_yaml(path)[lang]

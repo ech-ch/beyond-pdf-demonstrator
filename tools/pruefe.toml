@@ -11,15 +11,55 @@ html = "_site/ech-0003/v11.1.0/de/index.html"
 docx = "_site/ech-0003/v11.1.0/de/DEMO_eCH-0003_V11.1.0_de.docx"
 # Elemente der Website, die nicht zum Text gehören (Platzhalter, Bedienelemente
 # des Feedbacks). pruefe.py prüft, dass die Ausnahme wirkt.
-html_ignorieren = ["platzhalter-hinweis", "baustein-bedienung"]
+html_ignorieren = ["platzhalter-hinweis", "baustein-bedienung", "vorlagentext-hinweis"]
 # Ziel der Feedback-Links (filters/ech_feedback.lua)
 feedback_repo = "https://github.com/ech-ch/beyond-pdf-demonstrator"
 
 # Überführte Kapitel: gerenderter Klartext = Rohtext (E19), Zählung (D4).
-# Ein Kapitel reicht vom Anker `von` bis vor den Anker `bis`.
+# Ein Kapitel reicht vom Anker `von` bis vor den Anker `bis`, ohne `bis` bis zum
+# Ende des Dokuments. «einleitung» und «prozessmodule» sind provisorische Anker
+# (E05); der Rohtext dieses Teils umfasst auch die Überschrift «1 Einleitung».
+# `vorlagentext = true`: kein Baustein, kein Feedback, Hinweis auf der Website.
+[[standard.kapitel]]
+name = "1 Einleitung bis 1.2.1"
+von = "einleitung"
+bis = "prozessmodule"
+rohtext = "original/text/kap01-1.1-bis-1.2.1.txt"
+
 [[standard.kapitel]]
 name = "7 Formales"
 von = "sec-formales"
 bis = "sec-sicherheitsueberlegungen"
 rohtext = "original/text/kap07.txt"
 zaehlung = { "MUSS" = 36, "SOLLTE" = 11, "DARF NICHT" = 8 }
+
+[[standard.kapitel]]
+name = "8 Sicherheitsüberlegungen"
+von = "sec-sicherheitsueberlegungen"
+bis = "sec-haftungsausschluss"
+rohtext = "original/text/kap08.txt"
+
+[[standard.kapitel]]
+name = "9 Haftungsausschluss"
+von = "sec-haftungsausschluss"
+bis = "sec-urheberrechte"
+rohtext = "original/text/kap09.txt"
+vorlagentext = true
+
+[[standard.kapitel]]
+name = "10 Urheberrechte"
+von = "sec-urheberrechte"
+bis = "sec-referenzen"
+rohtext = "original/text/kap10.txt"
+vorlagentext = true
+
+[[standard.kapitel]]
+name = "Anhang A"
+von = "sec-referenzen"
+bis = "abkürzungen"
+rohtext = "original/text/anhang-a.txt"
+
+[[standard.kapitel]]
+name = "Anhang F"
+von = "sec-formale-syntax"
+rohtext = "original/text/anhang-f.txt"

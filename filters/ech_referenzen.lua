@@ -2,45 +2,32 @@
 --
 -- Die Einträge stehen in referenzen.yml im Ordner der Version, eine Ebene
 -- über der Sprachfassung (ech-0003/v11.1.0/referenzen.yml für
--- ech-0003/v11.1.0/de/index.qmd). Anhang A wird nicht per CSL erzeugt (E15).
+-- ech-0003/v11.1.0/de/index.qmd). Anhang A wird nicht per CSL erzeugt (E15);
+-- die Tabelle setzt der Shortcode {{< referenzen >}} (ech_shortcodes.lua).
 --
 --   «Semantic Versioning»[@SemVer]   ->  «Semantic Versioning»[SemVer]
 --   @SemVer                          ->  SemVer
 --
 -- Der Text ist das Anzeige-Kürzel (`kuerzel`), in eckigen Klammern wie im
 -- Original; ein Kürzel mit eigenen Klammern («[ISO]») bleibt unverändert. Der
--- Link führt vorerst auf Anhang A (#sec-referenzen); die Tabelle des Anhangs
--- mit einem Anker je Eintrag folgt mit AP13.
+-- Link führt auf den Eintrag in Anhang A (#ref-<schlüssel>).
 --
 -- Läuft VOR dem quarto-Filter, nach ech_anhang.lua. Querverweise (@sec-… usw.)
 -- bleiben für Quarto. Ein Zitat mit unbekanntem Schlüssel bricht den Build ab
 -- (K3).
 
+local common = dofile(quarto.utils.resolve_path("ech_common.lua"))
 local stringify = pandoc.utils.stringify
 
-local ANHANG_A = "#sec-referenzen"
 local CROSSREF = { sec = true, fig = true, tbl = true, lst = true, eq = true, thm = true,
   lem = true, cor = true, prp = true, cnj = true, def = true, exm = true, exr = true,
   sol = true, rem = true }
 
-local function lies_referenzen()
-  local input = quarto.doc.input_file
-  if not input then return {} end
-  local pfad = pandoc.path.join({ pandoc.path.directory(input), "..", "referenzen.yml" })
-  local datei = io.open(pfad, "r")
-  if datei == nil then return {} end
-  local yaml = datei:read("a")
-  datei:close()
-  local meta = pandoc.read("---\n" .. yaml .. "\n---\n", "markdown").meta
-  local eintraege = {}
-  for _, e in ipairs(meta.referenzen or {}) do
-    eintraege[stringify(e.schluessel)] = stringify(e.kuerzel)
-  end
-  return eintraege
-end
-
 function Pandoc(doc)
-  local referenzen = lies_referenzen()
+  local referenzen = {}
+  for _, e in ipairs(common.referenzen()) do
+    referenzen[e.schluessel] = stringify(e.kuerzel)
+  end
   doc.blocks = doc.blocks:walk({
     Cite = function(cite)
       local bekannt = 0
@@ -62,7 +49,7 @@ function Pandoc(doc)
         if c.mode ~= "AuthorInText" and kuerzel:sub(1, 1) ~= "[" then
           kuerzel = "[" .. kuerzel .. "]"
         end
-        result:insert(pandoc.Link(kuerzel, ANHANG_A))
+        result:insert(pandoc.Link(kuerzel, "#ref-" .. c.id))
       end
       return result
     end,

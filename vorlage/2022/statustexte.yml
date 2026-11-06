@@ -1,8 +1,17 @@
-# Statustexte für 1.1 «Status», Vorlage-Fassung 2022 (ADR 0005, E14).
+# Statustexte für 1.1 «Status», Vorlage-Fassung 2022 (ADR 0005, E14, E36).
 #
-# Der Statustext ist ein fester Satz der Vorlage, nicht aus Kap. 7.5
-# abgeleitet. Von der Fassung 2022 ist nur belegt, was im Original sichtbar
-# ist: eCH-0003 V11.1.0, Seite 6. Ein Status ohne Eintrag bricht den Build ab.
+# Der Statustext ist ein fester Satz der Vorlage, nicht aus Kap. 7.5 abgeleitet.
+# Quelle ist das Dropdown in 1.1 des Word-Originals von eCH-0003 V11.1.0 (nicht
+# im Repo). Übernommen Zeichen für Zeichen, auch mit seinen Eigenheiten wie
+# «öf-fentlichen», «Er darf nicht mehr» und dem Leerzeichen am Ende von zwei
+# Sätzen. Sichtbar im publizierten Original ist nur «Genehmigt» (Seite 6). Ein
+# Status ohne Eintrag bricht den Build ab.
 
 de:
+  in-arbeit: "In Arbeit: Der Gebrauch ist nur innerhalb der Fachgruppe, bzw. im Expertenausschuss zugelassen."
+  entwurf: "Entwurf: Das Dokument wurde von den zuständigen Referenten aus dem Expertenausschuss zur öf-fentlichen Konsultation freigegeben und entsprechend publiziert."
+  vorschlag: "Vorschlag: Das Dokument wird dem Vorstand zur Genehmigung vorgelegt, ist aber normativ noch nicht gültig. "
   genehmigt: "Genehmigt: Das Dokument wurde vom Vorstand genehmigt. Es hat für das definierte Einsatzgebiet im festgelegten Gültigkeitsbereich normative Kraft."
+  abgeloest: "Abgelöst: Das Dokument wurde durch eine neue, aktuellere Version ersetzt. Die Benutzung ist zwar noch möglich, es wird aber empfohlen, die neuere Version einzusetzen."
+  aufgehoben: "Aufgehoben: Das Dokument wurde von eCH zurückgezogen. Er darf nicht mehr genutzt werden."
+  sistiert: "Sistiert: Das Dokument wurde von eCH zurückgezogen. Es darf nicht genutzt werden. Es hat den Status «Genehmigt» nicht erreicht. "

@@ -22,8 +22,9 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Word mit Deckblatt, Demonstrator-Hinweis, Inhaltsverzeichnis und Fusszeile | vorhanden |
 | CI-Prüfungen für Quelle und Ausgabe (`tools/pruefe.py`) | vorhanden |
 | Startseite mit Rundgang; jeder Baustein unter `#<baustein-id>` erreichbar | vorhanden |
-| Feedback je Baustein: Knopf, Formular, Labels (`filters/ech_feedback.lua`, `.github/`) | vorhanden, Test auf der Live-Website nach dem Push (E40) |
-| Registry, Anhang A und F | folgt (AP12–AP14) |
+| Feedback je Baustein: Knopf, Formular, Labels (`filters/ech_feedback.lua`, `.github/`) | vorhanden, live getestet (E42) |
+| 1.2, 1.2.1, Kap. 8 und Anhang F als grobe Bausteine; Kap. 9 und 10 als Vorlagentexte 2022; Anhang A aus `referenzen.yml` | vorhanden |
+| Registry, Anhang C | folgt (AP14, AP18) |
 
 Das Original-PDF liegt unter [original/eCH-0003_V11.1.0_d.pdf](original/eCH-0003_V11.1.0_d.pdf). Kap. 10 des Standards erlaubt die Weiterverbreitung.
 
@@ -34,10 +35,11 @@ _quarto.yml                 Website-Projekt; render-Liste explizit
 index.qmd                   Startseite
 ech-0003/v11.1.0/
   _metadata.yml             Ebene 0, sprachneutral (Codes, Vorlage-Fassung, Original)
+  referenzen.yml            Daten für Anhang A
   de/index.qmd              Gerüst; Kopfzeile mit sprachabhängiger Ebene 0
   de/bausteine/             eine Datei je grobem Baustein (ab AP5)
 vorlage/
-  2022/                     Vorlage-Fassung 2022: Statustexte, Deckblatt
+  2022/                     Vorlage-Fassung 2022: Vorlagentexte, Statustexte, Deckblatt
   word/                     Word-Referenzdokument (eCH-Vorlage vom 28.11.2025, lokale Kopie)
 original/
   eCH-0003_V11.1.0_d.pdf    Original
@@ -103,7 +105,7 @@ GitHub Pages ist vorbereitet, aber ausgeschaltet, bis die Freigabe zum Veröffen
 | `assets/title-metadata.html` | `docs/assets/title-metadata.html` | keine |
 | `filters/ech_common.lua` | `docs/assets/ech_common.lua` | liest die Vorlage-Fassung statt `ech_vocabulary.yml`; deutsche Codes; Statustext |
 | `filters/ech_metadata.lua` | `docs/assets/ech_metadata.lua` | ohne Typst-Werte |
-| `filters/ech_shortcodes.lua` | `docs/assets/ech_shortcodes.lua` | nur noch `{{< statustext >}}` aus der Vorlage-Fassung |
+| `filters/ech_shortcodes.lua` | `docs/assets/ech_shortcodes.lua` | nur noch `{{< statustext >}}` aus der Vorlage-Fassung; neu `{{< vorlagentext >}}` und `{{< referenzen >}}` |
 
 **Abweichungen vom FOAG-Template** (für eine spätere Rückführung in ein gemeinsames eCH-Template, F16):
 

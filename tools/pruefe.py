@@ -343,9 +343,11 @@ class HtmlText(HTMLParser):
             self.teile.append(data)
 
 
-def html_abschnitt(t: str, von: str, bis: str) -> str:
+def html_abschnitt(t: str, von: str, bis: str | None) -> str:
+    """HTML vom Abschnitt `von` bis vor den Abschnitt `bis` oder ans Ende des Inhalts."""
     a = t.index(f'<section id="{von}"')
-    return t[a:t.index(f'<section id="{bis}"', a)]
+    e = t.index(f'<section id="{bis}"', a) if bis else t.index("</main>", a)
+    return t[a:e]
 
 
 def html_klartext(ausschnitt: str, ignorieren: set[str]) -> str:
@@ -354,7 +356,7 @@ def html_klartext(ausschnitt: str, ignorieren: set[str]) -> str:
     return norm("".join(p.teile))
 
 
-def html_kapitel(t: str, von: str, bis: str, ignorieren: set[str]) -> str:
+def html_kapitel(t: str, von: str, bis: str | None, ignorieren: set[str]) -> str:
     return html_klartext(html_abschnitt(t, von, bis), ignorieren)
 
 
@@ -378,9 +380,9 @@ def docx_absaetze(pfad: Path) -> list[tuple[str, set[str]]]:
     return absaetze
 
 
-def docx_kapitel(absaetze, von: str, bis: str) -> str:
+def docx_kapitel(absaetze, von: str, bis: str | None) -> str:
     a = next(i for i, (_, m) in enumerate(absaetze) if von in m)
-    e = next(i for i, (_, m) in enumerate(absaetze) if bis in m and i > a)
+    e = next(i for i, (_, m) in enumerate(absaetze) if bis in m and i > a) if bis else len(absaetze)
     return norm(" ".join(t for t, _ in absaetze[a:e]))
 
 
@@ -431,7 +433,7 @@ def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befu
 
     # je Fundstelle genau ein Link
     fundstellen: dict[str, int] = {}
-    for bb in re.findall(r'<(?:div|section)\b[^>]*\sdata-bb="([^"]+)"', t):
+    for bb in re.findall(r'<(?:div|section)\b[^>]*\sdata-(?:bb|feedback-id)="([^"]+)"', t):
         fundstellen[bb] = fundstellen.get(bb, 0) + 1
     je_id: dict[str, int] = {}
     for art, wert, _, _ in links:
@@ -470,13 +472,20 @@ def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befu
     ignorieren = set(std.get("html_ignorieren", []))
     for kap in std.get("kapitel", []):
         try:
-            ausschnitt = html_abschnitt(t, kap["von"], kap["bis"])
+            ausschnitt = html_abschnitt(t, kap["von"], kap.get("bis"))
         except ValueError:
             continue   # meldet der Textvergleich
         mit, ohne = html_klartext(ausschnitt, ignorieren), html_klartext(ausschnitt, set())
-        if std["id_praefix"] not in ohne:
+        if 'class="platzhalter-hinweis"' in ausschnitt:
+            b.fehler_(f"{kap['name']}: überführt, enthält aber noch einen Platzhalter (E05)", html_pfad)
+        if kap.get("vorlagentext"):
+            if "data-bb=" in ausschnitt or "baustein-feedback" in ausschnitt:
+                b.fehler_(f"{kap['name']}: Ein Vorlagentext ist kein Baustein und hat kein Feedback (E13)", html_pfad)
+            if "Vorlagentext, zentral gepflegt" not in ohne:
+                b.fehler_(f"{kap['name']}: Hinweis «Vorlagentext, zentral gepflegt …» fehlt auf der Website (E13)", html_pfad)
+        elif "baustein-feedback" not in ausschnitt:
             b.fehler_(f"{kap['name']}: keine Bedienelemente im HTML; die Ausnahme vom Textvergleich prüft nichts", html_pfad)
-        if std["id_praefix"] in mit or "Alle Rückmeldungen" in mit:
+        if std["id_praefix"] in mit or "Alle Rückmeldungen" in mit or "Vorlagentext, zentral" in mit:
             b.fehler_(f"{kap['name']}: Bedienelemente stehen im Klartext (html_ignorieren)", html_pfad)
         soll = rohtext(WURZEL / kap["rohtext"], None)
         for art, wert, _, p in feedback_links(ausschnitt):
@@ -540,18 +549,20 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
     for kap in std.get("kapitel", []):
         quelle = WURZEL / kap["rohtext"]
         try:
-            h = html_kapitel(html_roh, kap["von"], kap["bis"], ignorieren)
+            h = html_kapitel(html_roh, kap["von"], kap.get("bis"), ignorieren)
         except ValueError:
-            b.fehler_(f"{kap['name']}: Abschnitt #{kap['von']} … #{kap['bis']} im HTML nicht gefunden", html_pfad)
+            b.fehler_(f"{kap['name']}: Abschnitt #{kap['von']} … #{kap.get('bis')} im HTML nicht gefunden", html_pfad)
             continue
         try:
-            d = docx_kapitel(absaetze, kap["von"], kap["bis"])
+            d = docx_kapitel(absaetze, kap["von"], kap.get("bis"))
         except StopIteration:
-            b.fehler_(f"{kap['name']}: Textmarken {kap['von']} … {kap['bis']} im Word nicht gefunden", docx_pfad)
+            b.fehler_(f"{kap['name']}: Textmarken {kap['von']} … {kap.get('bis')} im Word nicht gefunden", docx_pfad)
             continue
         vergleiche(f"{kap['name']}, HTML", h, rohtext(quelle, None), quelle, b)
         vergleiche(f"{kap['name']}, Word", d, rohtext(quelle, ueberschriften), quelle, b)
         for name, text in (("HTML", h), ("Word", d)):
+            if "zaehlung" not in kap:
+                continue
             ist = {k: text.count(f"[{k}]") for k in kap["zaehlung"]}
             if ist != kap["zaehlung"]:
                 b.fehler_(f"{kap['name']}, {name}: Kennzeichnungen {ist}, erwartet {kap['zaehlung']} (D4)")

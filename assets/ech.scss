@@ -444,6 +444,16 @@ $grid-margin-width: 375px;
   }
 }
 
+// Hinweis unter Vorlagentexten (E13, filters/ech_shortcodes.lua)
+#quarto-content .vorlagentext-hinweis {
+  margin: -0.35rem 0 0.75rem;
+  font-size: 0.72rem;
+  color: $ech-muted;
+  p {
+    margin: 0;
+  }
+}
+
 // Platzhalter unter nicht überführten Überschriften (E05,
 // filters/ech_platzhalter.lua): grauer Hinweiskasten. Die Klasse .platzhalter
 // selbst trägt Quarto auf das section-Element der Überschrift.

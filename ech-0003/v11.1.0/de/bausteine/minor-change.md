@@ -49,5 +49,5 @@ Wird innerhalb der Frist keine Einsprache erhoben, gilt der Minor Change als gen
 {{< include bausteine/mehrfach/aenderungen-vorversion.md >}}
 
 ::: {bb="ech-0003-bb-verfahren-ech-0150-minor" typ="requirement" original-seite="31"}
-[MUSS] Das Verfahren und die Organisation von Minor Changes richtet sich nach dem Standard [«eCH-0150: Change und Releasemanagement von eCH-Standards»]{standard="eCH-0150"}.
+[MUSS] Das Verfahren und die Organisation von Minor Changes richtet sich nach dem Standard [«[eCH-0150: Change und Releasemanagement von eCH-Standards](https://www.ech.ch/ech/ech-0150)»]{standard="eCH-0150"}.
 :::

@@ -38,8 +38,9 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
   den Hinweis mit Link auf die Seite im Original. Hauptkapitel ohne eigenen
   Text haben keinen Platzhalter.
 - `.appendix`: Anhang; filters/ech_anhang.lua vergibt die Buchstaben.
-- Überführte Kapitel ersetzen ihre Überschrift durch
-  {{< include bausteine/<kurzname>.md >}} (AP5, AP12, AP13).
+- Überführte Kapitel ersetzen ihre Überschrift durch ein include der Datei
+  bausteine/<kurzname>.md, Vorlagentexte durch den Shortcode vorlagentext.
+  (Keine Shortcodes in diesem Kommentar: Quarto wertet sie auch hier aus.)
 -->
 
 # Einleitung {original-seite="6"}
@@ -48,9 +49,9 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
 {{< statustext >}}
 
-## Anwendungsgebiet {#sec-anwendungsgebiet .platzhalter original-seite="6"}
+{{< include bausteine/anwendungsgebiet.md >}}
 
-### Beschreibungsterminologie {#sec-beschreibungsterminologie .platzhalter original-seite="6"}
+{{< include bausteine/beschreibungsterminologie.md >}}
 
 ## Prozessmodule {.platzhalter original-seite="6"}
 
@@ -210,13 +211,15 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
 {{< include bausteine/voraussetzungen-abhaengigkeiten.md >}}
 
-# Sicherheitsüberlegungen {#sec-sicherheitsueberlegungen .platzhalter original-seite="32"}
+{{< include bausteine/sicherheitsueberlegungen.md >}}
 
-# Haftungsausschluss/Hinweise auf Rechte Dritter {#sec-haftungsausschluss .platzhalter original-seite="33"}
+{{< vorlagentext haftungsausschluss >}}
 
-# Urheberrechte {#sec-urheberrechte .platzhalter original-seite="33"}
+{{< vorlagentext urheberrechte >}}
 
-# Referenzen & Bibliographie {#sec-referenzen .appendix .platzhalter original-seite="34"}
+# Referenzen & Bibliographie {#sec-referenzen .appendix feedback-id="ech-0003-referenzen" original-seite="34"}
+
+{{< referenzen >}}
 
 # Abkürzungen {.appendix .platzhalter original-seite="34"}
 
@@ -226,5 +229,5 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
 # Abbildungsverzeichnis {.appendix .platzhalter original-seite="36"}
 
-# Formale Syntax für die Versionierung {#sec-formale-syntax .appendix .platzhalter original-seite="36"}
+{{< include bausteine/formale-syntax.md >}}
 

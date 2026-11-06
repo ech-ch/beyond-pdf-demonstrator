@@ -104,7 +104,7 @@ Umfang gemäss E02 und E04:
   > *Dieser Abschnitt ist im Demonstrator nicht in Bausteine überführt. Massgebend ist das Original: eCH-0003 V11.1.0, Seite N.*
 
   Er verlinkt auf die PDF-Seite. Auf der Website erscheint er als grauer Hinweiskasten, im Word als kursiver Satz. Die Seitenzahlen stammen aus dem Inhaltsverzeichnis des Originals.
-- Die Startseite der Website weist darauf hin, dass Kap. 2–6, 1.3–1.4 und die Anhänge B, D und E Platzhalter sind.
+- Die Startseite der Website weist darauf hin, dass Kap. 2–6, 1.3–1.4 und die Anhänge B–E Platzhalter sind (Anhang C bis Stufe 2).
 
 **Referenzbaustein 7.3 Versionierung:** Bis auf «Unterkapitel 1.3.4» führen alle Verweise aus 7.3 auf überführten Inhalt:
 
@@ -406,9 +406,10 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | `ech_anker.lua` | Anker = Baustein-ID, nur HTML; bei Mehrfachverwendung nur an der ersten Fundstelle (umgesetzt mit AP8) | neu | R6, E27, E35 |
 | `ech_feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML (umgesetzt mit AP9) | Spike S4; umgestellt von `.baustein` auf `bb` | E08, E09, E39, E41 |
 | Registry-Filter | `bausteine.json`: Metadaten, Fundstelle, Herkunft, Verbindlichkeit, Beziehungen | neu | E09, E10 |
-| `ech_referenzen.lua` (Anhang-A-Filter) | Zitate `[@key]` aus `referenzen.yml` auflösen (umgesetzt mit AP5); Tabelle für Anhang A (AP13) | neu | E15, E32 |
+| `ech_referenzen.lua`, `{{< referenzen >}}` | Zitate `[@key]` aus `referenzen.yml` auf den Eintrag verlinken; Tabelle für Anhang A (umgesetzt mit AP13) | neu | E15, E32, E43 |
 | `{{< statustext >}}` | Statustext 1.1 aus Vorlage-Fassung | FOAG `{{< ech status >}}` | E14 |
-| `{{< vorlagentext … >}}` | Vorlagentext der gewählten Fassung einfügen | neu | E13 |
+| `{{< vorlagentext … >}}` | Vorlagentext der gewählten Fassung einfügen, auf der Website mit Hinweis (umgesetzt mit AP12) | neu | E13, E43 |
+| `ech_docx_tabellen.lua` | im DOCX: Tabellenzellen in «Tabellentext» | neu | E43 |
 | Platzhalter | Platzhalter unter nicht überführten Überschriften | neu | E05 |
 | Deckblatt-Filter (DOCX) | Titel, Hinweis, Metadatentabelle, Zusammenfassung, Inhaltsverzeichnis-Feld, Textmarken der Fusszeile | neu; Textmarken aus Spike S3 | E17 |
 | `aktualisiere_felder_beim_oeffnen.py` | Word aktualisiert Felder beim Öffnen | neu (F40) | E17 |
@@ -551,7 +552,7 @@ Eine Vorlage-Fassung (`vorlage/<fassung>/`) umfasst:
 | Teil | Datei (Vorschlag) | Fassung 2022 |
 |---|---|---|
 | Vorlagentexte | `haftungsausschluss.md`, `urheberrechte.md` | aus dem Original, Kap. 9 und 10 |
-| Statustexte (1.1) | `statustexte.yml` | heute nur «Genehmigt: Das Dokument wurde vom Vorstand genehmigt. Es hat für das definierte Einsatzgebiet im festgelegten Gültigkeitsbereich normative Kraft.» Das Dropdown im Word-Original belegt alle sieben (E36); Ergänzung in AP12. |
+| Statustexte (1.1) | `statustexte.yml` | alle sieben Sätze aus dem Dropdown des Word-Originals, Zeichen für Zeichen (E36, E43). Sichtbar im publizierten Original ist nur «Genehmigt: Das Dokument wurde vom Vorstand genehmigt. Es hat für das definierte Einsatzgebiet im festgelegten Gültigkeitsbereich normative Kraft.» |
 | Beschriftungen des Deckblatts | `deckblatt.yml` | Name, eCH-Nummer, Kategorie, Reifegrad, Version, Status, Beschluss am, Ausgabedatum, Ersetzt Version, Voraussetzungen, Beilagen, Sprachen, Autoren, Herausgeber / Vertrieb, Zusammenfassung |
 | Herausgeber/Vertrieb | in `deckblatt.yml` | «Verein eCH, Mainaustrasse 30, Postfach, 8034 Zürich», «T 044 388 74 64, F 044 388 71 80», «www.ech.ch / info@ech.ch» |
 
@@ -723,16 +724,16 @@ Abgestimmt auf den Zeitplan bis 12.11.2026. «PL» = Projektleitung. Verweise au
 | AP6 | Word mit Deckblatt, Inhaltsverzeichnis, Fusszeile | committet, live |
 | AP7 | CI-Prüfungen (Quelle und Ausgabe) | committet, unter Linux grün |
 | AP8 | Startseite mit Rundgang, Anker = Baustein-ID | committet, live (`a05c2c3`) |
+| — | Session 3 (Feedback) | 6.11. (E37–E40) |
+| AP9 | Feedback-Knopf, Formular, Action | live (`1f1193c`), Test bestanden (E42) |
+| AP10 | D1–D5 geprüft, Tag `v0.1-durchstich` | 6.11. (E42); offen nur die Durchsicht von Kap. 7 im Word neben dem PDF (D4, Projektleitung) |
 
 Entfallen: AP11 (Vorschau mit Go/No-Go, E36); die Screenshots gehen in AP17 auf.
 
-### Fr 6.11. – Feedback und geplante Kapitel
+### Fr 6.11. – geplante Kapitel
 
 | # | Aufgabe | Grundlage |
 |---|---|---|
-| — | **Session 3 (Feedback):** Details zu E21; F05, F31; Erwartungstext (F30); Feedback-Art «Zuschnitt» (F42); Gestaltung der Knöpfe; URL-Länge | E21, E36 |
-| AP9 | `ech_feedback.lua`, Issue-Formular, Action für das Label; Test mit dem Konto aus AP0c | E18, E21, D2 |
-| AP10 | D1–D5 prüfen. Erfüllt → Tag `v0.1-durchstich`. | A4 |
 | AP12 | 1.2, 1.2.1, Kap. 8, Vorlagentexte 9/10 (`{{< vorlagentext >}}`, Fassung 2022); Statustexte 2022 vollständig aus dem Word-Original; Links aus dem Word-Original ergänzen, Text unverändert («Home (admin.ch)» → `https://www.hermes.admin.ch/`, SemVer, eCH-0150) | E13, E14, E36 |
 | AP13 | Anhang A (Filter, `referenzen.yml`) und Anhang F | E15 |
 
@@ -767,10 +768,9 @@ Was im Material gezeigt wird, muss ab Montagabend stabil sein. Für Sichtbares l
 
 | # | Aufgabe | Wann |
 |---|---|---|
-| AP0c | Testkonto ohne Mitgliedschaft in `ech-ch` und ohne Schreibrechte im Repo (D2). **Nicht** das eigene Konto weitergeben: Es hat Schreibrechte, und der Test wäre wertlos. Am besten legt die Vertrauensperson ein eigenes Konto an und macht damit auch gleich den Fremdtest (AP16). | für AP9 |
+| D4 | Kap. 7 im Word neben dem PDF auf Struktur und Layout durchsehen | vor AP17 |
+| AP16 | Vertrauensperson für den Fremdtest anfragen; sie kennt den Ablauf noch nicht | Mo 9.11. |
 
 ### Abhängigkeiten
 
-- AP9 braucht Session 3 und das Testkonto (AP0c).
-- AP16 braucht AP9.
 - AP17 braucht einen stabilen Stand von AP9, AP12 und AP13.
