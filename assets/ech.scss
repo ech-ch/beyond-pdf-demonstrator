@@ -4,7 +4,8 @@
 // docs/assets/ech.scss (CC BY 4.0, Stand Commit 659b85f). Angepasst für den
 // Demonstrator: Regel zum Ausblenden der Anhänge im Inhaltsverzeichnis
 // entfernt (das Original führt sie dort auf); Platzhalter (E05), Sprungziele
-// der Bausteine (R6) und Umbruch langer Werte im Deckblatt ergänzt.
+// der Bausteine (R6), Feedback (E39) und Umbruch langer Werte im Deckblatt
+// ergänzt.
 //
 // eCH look for the Quarto website: Noto Sans, eCH red for links, a dark
 // header, plain headings and PDF-like tables. The colours below are the light
@@ -311,6 +312,136 @@ $grid-margin-width: 375px;
   padding: 0.3rem 0.6rem;
   margin-left: calc(-0.6rem - 3px);
   margin-right: -0.6rem;
+}
+
+// Feedback je Baustein (E39, filters/ech_feedback.lua): nur CSS, ohne
+// JavaScript. Grob: Knopf auf der Zeile der Überschrift, ID darunter. Fein:
+// Symbol am rechten Rand; ID und Link erscheinen beim Darüberfahren oder mit
+// der Tastatur. Das Handy zeigt nur das Symbol, das Drucken nichts davon.
+#quarto-content div[data-bb] {
+  position: relative;
+}
+#quarto-content .baustein-feedback {
+  color: $ech-muted;
+  text-decoration: none;
+  &:hover,
+  &:focus-visible {
+    color: $ech-red;
+  }
+}
+#quarto-content .baustein-info {
+  font-size: 0.72rem;
+  color: $ech-muted;
+  white-space: nowrap;
+  a {
+    color: inherit;
+    text-decoration: underline;
+    &:hover,
+    &:focus-visible {
+      color: $ech-red;
+    }
+  }
+}
+#quarto-content .baustein-symbol {
+  position: absolute;
+  top: 0;
+  right: -1.4rem; // in der Lücke zum Inhaltsverzeichnis, auf dem Handy im Rand
+  padding: 0.1rem 0.15rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+#quarto-content .baustein-fein .baustein-info {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  z-index: 1;
+  padding: 0 0.35rem;
+  background: $body-bg;
+  opacity: 0; // nicht display:none: bleibt mit der Tastatur erreichbar
+}
+#quarto-content div[data-bb]:focus-within {
+  background: rgba($ech-red, 0.05);
+  box-shadow: 0 0 0 0.35rem rgba($ech-red, 0.05);
+  .baustein-info {
+    opacity: 1;
+  }
+}
+@media (hover: hover) {
+  #quarto-content div[data-bb]:hover {
+    background: rgba($ech-red, 0.05);
+    box-shadow: 0 0 0 0.35rem rgba($ech-red, 0.05);
+    .baustein-info {
+      opacity: 1;
+    }
+    .baustein-symbol {
+      color: $ech-red;
+    }
+  }
+}
+#quarto-content .baustein-grob {
+  position: relative;
+  margin: -0.35rem 0 0.75rem;
+  min-height: 1.1rem;
+}
+#quarto-content .baustein-knopf {
+  display: inline-block;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+}
+#quarto-content .baustein-grob .baustein-knopf {
+  position: absolute;
+  right: 0;
+  top: -2.05rem;
+}
+#quarto-content .baustein-standard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  .baustein-alle {
+    font-size: 0.72rem;
+    color: $ech-muted;
+  }
+}
+#quarto-content .baustein-auch {
+  margin: -0.75rem 0 1rem;
+  font-size: 0.72rem;
+  color: $ech-muted;
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+}
+@media (max-width: 767.98px) {
+  #quarto-content .baustein-info {
+    display: none;
+  }
+  #quarto-content .baustein-grob {
+    margin: 0;
+    min-height: 0;
+  }
+  #quarto-content .baustein-grob .baustein-knopf {
+    top: -2.5rem;
+    right: -1.4rem;
+    padding: 0.1rem 0.15rem;
+    border: none;
+    font-size: 0.95rem;
+  }
+  #quarto-content .baustein-grob .baustein-knopf-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+@media print {
+  .baustein-bedienung {
+    display: none !important;
+  }
 }
 
 // Platzhalter unter nicht überführten Überschriften (E05,

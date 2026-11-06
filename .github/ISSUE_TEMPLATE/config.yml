@@ -1,0 +1,2 @@
+# Nur das Feedback-Formular, keine leeren Issues (E38).
+blank_issues_enabled: false

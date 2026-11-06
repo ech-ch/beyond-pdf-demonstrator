@@ -1,0 +1,32 @@
+# Labels für Feedback-Issues (E38, MVP-Spezifikation 6).
+#
+# Der Issue-Text ist fremde Eingabe: Er wird nur in
+# .github/scripts/feedback-label.js aus dem Ereignis gelesen und als Daten
+# behandelt, nie in einen Befehl oder ein Skript eingesetzt. Diese Datei
+# verwendet deshalb keine Ausdrücke mit Issue-Inhalten. Die Action schreibt
+# keinen Kommentar. Ist sie blockiert, bleibt die Suche nach der Baustein-ID.
+name: Feedback-Labels
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+  contents: read   # Checkout: IDs gegen die Quelle prüfen
+
+jobs:
+  labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Labels setzen
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { setzeLabels } = require('./.github/scripts/feedback-label.js');
+            await setzeLabels({ github, context, core });

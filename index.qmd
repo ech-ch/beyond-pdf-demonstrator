@@ -18,7 +18,7 @@ Der Demonstrator zerlegt den Standard eCH-0003 V11.1.0 «Leitfaden zur Genehmigu
 
 1. **Eine Regel ansehen.** [Diese Regel zur Versionierung](ech-0003/v11.1.0/de/index.qmd#ech-0003-bb-schema-eigene-version) hat die feste Adresse `ech-0003-bb-schema-eigene-version`. Die Adresse soll bleiben, auch wenn die Regel in einer neuen Version anders formuliert ist oder in einem anderen Kapitel steht.
 
-2. **Feedback geben.** Feedback landet direkt beim Baustein, statt bei «Kapitel X, Seite Y». Der Feedback-Knopf an jeder Regel **folgt in Kürze**. Für Feedback braucht es ein kostenloses GitHub-Konto.
+2. **Feedback geben.** Neben jeder Regel steht das Symbol <i class="bi bi-chat-left-text" aria-label="Sprechblase"></i>, bei Kapiteln der Knopf «Feedback». Ein Klick öffnet bei GitHub ein vorbefülltes Formular. Ihr Feedback landet so direkt beim Baustein, statt bei «Kapitel X, Seite Y». Dafür braucht es ein kostenloses GitHub-Konto. Ihr Feedback ist öffentlich sichtbar und keine offizielle Rückmeldung an eCH.
 
 3. **Word herunterladen.** [DEMO_eCH-0003_V11.1.0_de.docx](ech-0003/v11.1.0/de/DEMO_eCH-0003_V11.1.0_de.docx) entsteht automatisch aus denselben Bausteinen, mit Deckblatt, Inhaltsverzeichnis und Querverweisen. Word fragt beim Öffnen, ob es die Felder aktualisieren soll; mit «Ja» erscheint das Inhaltsverzeichnis.
 

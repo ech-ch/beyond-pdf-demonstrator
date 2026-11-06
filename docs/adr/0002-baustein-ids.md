@@ -4,7 +4,7 @@ status: accepted (vorläufig, MVP; Überprüfung nach 12.11.2026)
 
 # Baustein-IDs: sprechend, inhaltsbezogen, eingefroren
 
-Baustein-IDs folgen dem ZHAW-Schema `ech-0003-bb-<kurzname>`. Für den Kurznamen gelten drei Regeln:
+Baustein-IDs folgen dem ZHAW-Schema `<standard-id>-bb-<kurzname>`, also `ech-0003-bb-<kurzname>`. Die Standard-ID ist die eigene Kennung des Standards; zusammen mit ihr ist ein Kurzname auch über Standards hinweg eindeutig (E38). Für den Kurznamen gelten drei Regeln:
 
 - Er beschreibt den **Inhalt** in 1–4 deutschen Wörtern. Feststehende Fachbegriffe bleiben im Original, z.B. «semver», «minor» und «major». Kapitelnummer, Version und Präfix des Elternbausteins kommen nicht vor.
 - Er wird mit der ersten Veröffentlichung (Release oder Pages) **eingefroren** und danach nie geändert, auch wenn sich der Wortlaut ändert. Vorher, solange er nur in der Doku steht, darf er noch angepasst werden (präzisiert 3.11.2026, E27).

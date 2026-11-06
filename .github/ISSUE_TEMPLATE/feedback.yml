@@ -1,0 +1,65 @@
+# Feedback zu einem Baustein oder zum Standard als Ganzes (E37, MVP-Spezifikation 6).
+#
+# Die Links filters/ech_feedback.lua füllen Titel und Felder per URL vor; die
+# Schlüssel in der URL sind die `id` der Felder. Die Überschriften (`label`)
+# wertet .github/scripts/feedback-label.js aus: Wer sie ändert, ändert auch dort.
+name: Feedback
+description: Rückmeldung zu einem Baustein oder zum Standard als Ganzes. Demonstrator, kein offizielles Verfahren von eCH.
+body:
+  - type: markdown
+    attributes:
+      value: >-
+        **Dies ist ein Demonstrator, kein offizielles Verfahren von eCH.**
+        Ihr Feedback ist keine Rückmeldung im Sinn einer öffentlichen Konsultation
+        und fliesst nicht in die Überarbeitung von eCH-0003 ein. Es ist öffentlich sichtbar,
+        bitte schreiben Sie nichts Vertrauliches hinein. Wir sammeln es und nutzen es
+        für den Ausbau des Demonstrators. Eine Antwort können wir nicht zusagen.
+  - type: input
+    id: standard
+    attributes:
+      label: Standard
+      description: Vorbefüllt.
+      value: ech-0003
+  - type: input
+    id: baustein
+    attributes:
+      label: Baustein-ID
+      description: Vorbefüllt. Beim Feedback zum Standard als Ganzes bleibt das Feld leer.
+  - type: input
+    id: stand
+    attributes:
+      label: Stand
+      description: Vorbefüllt. Version und Build, auf die sich Ihr Feedback bezieht.
+  - type: input
+    id: stelle
+    attributes:
+      label: Link zur Stelle
+      description: Vorbefüllt.
+  - type: textarea
+    id: wortlaut
+    attributes:
+      label: Wortlaut
+      description: Vorbefüllt bei einzelnen Regeln. Hält fest, worauf sich Ihr Feedback bezieht.
+  - type: dropdown
+    id: art
+    attributes:
+      label: Art
+      description: Worum geht es?
+      options:
+        - Zum Inhalt
+        - Zum Zuschnitt oder zu Beziehungen
+        - Zum Demonstrator
+        - Frage
+    validations:
+      required: true
+  - type: textarea
+    id: kommentar
+    attributes:
+      label: Kommentar
+    validations:
+      required: true
+  - type: textarea
+    id: vorschlag
+    attributes:
+      label: Vorschlag
+      description: Freiwillig.

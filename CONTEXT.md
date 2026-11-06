@@ -24,6 +24,9 @@ _Vermeiden_: Kopie, Duplikat (für einen mehrfach verwendeten Baustein)
 Einen Textteil eines groben Bausteins nachträglich als feinen Baustein auszeichnen. Bestehende IDs, Beziehungen und Rückmeldungen bleiben dabei gültig. Das Gegenteil, eine veröffentlichte ID wieder zu entfernen, ist nicht erlaubt.
 _Vermeiden_: Zerlegen (wenn Verfeinern gemeint ist)
 
+**Standard-ID**:
+Die Kennung eines Standards ohne Version, z.B. `ech-0003`. Sie steht vorne in der Baustein-ID, im Pfad der Website und in den Labels.
+
 **Baustein-ID**:
 Die stabile Kennung eines Bausteins. Sie allein bestimmt seine Identität. Datei, Position und Kapitelnummer gehören nicht dazu.
 _Vermeiden_: Kapitelnummer, Anker (als Kennung eines Bausteins)
@@ -117,6 +120,10 @@ Angabe, aus welchem Original und von welcher Seite ein überführter Baustein st
 Kapitel und Titel eines Bausteins im erzeugten Dokument einer bestimmten Version. Sie ist erzeugter Inhalt. Ein mehrfach verwendeter Baustein hat mehrere Fundstellen.
 _Vermeiden_: Quelle (für die Fundstelle)
 
+**Steckbrief**:
+Raster mit Plandaten, Einordnung, Zusammenfassung und inhaltlicher Strukturierung eines Standards, entlang des Prozesses nachgeführt. Er gehört zur Ebene 0 und ist bisher ein Word-Dokument (offen: F47).
+_Vermeiden_: Faktenblatt
+
 **Registry**:
 Die vom Build erzeugte, maschinenlesbare Liste aller Bausteine mit ihren Metadaten (`bausteine.json`).
 
@@ -125,6 +132,9 @@ Ein Kapitel, dessen Inhalt im MVP in Bausteine überführt wird.
 
 **Rundgang**:
 Drei Schritte auf der Startseite der Website, mit denen Besuchende den Demonstrator ohne Begleitung erkunden: einen Baustein ansehen, Feedback geben, Word herunterladen.
+
+**Synopse**:
+Sicht für einen Anwendungsfall, die zusammengehörige Bausteine aus mehreren Standards nebeneinander zeigt, etwa «was gilt formell, was in der Praxis» (offen: F50).
 
 **Durchstich**:
 Ein Kapitel durchgehend umgesetzt: von der Quelle zum Word-Dokument und von der Quelle zur Website mit Feedback-Knopf.

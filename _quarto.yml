@@ -21,6 +21,8 @@ demonstrator-hinweis: "**Demonstrator, kein offizieller eCH-Standard.** Dieses D
 # Basis-URL für Links im Word (Platzhalter auf das Original-PDF). Gleich wie
 # website.site-url, das Lua-Filter nicht sehen.
 demonstrator-url: https://ech-ch.github.io/beyond-pdf-demonstrator/
+# Repo für die Feedback-Links (filters/ech_feedback.lua). Gleich wie website.repo-url.
+demonstrator-repo: https://github.com/ech-ch/beyond-pdf-demonstrator
 
 website:
   title: "Beyond PDF – Demonstrator"
@@ -57,6 +59,7 @@ filters:
   - quarto
   - filters/ech_titelref.lua      # [-@sec-x]{.mit-titel} (E11)
   - filters/ech_anker.lua         # nur HTML: Anker = Baustein-ID (R6)
+  - filters/ech_feedback.lua      # nur HTML: Feedback je Baustein (E37, E39)
   - filters/ech_docx_nummern.lua  # nur DOCX: Word nummeriert (Spike S3, Lösung A)
   - filters/ech_deckblatt.lua     # nur DOCX: Deckblatt, Inhaltsverzeichnis, Textmarken (E17)
 shortcodes:

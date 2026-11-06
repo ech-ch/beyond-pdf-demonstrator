@@ -21,6 +21,7 @@ Quelle (Gerüst und Baustein-Dateien):
      Baustein (E29)
   7. Ziele von `bezug` existieren (E30)
   8. Hinweis bei zeichengleichen Klauseln ohne Mehrfachverwendung (E27)
+  9. Label `bb:<kurzname>` höchstens 50 Zeichen (Grenze von GitHub, E38)
 
 Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
   1. Zählung der Kennzeichnungen (D4)
@@ -30,6 +31,10 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
   3. kein unaufgelöster Verweis: «?@…», «@sec-…» im Text oder die
      Quarto-Warnung «Unable to resolve crossref» im Log (K3)
   4. auf der Website hat jeder Baustein genau einen Anker #<baustein-id> (R6)
+  5. Feedback (E37, E39): je Fundstelle genau ein Link, ein Link zum Standard
+     als Ganzes, keine `labels=` in der URL, Wortlaut gleich wie der Rohtext;
+     die Bedienelemente stehen im HTML und sind vom Textvergleich ausgenommen;
+     im Word gibt es keine
 """
 import argparse
 import difflib
@@ -38,6 +43,7 @@ import os
 import re
 import sys
 import tomllib
+import urllib.parse
 import zipfile
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
@@ -59,6 +65,10 @@ NUMMER_VON_HAND = (
     re.compile(r"\((?:siehe|vgl\.)\s+\d+(?:\.\d+)+\)"),
 )
 LEERRAUM = re.compile(r"[ \t\r\n]+")   # nur ASCII-Leerraum, nicht U+00A0
+LABEL_MAX = 50                         # Grenze von GitHub für Labels (E38)
+URL_MAX = 6000                         # bis hier antwortet GitHub normal (E37)
+WORTLAUT_MAX = 2000                    # Zeichen (E37)
+FEEDBACK_LINK = re.compile(r'<a class="baustein-feedback[^"]*" data-feedback-(bb|standard)="([^"]*)" href="([^"]*)"')
 
 
 # --- Befunde -----------------------------------------------------------------
@@ -241,6 +251,8 @@ def pruefe_quelle(std: dict, b: Befunde) -> None:
     for x in bausteine:
         if not id_muster.match(x.bb):
             b.fehler_(f"ID «{x.bb}» verletzt R1/R2 ({praefix}<kurzname>, a–z, 0–9, Bindestrich)", x.datei, x.zeile)
+        elif len("bb:" + x.bb[len(praefix):]) > LABEL_MAX:
+            b.fehler_(f"Label zu «{x.bb}» wäre länger als {LABEL_MAX} Zeichen (E38)", x.datei, x.zeile)
         if x.bb in gesehen:
             erste = gesehen[x.bb]
             b.fehler_(f"ID «{x.bb}» doppelt (zuerst {rel(erste.datei)}:{erste.zeile}); "
@@ -331,12 +343,19 @@ class HtmlText(HTMLParser):
             self.teile.append(data)
 
 
-def html_kapitel(t: str, von: str, bis: str, ignorieren: set[str]) -> str:
+def html_abschnitt(t: str, von: str, bis: str) -> str:
     a = t.index(f'<section id="{von}"')
-    e = t.index(f'<section id="{bis}"', a)
+    return t[a:t.index(f'<section id="{bis}"', a)]
+
+
+def html_klartext(ausschnitt: str, ignorieren: set[str]) -> str:
     p = HtmlText(ignorieren)
-    p.feed(t[a:e])
+    p.feed(ausschnitt)
     return norm("".join(p.teile))
+
+
+def html_kapitel(t: str, von: str, bis: str, ignorieren: set[str]) -> str:
+    return html_klartext(html_abschnitt(t, von, bis), ignorieren)
 
 
 def docx_absaetze(pfad: Path) -> list[tuple[str, set[str]]]:
@@ -393,6 +412,93 @@ def vergleiche(name: str, ist: str, soll: str, quelle: Path, b: Befunde, max_ste
         b.fehler_(f"{name}: {len(stellen) - max_stellen} weitere Abweichungen", quelle)
 
 
+def feedback_links(t: str) -> list[tuple[str, str, str, dict]]:
+    """(Art, ID, URL, Parameter) je Feedback-Link eines HTML-Ausschnitts."""
+    links = []
+    for m in FEEDBACK_LINK.finditer(t):
+        url = html.unescape(m[3])
+        parameter = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query, keep_blank_values=True)
+        links.append((m[1], html.unescape(m[2]), url, {k: v[0] for k, v in parameter.items()}))
+    return links
+
+
+def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befunde) -> None:
+    links = feedback_links(t)
+    ziel = std["feedback_repo"] + "/issues/new?"
+    erlaubt = {"template", "title", "standard", "baustein", "stand", "stelle", "wortlaut"}
+    laengste = 0
+    ids = set(re.findall(r'\sid="([^"]+)"', t))
+
+    # je Fundstelle genau ein Link
+    fundstellen: dict[str, int] = {}
+    for bb in re.findall(r'<(?:div|section)\b[^>]*\sdata-bb="([^"]+)"', t):
+        fundstellen[bb] = fundstellen.get(bb, 0) + 1
+    je_id: dict[str, int] = {}
+    for art, wert, _, _ in links:
+        if art == "bb":
+            je_id[wert] = je_id.get(wert, 0) + 1
+    for bb in sorted(set(fundstellen) | set(je_id)):
+        if fundstellen.get(bb, 0) != je_id.get(bb, 0):
+            b.fehler_(f"HTML: «{bb}» hat {fundstellen.get(bb, 0)} Fundstellen, aber {je_id.get(bb, 0)} Feedback-Links (E39)", html_pfad)
+    if sum(1 for art, *_ in links if art == "standard") != 1:
+        b.fehler_("HTML: Es braucht genau einen Knopf «Feedback zum Standard» (E39)", html_pfad)
+
+    # jeder Link
+    for art, wert, url, p in links:
+        laengste = max(laengste, len(url))
+        name = wert or "Standard"
+        if not url.startswith(ziel) or p.get("template") != "feedback.yml":
+            b.fehler_(f"HTML: Feedback-Link zu «{name}» führt nicht aufs Formular: {url[:80]}", html_pfad)
+        if "labels" in p or "labels=" in url:
+            b.fehler_(f"HTML: Feedback-Link zu «{name}» setzt Labels in der URL (404 ohne Berechtigung, E37)", html_pfad)
+        if set(p) - erlaubt:
+            b.fehler_(f"HTML: Feedback-Link zu «{name}» mit unbekannten Parametern {sorted(set(p) - erlaubt)}", html_pfad)
+        if len(url) > URL_MAX:
+            b.fehler_(f"HTML: Feedback-Link zu «{name}» ist {len(url)} Zeichen lang (höchstens {URL_MAX}, E37)", html_pfad)
+        if art == "bb":
+            if p.get("baustein") != wert:
+                b.fehler_(f"HTML: Feedback-Link zu «{wert}» nennt die ID «{p.get('baustein')}»", html_pfad)
+            if not p.get("title", "").endswith(f"({wert})"):
+                b.fehler_(f"HTML: Titel des Feedback-Links zu «{wert}» ohne ID: «{p.get('title')}»", html_pfad)
+            anker = urllib.parse.urlsplit(p.get("stelle", "")).fragment
+            if anker not in ids:
+                b.fehler_(f"HTML: Link zur Stelle von «{wert}» führt auf den fehlenden Anker «{anker}»", html_pfad)
+        elif "baustein" in p:
+            b.fehler_("HTML: Der Knopf zum Standard darf keine Baustein-ID mitgeben (E38)", html_pfad)
+
+    # Wortlaut und Ausnahme vom Textvergleich je überführtem Kapitel
+    ignorieren = set(std.get("html_ignorieren", []))
+    for kap in std.get("kapitel", []):
+        try:
+            ausschnitt = html_abschnitt(t, kap["von"], kap["bis"])
+        except ValueError:
+            continue   # meldet der Textvergleich
+        mit, ohne = html_klartext(ausschnitt, ignorieren), html_klartext(ausschnitt, set())
+        if std["id_praefix"] not in ohne:
+            b.fehler_(f"{kap['name']}: keine Bedienelemente im HTML; die Ausnahme vom Textvergleich prüft nichts", html_pfad)
+        if std["id_praefix"] in mit or "Alle Rückmeldungen" in mit:
+            b.fehler_(f"{kap['name']}: Bedienelemente stehen im Klartext (html_ignorieren)", html_pfad)
+        soll = rohtext(WURZEL / kap["rohtext"], None)
+        for art, wert, _, p in feedback_links(ausschnitt):
+            text = p.get("wortlaut")
+            if text is None:
+                continue
+            gekuerzt = text.endswith(" …")
+            if len(text) > WORTLAUT_MAX + 2:
+                b.fehler_(f"HTML: Wortlaut von «{wert}» hat {len(text)} Zeichen (höchstens {WORTLAUT_MAX}, E37)", html_pfad)
+            zeilen = [z[2:] if z.startswith("- ") else z for z in (text[:-2] if gekuerzt else text).split("\n")]
+            if norm("\n".join(zeilen)) not in soll:
+                b.fehler_(f"HTML: Wortlaut von «{wert}» weicht vom Rohtext ab (E19)", html_pfad)
+
+    # Im Word gibt es kein Feedback
+    with zipfile.ZipFile(docx_pfad) as z:
+        for teil in ("word/document.xml", "word/_rels/document.xml.rels"):
+            xml = z.read(teil).decode("utf-8")
+            if "/issues/new" in xml or "Alle Rückmeldungen" in xml or "baustein-feedback" in xml:
+                b.fehler_(f"Word: Feedback-Link in {teil} (E39)", docx_pfad)
+    print(f"Feedback: {len(links)} Links, {sum(fundstellen.values())} Fundstellen, längste URL {laengste} Zeichen")
+
+
 def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
     html_pfad, docx_pfad = WURZEL / std["html"], WURZEL / std["docx"]
     for pfad in (html_pfad, docx_pfad):
@@ -427,6 +533,8 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
         n = ids.count(bb)
         if n != 1:
             b.fehler_(f"HTML: Baustein «{bb}» hat {n} Anker #{bb}, erwartet genau einen (R6)", html_pfad)
+
+    pruefe_feedback(std, html_roh, html_pfad, docx_pfad, b)
 
     # 1.–2. je überführtem Kapitel
     for kap in std.get("kapitel", []):

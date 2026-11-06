@@ -58,6 +58,10 @@ jobs:
       - name: Prüfen (Quelle)
         run: python tools/pruefe.py quelle
 
+      # Auswertung der Feedback-Issues, auch mit bösartigen Eingaben (E38)
+      - name: Feedback-Auswertung testen
+        run: node --test .github/scripts/feedback-label.test.js
+
       # Alle Formate in einem Aufruf: `quarto render --to X` löscht im
       # Website-Projekt die übrigen Formate (Spike S1). Das Log braucht die
       # Prüfung der Ausgabe (Warnung «Unable to resolve crossref», K3).

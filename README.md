@@ -22,7 +22,8 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Word mit Deckblatt, Demonstrator-Hinweis, Inhaltsverzeichnis und Fusszeile | vorhanden |
 | CI-Prüfungen für Quelle und Ausgabe (`tools/pruefe.py`) | vorhanden |
 | Startseite mit Rundgang; jeder Baustein unter `#<baustein-id>` erreichbar | vorhanden |
-| Feedback, Registry, Anhang A und F | folgt (AP9–AP14) |
+| Feedback je Baustein: Knopf, Formular, Labels (`filters/ech_feedback.lua`, `.github/`) | vorhanden, Test auf der Live-Website nach dem Push (E40) |
+| Registry, Anhang A und F | folgt (AP12–AP14) |
 
 Das Original-PDF liegt unter [original/eCH-0003_V11.1.0_d.pdf](original/eCH-0003_V11.1.0_d.pdf). Kap. 10 des Standards erlaubt die Weiterverbreitung.
 
@@ -45,6 +46,8 @@ filters/                    Lua-Filter und Shortcodes
 assets/                     SCSS, Logos, HTML-Partial
 tools/                      Extraktion, Nachbearbeitung Word, CI-Prüfungen
 .github/workflows/build.yml Prüfen -> Rendern -> Word nachbearbeiten -> Artefakt (Pages vorbereitet)
+.github/workflows/feedback-label.yml, .github/scripts/  Labels für Feedback-Issues, mit Tests
+.github/ISSUE_TEMPLATE/    Feedback-Formular
 docs/                       Projektdokumentation (wird nicht gerendert)
 ```
 
@@ -119,4 +122,4 @@ GitHub Pages ist vorbereitet, aber ausgeschaltet, bis die Freigabe zum Veröffen
 
 ## Lizenz
 
-Noch offen (F36, Meeting vom 4.11.2026). Bis dahin gelten für übernommene Teile die oben genannten Lizenzen, für den Standardtext die Bestimmungen in Kap. 10 von eCH-0003.
+Für den Demonstrator ist noch keine Lizenz festgelegt (F36). Für übernommene Teile gelten die oben genannten Lizenzen, für den Standardtext die Bestimmungen in Kap. 10 von eCH-0003.

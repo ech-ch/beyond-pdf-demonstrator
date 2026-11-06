@@ -50,26 +50,24 @@ Stand: 2.11.2026 (Grilling-Session 1, laufend nachgeführt). Alle Festlegungen g
 
 | Datum | Lieferung |
 |---|---|
-| sofort | URL und QR-Code stehen fest und ändern sich nicht |
-| Mi 4.11. | Meeting mit dem Vorgesetzten (verschoben vom 2.11.). Website online, sobald die Freigabe zum Veröffentlichen vorliegt. Bis dahin: Build in der CI und lokale Vorschau. |
-| Fr 6.11. | Vorschau mit Screenshots, Feedback-Knopf und Word; Go/No-Go des Vorgesetzten |
-| Mo 9.11. | Definitives Folienpaket (früher, falls nötig) |
+| erledigt | URL und QR-Code stehen fest. Repo öffentlich und Website online seit 4.11. |
+| **Mo 9.11. abends** | Material an den Vorgesetzten: relevante Informationen, Visualisierungen und Storyline zur Demo und zu Beyond PDF. Die Folien erstellt er selbst (E36). |
 
-**Rückfall:** Läuft am Do 5.11. die Word-Erzeugung nicht, wird der Umfang reduziert. Der Termin bleibt.
+**Rückfall:** Läuft die Word-Erzeugung nicht, wird der Umfang reduziert. Der Termin bleibt.
 
-**Vom Vorgesetzten zu klären** (Meeting Mi 4.11., verschoben vom 2.11.):
+**Ergebnis des Meetings vom 4.11. (E36):**
 
-1. Bis wann braucht er das Material definitiv?
-2. Freigabe, das Repo öffentlich zu schalten. Es ist heute privat, und die Organisation `ech-ch` hat nach Einschätzung der Projektleitung den Gratis-Plan. Pages und Feedback-Issues von Besuchenden setzen damit ein öffentliches Repo voraus. Laut Projektleitung ist ein öffentliches, kollaboratives Projekt ohnehin beabsichtigt.
-3. Welche Lizenz gilt für das öffentliche Repo (F36)? Vorschlag zur Diskussion: Code (Filter, Skripte, CI) unter MIT; eigene Dokumentation unter CC BY 4.0; Standardtext eCH-0003 nach den eCH-Bestimmungen (Kap. 10); übernommene FOAG-Teile bleiben CC BY 4.0, die CSL CC BY-SA 3.0.
-4. Word-Original von V11.1.0 über ihn bei der Geschäftsstelle anfragen (E19).
+1. Termin: Mo 9.11. abends. Was genau zum Material gehört, wird festgelegt, wenn der MVP steht.
+2. Veröffentlichen ist freigegeben. Repo öffentlich, Pages aktiv.
+3. Lizenz (F36): nicht besprochen, wird nach dem MVP geklärt.
+4. Word-Original von V11.1.0 erhalten (de, fr), dazu weitere Unterlagen ([ausbau.md](ausbau.md)).
 
-**Nicht mehr für den Vorgesetzten (Entscheid Projektleitung 2.11.):** Sichtung der Issues (F30) und GitHub-Konto als Hürde (F06) betreffen den Weiterbetrieb nach dem MVP. Im MVP gibt es dafür nur zwei Massnahmen:
+**Nicht für den Vorgesetzten:** Sichtung der Issues (F30) und GitHub-Konto als Hürde (F06) betreffen den Weiterbetrieb nach dem MVP. Im MVP gibt es dafür nur zwei Massnahmen:
 
 - Die Startseite sagt offen, dass Feedback ein kostenloses GitHub-Konto braucht.
 - Das Issue-Formular sagt, dass Feedback gesammelt und nach dem 12.11. gesichtet wird, ohne Zusage einer Antwort (Wortlaut in Session 3).
 
-### Material für das Folienpaket
+### Material für den Vorgesetzten (Stoffsammlung; Inhalt wird festgelegt, wenn der MVP steht)
 
 | Folie | Inhalt | Quelle |
 |---|---|---|
@@ -209,7 +207,7 @@ Die Auslöser für eine Neubeurteilung stehen in ADR 0001.
 
 | Regel | Inhalt |
 |---|---|
-| R1 Format | `ech-0003-bb-<kurzname>`. Das Präfix enthält die Standardnummer, aber keine Version. |
+| R1 Format | `<standard-id>-bb-<kurzname>`, also `ech-0003-bb-<kurzname>`. Die Standard-ID (`ech-0003`) ist die eigene Kennung des Standards und enthält keine Version; sie steht auch im Pfad der Website und in den Labels (E38). |
 | R2 Zeichen | `a–z`, `0–9`, Bindestrich. Umlaute werden ausgeschrieben (ä→ae, ö→oe, ü→ue). |
 | R3 Inhalt | Der Kurzname beschreibt den Inhalt in 1–4 deutschen Wörtern, auch für Übersetzungen. Feststehende Fachbegriffe bleiben in der Sprache des Originals, z.B. «semver», «minor», «major» (3.11.2026). Er enthält keine Kapitelnummer, keine Version und kein Präfix des Elternbausteins. Prüffrage: «Stimmt der Name noch, wenn der Baustein in ein anderes Kapitel wandert?» Zahlen sind nur als Inhalt erlaubt. |
 | R4 Stabilität | Ab der ersten Veröffentlichung (Release oder Pages) wird eine ID nie geändert, auch wenn sich der Wortlaut ändert. Vorher darf sie noch angepasst werden (E27). |
@@ -406,7 +404,7 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | `ech_titelref.lua` | Verweis «Nummer + Titel» (`.mit-titel`) | Spike S3 | E11 |
 | `ech_docx_nummern.lua` | im DOCX: Word nummeriert, Quarto-Textnummern entfernen, unnummerierte Überschriften und Anhänge in eCH-Formatvorlagen | Spike S3 (Lösung A) | Block C |
 | `ech_anker.lua` | Anker = Baustein-ID, nur HTML; bei Mehrfachverwendung nur an der ersten Fundstelle (umgesetzt mit AP8) | neu | R6, E27, E35 |
-| `feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML | Spike S4; umstellen von `.baustein` auf `bb` | E08, E09, Session 3 |
+| `ech_feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML (umgesetzt mit AP9) | Spike S4; umgestellt von `.baustein` auf `bb` | E08, E09, E39, E41 |
 | Registry-Filter | `bausteine.json`: Metadaten, Fundstelle, Herkunft, Verbindlichkeit, Beziehungen | neu | E09, E10 |
 | `ech_referenzen.lua` (Anhang-A-Filter) | Zitate `[@key]` aus `referenzen.yml` auflösen (umgesetzt mit AP5); Tabelle für Anhang A (AP13) | neu | E15, E32 |
 | `{{< statustext >}}` | Statustext 1.1 aus Vorlage-Fassung | FOAG `{{< ech status >}}` | E14 |
@@ -507,6 +505,9 @@ beyond-pdf-demonstrator/
 ├── assets/                       SCSS, Logos, HTML-Partial, Typst (FOAG)
 ├── tools/                        Python: Extraktion, CI-Prüfungen, Nachbearbeitung Word
 ├── .github/workflows/build.yml   Prüfen → Rendern → Word nachbearbeiten → Pages
+├── .github/workflows/feedback-label.yml  Labels für Feedback-Issues
+├── .github/scripts/             Auswertung der Feedback-Issues mit Tests
+├── .github/ISSUE_TEMPLATE/       Feedback-Formular
 ├── docs/                         Projektdoku (wird nicht gerendert)
 └── _site/                        erzeugt, in .gitignore
 ```
@@ -550,7 +551,7 @@ Eine Vorlage-Fassung (`vorlage/<fassung>/`) umfasst:
 | Teil | Datei (Vorschlag) | Fassung 2022 |
 |---|---|---|
 | Vorlagentexte | `haftungsausschluss.md`, `urheberrechte.md` | aus dem Original, Kap. 9 und 10 |
-| Statustexte (1.1) | `statustexte.yml` | nur «Genehmigt: Das Dokument wurde vom Vorstand genehmigt. Es hat für das definierte Einsatzgebiet im festgelegten Gültigkeitsbereich normative Kraft.» |
+| Statustexte (1.1) | `statustexte.yml` | heute nur «Genehmigt: Das Dokument wurde vom Vorstand genehmigt. Es hat für das definierte Einsatzgebiet im festgelegten Gültigkeitsbereich normative Kraft.» Das Dropdown im Word-Original belegt alle sieben (E36); Ergänzung in AP12. |
 | Beschriftungen des Deckblatts | `deckblatt.yml` | Name, eCH-Nummer, Kategorie, Reifegrad, Version, Status, Beschluss am, Ausgabedatum, Ersetzt Version, Voraussetzungen, Beilagen, Sprachen, Autoren, Herausgeber / Vertrieb, Zusammenfassung |
 | Herausgeber/Vertrieb | in `deckblatt.yml` | «Verein eCH, Mainaustrasse 30, Postfach, 8034 Zürich», «T 044 388 74 64, F 044 388 71 80», «www.ech.ch / info@ech.ch» |
 
@@ -604,24 +605,79 @@ Einen Übersteuerungsmechanismus gibt es im MVP nicht. Weicht erzeugter Inhalt v
 | Vorlage | 2022 |
 | Original | eCH-0003 V11.1.0 (PDF) |
 
-## 6. Feedback-Grundsatz (E21; Details in Session 3, Do 5.11.)
+## 6. Feedback (E21, E37; Session 3)
+
+**Formular** `.github/ISSUE_TEMPLATE/feedback.yml` (E37):
+
+| Feld | Typ | Inhalt |
+|---|---|---|
+| Hinweis oben | Text | siehe unten |
+| Standard | vorbefüllt | Standard-ID `ech-0003` (E38) |
+| Baustein-ID | vorbefüllt | z.B. `ech-0003-bb-schema-eigene-version`; `ech-0003-referenzen` bei Anhang A; leer beim Standard als Ganzes |
+| Stand | vorbefüllt | «eCH-0003 V11.1.0, Build 2026-11-09 (a05c2c3)» |
+| Link zur Stelle | vorbefüllt | `…/ech-0003/v11.1.0/de/index.html#<baustein-id>` |
+| Wortlaut | vorbefüllt, nur bei feinen Bausteinen | Text der Klausel; über 2 000 Zeichen gekürzt, mit «…» |
+| Art | Auswahl, Pflicht | Zum Inhalt / Zum Zuschnitt oder zu Beziehungen / Zum Demonstrator / Frage |
+| Kommentar | Text, Pflicht | |
+| Vorschlag | Text, freiwillig | |
+
+Titel: «Feedback zu <Name> (<Baustein-ID>)». Labels werden nie per URL gesetzt: Ohne Berechtigung führt das laut GitHub-Doku zu einer 404-Seite.
+
+**Hinweis oben im Formular:**
+
+> **Dies ist ein Demonstrator, kein offizielles Verfahren von eCH.** Ihr Feedback ist keine Rückmeldung im Sinn einer öffentlichen Konsultation und fliesst nicht in die Überarbeitung von eCH-0003 ein. Es ist öffentlich sichtbar, bitte schreiben Sie nichts Vertrauliches hinein. Wir sammeln es und nutzen es für den Ausbau des Demonstrators. Eine Antwort können wir nicht zusagen.
+
+**Ohne Baustein:** Dasselbe Formular dient für «Feedback zum Standard als Ganzes» (`bb:gesamt`) und Anhang A (`bb:referenzen`).
+
+**Action `.github/workflows/feedback-label.yml` (E38):**
 
 | Punkt | Festlegung |
 |---|---|
-| Mechanik | Ein Issue-Formular `.github/ISSUE_TEMPLATE/feedback.yml` für alle Bausteine. Der Feedback-Link füllt Titel und Felder per URL vor. Eine Action liest die Baustein-ID aus dem Formularfeld und setzt das Label `bb:<kurzname>`; das Label wird nur bei Bedarf angelegt. Das Formular selbst setzt das Label `feedback`. |
-| Vorbefüllt | Titel «Feedback zu <Name> (<Baustein-ID>)»; Baustein-ID; Stand (z.B. «eCH-0003 V11.1.0, Build 2026-11-05»); Link zur Stelle `…/ech-0003/v11.1.0/de/#<baustein-id>`; bei feinen Bausteinen der Wortlaut der Klausel als Zitat |
-| Auszufüllen | Art (inhaltlich / redaktionell / Frage / zum Demonstrator selbst); Kommentar; optional Vorschlag |
-| Abgrenzung | Textblock oben im Formular: Demonstrator, keine offizielle Rückmeldung zu eCH-0003 (F31, Wortlaut in Session 3) |
-| Ohne Baustein | dasselbe Formular ohne Baustein-ID: «Feedback zum Standard als Ganzes» (`bb:standard`), Anhang A (`bb:referenzen`) |
-| Offen für Session 3 | Test mit Konto ohne Schreibrechte (F05), Sichtung nach der Versammlung (F30), Wortlaut der Abgrenzung (F31), Gestaltung der Knöpfe, URL-Länge bei langen Klauseln, GitHub-Konto als Hürde (F06) |
+| Auslöser, Rechte | `issues: opened`; nur `issues: write` und `contents: read` (Checkout, um IDs gegen die Quelle zu prüfen) |
+| Labels | `feedback`, `standard:<standard-id>` (z.B. `standard:ech-0003`), `bb:<kurzname>`, `art:inhalt`, `art:zuschnitt`, `art:demonstrator`, `art:frage`. Fehlende Labels legt die Action an. |
+| Eindeutigkeit | `standard:` und `bb:` zusammen. Der Kurzname ist nur innerhalb eines Standards eindeutig (R5), und GitHub begrenzt Labels auf 50 Zeichen. |
+| Prüfung | Die ID muss in der Quelle vorkommen (`bb="…"`); sonst `bb:unbekannt`, das Issue bleibt bestehen. |
+| Sicherheit | Der Issue-Text wird nur als Daten gelesen, nie in einen Shell-Befehl eingesetzt; ins Label kommt nur `[a-z0-9-]`. |
+| Keine Antwort | Die Action schreibt keinen Kommentar. |
+| Nur das Formular | `blank_issues_enabled: false` |
+| Rückfall | Ist die Action blockiert: Suche nach der ID (`…/issues?q="<baustein-id>"`). |
 
-**Nutzen für die Folie:** Der mitgelieferte Wortlaut hält fest, worauf sich ein Feedback bezog, auch wenn sich der Text später ändert. Das Label `bb:schema-eigene-version` zeigt alle Rückmeldungen zu einem Baustein mit einem Klick, als Gegenstück zu den vier verstreuten öK-Rückmeldungen.
+Alle Rückmeldungen zu einem Baustein: `…/issues?q=label:"standard:ech-0003" label:"bb:schema-eigene-version"`.
+
+**Darstellung auf der Website (E39):**
+
+| Punkt | Festlegung |
+|---|---|
+| Grober Baustein | kleiner Knopf «Feedback» rechts auf der Zeile der Überschrift, Baustein-ID in kleiner grauer Schrift |
+| Feiner Baustein | dezentes Sprechblasen-Symbol am rechten Rand; beim Darüberfahren färbt sich der Block leicht und zeigt die ID |
+| ID | Link auf den eigenen Anker |
+| Alle Rückmeldungen | kleiner Link neben der ID auf die Liste bei GitHub, ohne Zähler |
+| Handy | nur das Symbol, immer sichtbar |
+| Mehrfachbaustein | an beiden Stellen dasselbe Symbol und «erscheint auch in …» |
+| Standard als Ganzes | Knopf «Feedback zum Standard» beim Deckblatt |
+| Kein Knopf | Platzhalter, Vorlagentexte, Word |
+| Bedienung | mit Tastatur erreichbar, für Screenreader beschriftet, beim Drucken ausgeblendet; ohne JavaScript |
+| Startseite | Schritt 2 des Rundgangs erklärt das Symbol und ersetzt «folgt in Kürze» |
+
+**Test auf der Live-Website nach dem Push (E40, D2):**
+
+| Test | Erwartung |
+|---|---|
+| Testkonto ohne Schreibrechte klickt das Symbol der Schema-Regel | Formular vorbefüllt, Absenden klappt, Labels `feedback`, `standard:ech-0003`, `bb:schema-eigene-version`, `art:…` |
+| Ohne Anmeldung klicken | Weiterleitung zum Login, danach wieder das vorbefüllte Formular |
+| ID von Hand ändern | Label `bb:unbekannt`, das Issue bleibt bestehen |
+| Längste Klausel (`struktur-versionsschema-semver`) | Wortlaut vollständig, keine Fehlerseite |
+| Handy | Symbol sichtbar und antippbar |
+
+Test-Issues werden danach gelöscht. **Beispiel-Issues (E40):** fünf, deutlich gekennzeichnet («[Beispiel]», Label `beispiel`), vier zur Schema-Regel ohne Namen und Organisationen, eines zum Zuschnitt.
+
+**Nutzen für das Material:** Der mitgelieferte Wortlaut hält fest, worauf sich ein Feedback bezog, auch wenn sich der Text später ändert.
 
 ## 7. Definition of Done für den 12.11.
 
 Gemäss E06.
 
-### Durchstich (Entscheidungstor Do 5.11., Grundlage der Vorschau Fr 6.11.)
+### Durchstich (geplant Do 5.11., neu Fr 6.11., E36)
 
 | # | Kriterium |
 |---|---|
@@ -642,84 +698,63 @@ Gemäss E06.
 - Die geplanten Kapitel (1.1–1.2.1, Kap. 8–10, Anhang A und F) erfüllen D2–D4 sinngemäss, soweit fertig.
 - Die Startseite enthält einen Rundgang und den Hinweis auf die Platzhalter.
 - Das README beschreibt Zweck, Abgrenzung («kein offizieller eCH-Standard») und Aufbau und nennt das FOAG-Template (CC BY 4.0) als Quelle.
-- Das Folienpaket ist an den Vorgesetzten geliefert.
+- Das Material ist an den Vorgesetzten geliefert (Mo 9.11. abends).
 - **Fremdtest bestanden:** Eine Person ohne Vorwissen schafft in 10 Minuten ohne Hilfe drei Dinge: die Schema-Regel finden, ein Feedback abschicken und das Word herunterladen.
 
 ### Erfolgskriterium 12.11.
 
-Der Vorgesetzte gibt am Fr 6.11. das Go und zeigt am Anlass mindestens eine Folie mit Link oder QR-Code. Website und Feedback-Knopf funktionieren an diesem Tag für Besuchende ohne Hilfe.
+Der Vorgesetzte erhält das Material bis Mo 9.11. abends und zeigt am Anlass mindestens eine Folie mit Link oder QR-Code. Website und Feedback-Knopf funktionieren an diesem Tag für Besuchende ohne Hilfe.
 
-**Voraussetzung:** Für D2 braucht es vor Do 5.11. ein zweites GitHub-Konto ohne Mitgliedschaft in `ech-ch`.
+**Voraussetzung:** Für D2 braucht es ein zweites GitHub-Konto ohne Mitgliedschaft in `ech-ch` und ohne Schreibrechte im Repo (AP0c).
 
 ## 8. Arbeitspakete
 
 Abgestimmt auf den Zeitplan bis 12.11.2026. «PL» = Projektleitung. Verweise auf Entscheide in Klammern.
 
-### Aufgaben der Projektleitung (Stand 2.11. abends)
+### Erledigt (Stand 6.11.2026)
 
-| # | Aufgabe | Wann | Ergebnis |
-|---|---|---|---|
-| AP0a | Meeting mit dem Vorgesetzten: Lieferzusage (E04) und Stand der Umsetzung zeigen; definitiver Termin fürs Folienpaket; Freigabe zum Veröffentlichen; Lizenz (F36) | **Mi 4.11.** (verschoben) | Antworten im Fragenlog; danach Repo öffentlich und Pages aktiv |
-| AP0b | Word-Original von V11.1.0 über den Vorgesetzten bei der Geschäftsstelle anfragen (E19) | ab Mi 4.11. | Gegenprobe, falls es kommt |
-| AP0c | Testkonto ohne Mitgliedschaft in `ech-ch` und ohne Schreibrechte im Repo (D2). **Nicht** das eigene Konto weitergeben, denn es hat Schreibrechte, und der Test wäre wertlos. Am besten legt die Vertrauensperson ein eigenes Konto an und macht damit auch gleich den Fremdtest (AP16). | vor Do 5.11. | Testkonto; zusätzlich ein echter Befund zur Hürde «GitHub-Konto» (F06) |
-| AP0d | Kurznamen in [kap7-bausteine.md](kap7-bausteine.md) durchsehen, besonders die 11 unsicheren | **erledigt 3.11.** (E27–E31) | freigegebene ID-Liste (Voraussetzung für AP5) |
+| # | Was | Stand |
+|---|---|---|
+| AP0a | Meeting mit dem Vorgesetzten | 4.11., Ergebnis in E36 |
+| AP0b | Word-Original V11.1.0 | erhalten; Rohtext aller Pilotkapitel bestätigt |
+| AP0d | Kurznamen Kap. 7 | 3.11. (E27–E31) |
+| AP1–AP4 | Repo, CI, Rohtext, Gerüst | committet, live |
+| AP5 | Kap. 7 als 10 grobe und 54 feine Bausteine | committet, live |
+| AP6 | Word mit Deckblatt, Inhaltsverzeichnis, Fusszeile | committet, live |
+| AP7 | CI-Prüfungen (Quelle und Ausgabe) | committet, unter Linux grün |
+| AP8 | Startseite mit Rundgang, Anker = Baustein-ID | committet, live (`a05c2c3`) |
 
-**Folge der Verschiebung:** Bis zum Meeting wird umgesetzt, was ohne Freigabe geht. Das Meeting stützt sich dann auf einen laufenden Stand statt auf einen Plan. Ohne Freigabe läuft nur keine öffentliche Website.
+Entfallen: AP11 (Vorschau mit Go/No-Go, E36); die Screenshots gehen in AP17 auf.
 
-### Di 3.11. – Repo, Build, Pages
+### Fr 6.11. – Feedback und geplante Kapitel
 
 | # | Aufgabe | Grundlage |
 |---|---|---|
-| AP1 | Repo-Grundgerüst nach 4.5: Ordner, `.gitattributes`, `.gitignore`, README (Zweck, Abgrenzung, Namensnennung FOAG), `_quarto.yml` mit expliziter `render`-Liste, FOAG-Dateien übernehmen und auf die Vorlage-Fassung umstellen, lokale Word-Vorlage, Original-PDF | E16, E20 |
-| AP2 | CI `build.yml`: Quarto 1.10.19 und Python 3.11 festlegen; Prüfen → Rendern (alle Formate in einem Aufruf) → `aktualisiere_felder_beim_oeffnen.py` → Pages nur bei Erfolg; Releases bei Tags | E16, E17, E22 |
-| AP3 | Extraktionsskript (Schritt 1) und Rohtext für 1.1–1.2.1, Kap. 7–10, Anhang A, C, F | E19 |
-| AP4 | Gerüst `de/index.qmd` mit allen rund 92 Überschriften, `original-seite`, festen `sec-`-Ankern für Verweisziele, Platzhalter-Shortcode; `ech_anhang.lua` auf Klasse umstellen und Buchstaben vergeben | E05, E15 |
-
-**Pages und privates Repo:** Bei Organisationen mit Gratis-Plan setzt GitHub Pages ein öffentliches Repo voraus. Bis zur Freigabe am Mi 4.11. gilt deshalb:
-
-- Die CI baut und prüft, die Ausgabe gibt es als Download-Artefakt des Workflows.
-- Angeschaut wird lokal mit `quarto preview`.
-- Der Pages-Schritt ist vorbereitet und wird nach der Freigabe eingeschaltet, etwa 15 Minuten Aufwand.
-
-### Mi 4.11. – Kap. 7, Word, Querverweise
-
-| # | Aufgabe | Grundlage |
-|---|---|---|
-| AP5 | Kap. 7 als 10 grobe und 54 feine Bausteine (einer mehrfach verwendet, E27) (IDs aus AP0d), Querverweise in der Schreibweise aus E11, eCH-0150 als markierter Verweis (W3), `[@SemVer]` | E07–E12 |
-| AP6 | Word: `ech_docx_nummern.lua` (Lösung A), Deckblatt-Filter mit `vorlage/2022/deckblatt.yml` und Metadaten, Textmarken der Fusszeile, Demonstrator-Hinweis | E14, E17, D5 |
-| AP7 | CI-Prüfungen nach 3.7: YAML-Verbot, ID-Regeln, keine Nummern von Hand, eine Kennzeichnung je feinem Baustein, Zählung 36/11/8, unaufgelöste Verweise als Fehler, normalisierter Textvergleich | E07–E12, E19 |
-| AP8 | Startseite mit Rundgang und Hinweisen | E18 |
-
-### Do 5.11. – Feedback und Entscheidungstor
-
-| # | Aufgabe | Grundlage |
-|---|---|---|
-| — | **Session 3 (Feedback)**: Details zu E21, F05, F30, F31 | E21 |
-| AP9 | `feedback.lua` (Elemente mit `bb`, Anker = Baustein-ID, Symbol am Rand), Issue-Formular, Action für das Label; Test mit dem Konto aus AP0c | E18, E21, D2 |
-| AP10 | **Entscheidungstor abends:** D1–D5 prüfen. Erfüllt → Tag `v0.1-durchstich`. Word scheitert → Rückfall auf Pandoc nur fürs Word (E16), sonst Umfang reduzieren. | A4, E16 |
-
-### Fr 6.11. – Vorschau und geplante Kapitel
-
-| # | Aufgabe | Grundlage |
-|---|---|---|
-| AP11 | Vorschau für den Vorgesetzten: Screenshots (Schema-Regel mit Feedback-Symbol und ID, Issue-Formular, Word-Deckblatt, 7.3 im Word); Tag `v0.2-vorschau` | E04 |
-| AP12 | 1.1 Status (`{{< statustext >}}`, `statustexte.yml`), 1.2, 1.2.1, Kap. 8, Vorlagentexte 9/10 (`{{< vorlagentext >}}`, Fassung 2022) | E13, E14 |
+| — | **Session 3 (Feedback):** Details zu E21; F05, F31; Erwartungstext (F30); Feedback-Art «Zuschnitt» (F42); Gestaltung der Knöpfe; URL-Länge | E21, E36 |
+| AP9 | `ech_feedback.lua`, Issue-Formular, Action für das Label; Test mit dem Konto aus AP0c | E18, E21, D2 |
+| AP10 | D1–D5 prüfen. Erfüllt → Tag `v0.1-durchstich`. | A4 |
+| AP12 | 1.2, 1.2.1, Kap. 8, Vorlagentexte 9/10 (`{{< vorlagentext >}}`, Fassung 2022); Statustexte 2022 vollständig aus dem Word-Original; Links aus dem Word-Original ergänzen, Text unverändert («Home (admin.ch)» → `https://www.hermes.admin.ch/`, SemVer, eCH-0150) | E13, E14, E36 |
 | AP13 | Anhang A (Filter, `referenzen.yml`) und Anhang F | E15 |
 
-### Mo 9.11. – Stufe 1 komplett
+Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
+
+### Mo 9.11. – Stufe 1 komplett, abends Material
 
 | # | Aufgabe | Grundlage |
 |---|---|---|
-| AP14 | Registry-Filter `bausteine.json` mit Fundstelle, Herkunft, Verbindlichkeit und Beziehungen | E09, E10 |
-| AP15 | Feinschliff Deckblatt; README fertig | E17 |
+| AP14 | Registry-Filter `bausteine.json` mit Fundstelle, Herkunft, Verbindlichkeit und Beziehungen; F43 | E09, E10, E30 |
+| AP15 | Feinschliff Deckblatt (Tabellenformat aus dem Word-Original), README fertig | E17, E36 |
 | AP16 | Fremdtest mit einer unbeteiligten Person | Stufe 1 DoD |
-| AP17 | Folienpaket definitiv an den Vorgesetzten | E04 |
+| AP17 | Inhalt des Materials gemeinsam festlegen und erstellen (Informationen, Visualisierungen, Storyline, Screenshots, QR-Code); Tag `v0.2-material`; **abends an den Vorgesetzten** | E36 |
+| — | F45 entscheiden: Was von der Projektdoku bleibt öffentlich? | E36 |
 
-### Di 10.11. – Stufe 2 soweit möglich, abends Feature-Freeze
+Was im Material gezeigt wird, muss ab Montagabend stabil sein. Für Sichtbares liegt der Freeze damit einen Tag vor dem Feature-Freeze.
+
+### Di 10.11. – Stufe 2 und Ausbau nach Priorität, abends Feature-Freeze
 
 | # | Aufgabe | Grundlage |
 |---|---|---|
-| AP18 | nach Priorität: (1) Anhang C, (2) sichtbare Beziehungen auf der Website, (3) Vorlage-Fassung 2025 mit Umschalten, (4) PDF (F37) | E10, E13, E15 |
+| AP18 | nach Entscheid, wenn der MVP steht. Stufe 2: sichtbare Beziehungen, Anhang C, Vorlage-Fassung 2025, PDF (F37). Ausbau: [ausbau.md](ausbau.md), dort auch die empfohlene Reihenfolge. | E10, E13, E15, E36 |
 | AP19 | Feature-Freeze; Tag `v1.0-mitgliederversammlung` | E22 |
 
 ### Mi 11.11. – Abschluss
@@ -728,9 +763,14 @@ Abgestimmt auf den Zeitplan bis 12.11.2026. «PL» = Projektleitung. Verweise au
 |---|---|
 | AP20 | Fragenlog bereinigen (Stand, offene Punkte für die Zeit nach dem MVP); Website und Downloads ein letztes Mal prüfen. Probelauf und Backup-Aufnahme entfallen (E03). |
 
+### Offen bei der Projektleitung
+
+| # | Aufgabe | Wann |
+|---|---|---|
+| AP0c | Testkonto ohne Mitgliedschaft in `ech-ch` und ohne Schreibrechte im Repo (D2). **Nicht** das eigene Konto weitergeben: Es hat Schreibrechte, und der Test wäre wertlos. Am besten legt die Vertrauensperson ein eigenes Konto an und macht damit auch gleich den Fremdtest (AP16). | für AP9 |
+
 ### Abhängigkeiten
 
-- AP5 braucht die freigegebenen IDs (AP0d).
-- Pages braucht die Freigabe zum Veröffentlichen und die Klärung der Lizenz (AP0a).
-- D2 braucht das Testkonto (AP0c).
-- AP11 baut auf AP10 auf.
+- AP9 braucht Session 3 und das Testkonto (AP0c).
+- AP16 braucht AP9.
+- AP17 braucht einen stabilen Stand von AP9, AP12 und AP13.
