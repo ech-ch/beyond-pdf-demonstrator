@@ -746,7 +746,7 @@ Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
 | AP14 | Registry-Filter `bausteine.json` mit Fundstelle, Herkunft, Verbindlichkeit und Beziehungen; F43 | E09, E10, E30 |
 | AP15 | Feinschliff Deckblatt (Tabellenformat aus dem Word-Original), README fertig | E17, E36 |
 | AP16 | Fremdtest mit einer unbeteiligten Person | Stufe 1 DoD |
-| AP17 | Inhalt des Materials gemeinsam festlegen und erstellen (Informationen, Visualisierungen, Storyline, Screenshots, QR-Code); Tag `v0.2-material`; **abends an den Vorgesetzten** | E36 |
+| AP17 | Inhalt des Materials gemeinsam festlegen und erstellen (Informationen, Visualisierungen, Storyline, Screenshots, QR-Code); Tag `v0.3-material` (E44); **abends an den Vorgesetzten** | E36 |
 | — | F45 entscheiden: Was von der Projektdoku bleibt öffentlich? | E36 |
 
 Was im Material gezeigt wird, muss ab Montagabend stabil sein. Für Sichtbares liegt der Freeze damit einen Tag vor dem Feature-Freeze.

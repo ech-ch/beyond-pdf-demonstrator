@@ -120,12 +120,26 @@ jobs:
           name: website
           path: website
 
-      - name: Release erstellen
+      # Wird das Release von Hand auf GitHub angelegt, entsteht der Tag mit dem
+      # Release, und dieser Lauf findet es schon vor. Dann bleiben Titel und
+      # Text, und nur die Dateien werden angehängt (--clobber ersetzt sie bei
+      # einem erneuten Lauf). Wird nur der Tag gepusht, legt der Lauf das
+      # Release selbst an (E44).
+      - name: Release erstellen oder Dateien anhängen
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           dateien=$(find website -name '*.docx' -o -name 'bausteine.json')
-          gh release create "${GITHUB_REF_NAME}" $dateien \
-            --repo "${GITHUB_REPOSITORY}" \
-            --title "${GITHUB_REF_NAME}" \
-            --notes "Demonstrator, kein offizieller eCH-Standard. Stand ${GITHUB_REF_NAME} (Commit ${GITHUB_SHA::7})."
+          if [ -z "$dateien" ]; then
+            echo "Keine Dateien für das Release gefunden." >&2
+            exit 1
+          fi
+          if gh release view "${GITHUB_REF_NAME}" --repo "${GITHUB_REPOSITORY}" > /dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" $dateien --clobber \
+              --repo "${GITHUB_REPOSITORY}"
+          else
+            gh release create "${GITHUB_REF_NAME}" $dateien \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "${GITHUB_REF_NAME}" \
+              --notes "Demonstrator, kein offizieller eCH-Standard. Stand ${GITHUB_REF_NAME} (Commit ${GITHUB_SHA::7})."
+          fi
