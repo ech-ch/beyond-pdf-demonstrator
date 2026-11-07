@@ -1,20 +1,22 @@
 ---
 title: "Leitfaden zur Genehmigung von Anträgen"
 lang: de
-abstract: "Der vorliegende Standard definiert gemäss den Statuten des Vereins eCH Art. 40 Abs. 3 den Standardisierungsprozess des Vereins eCH."
+abstract: "Der vorliegende Standard definiert gemäss den [Statuten](https://www.ech.ch/sites/default/files/imce/Statuten/STAT_d_DEF_2014-04-10.pdf) des Vereins eCH Art. 40 Abs. 3 den Standardisierungsprozess des Vereins eCH."
 # Sprachabhängige Ebene 0 (Deckblatt). Die sprachneutralen Werte unter `ech`
 # stehen in ../_metadata.yml; ein `ech:` hier würde sie ganz ersetzen.
+# `aufzaehlung`: im Word als Aufzählung wie im Original, auf der Website Zeilen
 beilagen:
   - "Vorlage je in Deutsch, Französisch und Englisch für Standard, Best Practice, Hilfsmittel, White Paper und Addendum"
-  - "XXXX_d_DRA_JJJJ-MM-TT_eCH-0XXX_Vx.x.x_Titel.docx"
-  - "XXXX_f_DRA_JJJJ-MM-TT_eCH-0XXX_Vx.x.x_Titre.docx"
-  - "XXXX_e_DRA_JJJJ-MM-TT_eCH-0XXX_Vx.x.x_Titel.docx"
+  - aufzaehlung:
+      - "XXXX_d_DRA_JJJJ-MM-TT_eCH-0XXX_Vx.x.x_Titel.docx"
+      - "XXXX_f_DRA_JJJJ-MM-TT_eCH-0XXX_Vx.x.x_Titre.docx"
+      - "XXXX_e_DRA_JJJJ-MM-TT_eCH-0XXX_Vx.x.x_Titel.docx"
 autoren:
   - "Mitglieder des Expertenausschusses, Verein eCH"
   - "Mitarbeitende der Geschäftsstelle, Verein eCH"
 format:
   html:
-    # Downloads auf der Standardseite (E18): Word und Original-PDF. Die
+    # Downloads auf der Standardseite (E18): Word, Original-PDF, Registry. Die
     # automatischen Format-Links sind aus, sonst steht das Word doppelt da.
     format-links: false
     other-links:
@@ -24,6 +26,9 @@ format:
       - text: Original-PDF (eCH-0003 V11.1.0)
         href: ../../../original/eCH-0003_V11.1.0_d.pdf
         icon: file-earmark-pdf
+      - text: Registry (bausteine.json)
+        href: ../bausteine.json
+        icon: filetype-json
   docx:
     output-file: DEMO_eCH-0003_V11.1.0_de.docx   # bewusst kein eCH-Dateiname (E18)
 ---

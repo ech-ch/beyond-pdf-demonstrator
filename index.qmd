@@ -26,4 +26,4 @@ Der Demonstrator zerlegt den Standard eCH-0003 V11.1.0 «Leitfaden zur Genehmigu
 
 - **Platzhalter:** Überführt sind 1.1–1.2.1, Kap. 7–10 und die Anhänge A und F. 1.3–1.4, Kap. 2–6 und die Anhänge B–E sind als Platzhalter markiert und verweisen auf die entsprechende Seite im [Original-PDF](original/eCH-0003_V11.1.0_d.pdf).
 - **Vorschlag:** Die Regeln für Bausteine und IDs sind ein Vorschlag und eine Diskussionsgrundlage für eCH, keine verbindliche Regel.
-- **Mehr dazu:** [Repository auf GitHub](https://github.com/ech-ch/beyond-pdf-demonstrator) · [Fragen und Entscheide](https://github.com/ech-ch/beyond-pdf-demonstrator/blob/main/docs/fragenlog.md) · Liste aller Bausteine zum Herunterladen (Registry): folgt
+- **Mehr dazu:** [Repository auf GitHub](https://github.com/ech-ch/beyond-pdf-demonstrator) · [Fragen und Entscheide](https://github.com/ech-ch/beyond-pdf-demonstrator/blob/main/docs/fragenlog.md) · [Liste aller Bausteine mit ihren Beziehungen](ech-0003/v11.1.0/bausteine.json) (Registry, JSON)

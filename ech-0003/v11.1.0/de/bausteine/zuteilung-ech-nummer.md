@@ -1,7 +1,7 @@
 ## Zuteilung einer eCH-Nummer {#sec-zuteilung-ech-nummer bb="ech-0003-bb-zuteilung-ech-nummer" typ="process" original-seite="27"}
 
 ::: {bb="ech-0003-bb-ech-nummer-vor-arbeitsbeginn" typ="requirement" original-seite="27"}
-[MUSS] Bevor die Arbeiten an einem Standard, einer Best Practice, einem Hilfsmittel oder einem White Paper beginnen, beantragen die Antragstellenden bei der Geschäftsstelle (info@ech.ch) eine eCH-Nummer.
+[MUSS] Bevor die Arbeiten an einem Standard, einer Best Practice, einem Hilfsmittel oder einem White Paper beginnen, beantragen die Antragstellenden bei der Geschäftsstelle ([info@ech.ch](mailto:info@ech.ch)) eine eCH-Nummer.
 :::
 
 ::: {bb="ech-0003-bb-nummernvergabe-nach-eingang" typ="requirement" original-seite="27" bezug="ech-0003-bb-ech-nummer-vor-arbeitsbeginn"}

@@ -5,8 +5,13 @@
 --   1. Titel «eCH-0003 – Leitfaden …» (Formatvorlage «Titel»)
 --   2. Demonstrator-Hinweis (Metadatum `demonstrator-hinweis`, D5)
 --   3. Tabelle: Beschriftungen und Reihenfolge aus der Vorlage-Fassung
---      (vorlage/<fassung>/deckblatt.yml), Werte aus den Metadaten; Zellen wie
---      in der eCH-Vorlage «Tabellentitel» (Beschriftung) und «Tabellentext»
+--      (vorlage/<fassung>/deckblatt.yml), Werte aus den Metadaten. Format wie
+--      im Word-Original von V11.1.0: Rahmen 0,5 pt, Spalten 2622/6589 dxa,
+--      Zellränder 70, senkrecht zentriert, «Standard» mit fetter Beschriftung,
+--      Beilagen als «• Aufzählung», eine Leerzeile davor und zwei danach. Als
+--      OpenXML, weil sich Rahmen und Abstände einer Pandoc-Tabelle nicht
+--      steuern lassen; Links darin sind Felder HYPERLINK, weil OpenXML hier
+--      keine Beziehungen anlegt
 --   4. «Zusammenfassung» («Nebentitel») und Text aus `abstract`
 --   5. Seitenumbruch
 --   6. «Inhaltsverzeichnis» (Vorlage «Titel Inhaltsverzeichnis») und das Feld TOC
@@ -24,6 +29,7 @@ local stringify = pandoc.utils.stringify
 
 -- Zeilen der Tabelle, deren Wert eine Textmarke der Fusszeile trägt
 local TEXTMARKEN = { version = "Version", status = "Status", ausgabedatum = "Ausgabedatum" }
+local BREITE = { 2622, 6589 }           -- dxa, wie im Original
 
 local function absatz(inlines, stil)
   return pandoc.Div({ pandoc.Para(inlines) }, pandoc.Attr("", {}, { ["custom-style"] = stil }))
@@ -49,27 +55,79 @@ local function textmarke(name, inlines)
   return pandoc.Inlines({ pandoc.Span(inlines, pandoc.Attr(name)) })
 end
 
+local function xml(s)
+  return (s:gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub('"', "&quot;"))
+end
+
+-- Inlines als Läufe; Links als Feld HYPERLINK mit der Zeichenvorlage «Hyperlink».
+local function laeufe(inlines, fett)
+  local fett_xml = fett and "<w:b/>" or ""
+  local teile, text = {}, ""
+  local function schreibe()
+    if text ~= "" then
+      table.insert(teile, string.format('<w:r>%s<w:t xml:space="preserve">%s</w:t></w:r>',
+        fett and "<w:rPr><w:b/></w:rPr>" or "", xml(text)))
+      text = ""
+    end
+  end
+  for _, el in ipairs(inlines) do
+    if el.t == "Str" then
+      text = text .. el.text
+    elseif el.t == "Space" or el.t == "SoftBreak" then
+      text = text .. " "
+    elseif el.t == "Link" then
+      schreibe()
+      table.insert(teile, string.format(
+        '<w:fldSimple w:instr=" HYPERLINK &quot;%s&quot; "><w:r><w:rPr><w:rStyle w:val="Hyperlink"/>%s</w:rPr><w:t xml:space="preserve">%s</w:t></w:r></w:fldSimple>',
+        xml(el.target), fett_xml, xml(stringify(el.content))))
+    else
+      text = text .. stringify(el)
+    end
+  end
+  schreibe()
+  return table.concat(teile)
+end
+
+local function zelle(breite, absaetze)
+  return string.format('<w:tc><w:tcPr><w:tcW w:w="%d" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr>%s</w:tc>',
+    breite, table.concat(absaetze))
+end
+
 local function tabelle(rows)
-  local body = {}
+  local rahmen = {}
+  for _, seite in ipairs({ "top", "left", "bottom", "right", "insideH", "insideV" }) do
+    table.insert(rahmen, string.format('<w:%s w:val="single" w:sz="4" w:space="0" w:color="auto"/>', seite))
+  end
+  local zeilen, marke = {}, 9000   -- Textmarken-IDs ausserhalb der von Pandoc vergebenen
   for _, row in ipairs(rows) do
     local werte = {}
     for i, wert in ipairs(row.values) do
-      local inlines = pandoc.Inlines(wert)
-      if i == 1 and TEXTMARKEN[row.key] then inlines = textmarke(TEXTMARKEN[row.key], inlines) end
-      table.insert(werte, absatz(inlines, "Tabellentext"))
+      local ppr = row.punkte[i] and '<w:pPr><w:pStyle w:val="Aufzhlung"/><w:ind w:left="563" w:hanging="203"/></w:pPr>' or ""
+      local inhalt = laeufe(pandoc.Inlines(wert), false)
+      if i == 1 and TEXTMARKEN[row.key] then
+        marke = marke + 1
+        inhalt = string.format('<w:bookmarkStart w:id="%d" w:name="%s"/>%s<w:bookmarkEnd w:id="%d"/>',
+          marke, TEXTMARKEN[row.key], inhalt, marke)
+      end
+      table.insert(werte, "<w:p>" .. ppr .. inhalt .. "</w:p>")
     end
-    table.insert(body, pandoc.Row({
-      pandoc.Cell({ absatz(row.label, "Tabellentitel") }),
-      pandoc.Cell(werte),
-    }))
+    table.insert(zeilen, "<w:tr>" .. zelle(BREITE[1], { "<w:p>" .. laeufe(row.label, true) .. "</w:p>" })
+      .. zelle(BREITE[2], werte) .. "</w:tr>")
   end
-  return pandoc.Table(
-    pandoc.Caption(),
-    { { pandoc.AlignLeft, 0.3 }, { pandoc.AlignLeft, 0.7 } },
-    pandoc.TableHead(),
-    { { attr = pandoc.Attr(), body = body, head = {}, row_head_columns = 0 } },
-    pandoc.TableFoot()
-  )
+  return pandoc.RawBlock("openxml", table.concat({
+    "<w:p/>",   -- Leerzeilen wie im Original
+    "<w:tbl><w:tblPr>",
+    string.format('<w:tblW w:w="%d" w:type="dxa"/>', BREITE[1] + BREITE[2]),
+    "<w:tblBorders>", table.concat(rahmen), "</w:tblBorders>",
+    '<w:tblLayout w:type="fixed"/>',
+    '<w:tblCellMar><w:left w:w="70" w:type="dxa"/><w:right w:w="70" w:type="dxa"/></w:tblCellMar>',
+    '<w:tblLook w:val="0000" w:firstRow="0" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0"/>',
+    "</w:tblPr>",
+    string.format('<w:tblGrid><w:gridCol w:w="%d"/><w:gridCol w:w="%d"/></w:tblGrid>', BREITE[1], BREITE[2]),
+    table.concat(zeilen),
+    "</w:tbl>",
+    "<w:p/><w:p/>",
+  }))
 end
 
 function Pandoc(doc)

@@ -25,6 +25,9 @@ ech:
 # Vorlage-Fassung (ADR 0005): Vorlagentexte, Statustexte, Deckblatt
 vorlage: "2022"
 
+# Kennzeichnungen der Verbindlichkeit (V4, F22); V11.1.0 kennt kein [KANN]
+kennzeichnungen: [MUSS, SOLLTE, DARF NICHT]
+
 # Herkunft (E09): Original, aus dem der Standard überführt wird. Ohne
 # Original (direkt im neuen Ansatz verfasst) fallen beide Felder weg.
 original: eCH-0003 V11.1.0

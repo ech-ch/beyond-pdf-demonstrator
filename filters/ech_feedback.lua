@@ -26,10 +26,11 @@
 -- Nur explizite ASCII-Klassen: Unter Windows zählen %w und %s auch einzelne
 -- Bytes von UTF-8-Zeichen, z.B. das zweite Byte von «à» als Leerraum (S4).
 
+local common = dofile(quarto.utils.resolve_path("ech_common.lua"))
 local stringify = pandoc.utils.stringify
+local block_text, titel_ohne_nummer = common.block_text, common.titel_ohne_nummer
 
 local WORTLAUT_MAX = 2000   -- Zeichen (E37)
-local NAME_WOERTER = 7      -- erste Wörter als Name eines feinen Bausteins (E12)
 local LEER = "[ \t\r\n]"
 
 local function urlencode(s)
@@ -44,59 +45,12 @@ end
 
 -- Klartext ------------------------------------------------------------------
 
-local function block_text(block)
-  if block.t == "Para" or block.t == "Plain" then
-    return stringify(block.content)
-  elseif block.t == "BulletList" or block.t == "OrderedList" then
-    local punkte = {}
-    for _, item in ipairs(block.content) do
-      local teile = {}
-      for _, b in ipairs(item) do table.insert(teile, block_text(b)) end
-      table.insert(punkte, "- " .. table.concat(teile, " "))
-    end
-    return table.concat(punkte, "\n")
-  elseif block.t == "CodeBlock" then
-    return block.text
-  elseif block.t == "Div" then
-    local teile = {}
-    for _, b in ipairs(block.content) do
-      local t = block_text(b)
-      if t ~= "" then table.insert(teile, t) end
-    end
-    return table.concat(teile, "\n\n")
-  elseif block.t == "RawBlock" or block.t == "Header" then
-    return ""
-  end
-  return stringify(block)
-end
-
 -- Wortlaut für das Formular; über WORTLAUT_MAX Zeichen an einer Wortgrenze
 -- gekürzt. pandoc.text zählt Zeichen, nicht Bytes.
 local function wortlaut(text)
   if pandoc.text.len(text) <= WORTLAUT_MAX then return text end
   local kurz = pandoc.text.sub(text, 1, WORTLAUT_MAX)
   return (kurz:gsub(LEER .. "+[^ \t\r\n]*$", "")) .. " …"
-end
-
--- Name eines feinen Bausteins: Attribut `name`, sonst die ersten Wörter der
--- Klausel ohne Kennzeichnung (E12).
-local function name_aus_text(text)
-  local absatz = text:match("^([^\n]*)") or text
-  absatz = absatz:gsub("^%[[A-Z ]+%]" .. LEER .. "*", "")
-  local woerter = {}
-  for wort in absatz:gmatch("[^ \t\r\n]+") do table.insert(woerter, wort) end
-  local mehr = #woerter > NAME_WOERTER
-  local anzahl = math.min(#woerter, NAME_WOERTER)
-  local name = table.concat(woerter, " ", 1, anzahl):gsub("[.,:;]+$", "")
-  return mehr and (name .. " …") or name
-end
-
--- Überschrift ohne die Nummer von Quarto
-local function titel_ohne_nummer(h)
-  local inhalt = h.content:filter(function(x)
-    return not (x.t == "Span" and x.classes:includes("header-section-number"))
-  end)
-  return (stringify(inhalt):gsub("^" .. LEER .. "+", ""))
 end
 
 -- Kontext des Dokuments -----------------------------------------------------
@@ -266,7 +220,7 @@ function Pandoc(doc)
       elseif b.t == "Div" and b.attributes["bb"] then
         local bb = b.attributes["bb"]
         local text = block_text(b)
-        local name = b.attributes["name"] or name_aus_text(text)
+        local name = common.baustein_name(b)
         local inhalt = pandoc.Blocks({ bedienung_fein(k, bb, kurzname(bb), name, text) })
         inhalt:extend(bearbeite(b.content, stelle))
         local auch = hinweis_auch(fundstellen[bb], stelle)

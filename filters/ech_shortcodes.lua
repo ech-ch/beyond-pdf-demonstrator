@@ -37,6 +37,11 @@ return {
     local text = datei:read("a")
     datei:close()
     local blocks = pandoc.read(text, "markdown").blocks
+    -- Markierung für die Registry (verwendete Vorlagentexte, E13)
+    if blocks[1] and blocks[1].t == "Header" then
+      blocks[1].attributes["vorlagentext"] = name
+      blocks[1].attributes["fassung"] = fassung
+    end
     if quarto.doc.is_format("html") then
       local hinweis = pandoc.Div(
         { pandoc.Para({ pandoc.Str("Vorlagentext, zentral gepflegt, Fassung " .. fassung) }) },

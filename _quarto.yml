@@ -60,8 +60,10 @@ filters:
   - filters/ech_titelref.lua      # [-@sec-x]{.mit-titel} (E11)
   - filters/ech_anker.lua         # nur HTML: Anker = Baustein-ID (R6)
   - filters/ech_feedback.lua      # nur HTML: Feedback je Baustein (E37, E39)
+  - filters/ech_registry.lua      # nur HTML: Registry bausteine.json (E09, E10)
   - filters/ech_docx_nummern.lua  # nur DOCX: Word nummeriert (Spike S3, Lösung A)
   - filters/ech_docx_tabellen.lua # nur DOCX: Zellen in «Tabellentext»
+  - filters/ech_docx_code.lua     # nur DOCX: Codeblöcke in Festbreitenschrift (E43)
   - filters/ech_deckblatt.lua     # nur DOCX: Deckblatt, Inhaltsverzeichnis, Textmarken (E17)
 shortcodes:
   - filters/ech_shortcodes.lua    # statustext (E14), vorlagentext (E13), referenzen (E15)

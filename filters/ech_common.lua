@@ -40,6 +40,25 @@ local function to_list(value)
   return { to_inlines(value) }
 end
 
+-- Wie to_list; ein Eintrag `aufzaehlung: [...]` ergibt mehrere Werte, deren
+-- Stellen die zweite Rückgabe markiert (Aufzählung im Word, z.B. Beilagen).
+local function to_list_mit_punkten(value)
+  local werte, punkte = {}, {}
+  if value == nil then return werte, punkte end
+  local eintraege = pandoc.utils.type(value) == "List" and value or { value }
+  for _, item in ipairs(eintraege) do
+    if type(item) == "table" and item.aufzaehlung ~= nil then
+      for _, punkt in ipairs(to_list(item.aufzaehlung)) do
+        table.insert(werte, punkt)
+        punkte[#werte] = true
+      end
+    else
+      table.insert(werte, to_inlines(item))
+    end
+  end
+  return werte, punkte
+end
+
 local function concat(...)
   local result = pandoc.Inlines({})
   for _, part in ipairs({ ... }) do
@@ -156,7 +175,8 @@ function M.display(meta, options)
   end
 
   values["voraussetzungen"] = to_list(ech.voraussetzungen)
-  values["beilagen"] = to_list(meta.beilagen)   -- sprachabhängig, Kopfzeile der Sprachfassung
+  local punkte = {}
+  values["beilagen"], punkte["beilagen"] = to_list_mit_punkten(meta.beilagen)   -- Kopfzeile der Sprachfassung
   values["autoren"] = to_list(meta.autoren)
   values["herausgeber"] = to_list(voc.herausgeber)
 
@@ -194,6 +214,7 @@ function M.display(meta, options)
         -- explizite MetaList: pandoc machte aus einer leeren Lua-Tabelle `true`
         values = pandoc.MetaList(list),
         bullets = false,
+        punkte = punkte[key] or {},   -- Stellen mit Aufzählung (nur Word)
       })
     end
   end
@@ -219,6 +240,65 @@ function M.statustext(meta)
       fassung, status))
   end
   return to_inlines(texte[status])
+end
+
+-- Klartext eines Blocks: Absätze durch Leerzeile getrennt, Aufzählung mit «- ».
+local function block_text(block)
+  if block.t == "Para" or block.t == "Plain" then
+    return stringify(block.content)
+  elseif block.t == "BulletList" or block.t == "OrderedList" then
+    local punkte = {}
+    for _, item in ipairs(block.content) do
+      local teile = {}
+      for _, b in ipairs(item) do table.insert(teile, block_text(b)) end
+      table.insert(punkte, "- " .. table.concat(teile, " "))
+    end
+    return table.concat(punkte, "\n")
+  elseif block.t == "CodeBlock" then
+    return block.text
+  elseif block.t == "Div" then
+    local teile = {}
+    for _, b in ipairs(block.content) do
+      local t = block_text(b)
+      if t ~= "" then table.insert(teile, t) end
+    end
+    return table.concat(teile, "\n\n")
+  elseif block.t == "RawBlock" or block.t == "Header" then
+    return ""
+  end
+  return stringify(block)
+end
+M.block_text = block_text
+
+local NAME_WOERTER = 7      -- erste Wörter als Name eines feinen Bausteins (E12)
+local LEER = "[ \t\r\n]"   -- explizit: %s zählt unter Windows auch UTF-8-Bytes
+
+-- Name eines feinen Bausteins aus seinem Klartext: die ersten Wörter der
+-- Klausel ohne Kennzeichnung (E12).
+function M.name_aus_text(text)
+  local absatz = text:match("^([^\n]*)") or text
+  absatz = absatz:gsub("^%[[A-Z ]+%]" .. LEER .. "*", "")
+  local woerter = {}
+  for wort in absatz:gmatch("[^ \t\r\n]+") do table.insert(woerter, wort) end
+  local mehr = #woerter > NAME_WOERTER
+  local anzahl = math.min(#woerter, NAME_WOERTER)
+  local name = table.concat(woerter, " ", 1, anzahl):gsub("[.,:;]+$", "")
+  return mehr and (name .. " …") or name
+end
+
+-- Überschrift ohne die Nummer, die Quarto auf der Website davor setzt.
+function M.titel_ohne_nummer(h)
+  local inhalt = h.content:filter(function(x)
+    return not (x.t == "Span" and x.classes:includes("header-section-number"))
+  end)
+  return (stringify(inhalt):gsub("^" .. LEER .. "+", ""))
+end
+
+-- Name eines Bausteins: Überschrift beim groben, Attribut `name` oder die
+-- ersten Wörter beim feinen (E09, E12).
+function M.baustein_name(element)
+  if element.t == "Header" then return M.titel_ohne_nummer(element) end
+  return element.attributes["name"] or M.name_aus_text(block_text(element))
 end
 
 return M

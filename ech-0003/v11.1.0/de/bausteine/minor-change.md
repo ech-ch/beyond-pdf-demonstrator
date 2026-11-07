@@ -29,7 +29,7 @@ Wird der Anspruch auf Minor Change seitens der Referentinnen und Referenten gutg
 :::
 
 ::: {bb="ech-0003-bb-einsprachefrist-ankuendigen" typ="requirement" original-seite="31" bezug="ech-0003-bb-minor-anspruch-pruefen"}
-[MUSS] Diese Änderung und die entsprechende Einsprachefrist (Beginn und Ende) wird auf der Webseite (Frontseite, News) publiziert.
+[MUSS] Diese Änderung und die entsprechende Einsprachefrist (Beginn und Ende) wird auf der [Webseite](http://www.ech.ch) (Frontseite, News) publiziert.
 
 Wird innerhalb der Frist keine Einsprache erhoben, gilt der Minor Change als genehmigt.
 :::
@@ -39,7 +39,7 @@ Wird innerhalb der Frist keine Einsprache erhoben, gilt der Minor Change als gen
 :::
 
 ::: {bb="ech-0003-bb-einsprachen-antworten-publizieren" typ="requirement" original-seite="31" bezug="ech-0003-bb-einsprachefrist-ankuendigen"}
-[MUSS] Die Geschäftsstelle publiziert nach Abschluss der Frist alle eingegangenen Einsprachen inklusive der Antworten der Referentinnen und Referenten beziehungsweise des Expertenausschusses auf der Webseite.
+[MUSS] Die Geschäftsstelle publiziert nach Abschluss der Frist alle eingegangenen Einsprachen inklusive der Antworten der Referentinnen und Referenten beziehungsweise des Expertenausschusses auf der [Webseite](http://www.ech.ch).
 :::
 
 ::: {bb="ech-0003-bb-minor-anspruch-abgelehnt" typ="requirement" original-seite="31"}

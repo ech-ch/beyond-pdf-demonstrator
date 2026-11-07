@@ -12,6 +12,9 @@ docx = "_site/ech-0003/v11.1.0/de/DEMO_eCH-0003_V11.1.0_de.docx"
 # Elemente der Website, die nicht zum Text gehören (Platzhalter, Bedienelemente
 # des Feedbacks). pruefe.py prüft, dass die Ausnahme wirkt.
 html_ignorieren = ["platzhalter-hinweis", "baustein-bedienung", "vorlagentext-hinweis"]
+# Registry (filters/ech_registry.lua) und Daten von Anhang A
+registry = "_site/ech-0003/v11.1.0/bausteine.json"
+referenzen = "ech-0003/v11.1.0/referenzen.yml"
 # Ziel der Feedback-Links (filters/ech_feedback.lua)
 feedback_repo = "https://github.com/ech-ch/beyond-pdf-demonstrator"
 

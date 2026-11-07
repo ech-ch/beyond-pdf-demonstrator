@@ -31,6 +31,10 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
   3. kein unaufgelöster Verweis: «?@…», «@sec-…» im Text oder die
      Quarto-Warnung «Unable to resolve crossref» im Log (K3)
   4. auf der Website hat jeder Baustein genau einen Anker #<baustein-id> (R6)
+  6. Registry bausteine.json (E09, E10, E27, E30): gültiges JSON, dieselben
+     Bausteine wie die Quelle, Kennzeichnung und bezug wie in der Quelle, jedes
+     Ziel einer Beziehung vorhanden oder ausdrücklich «noch kein Baustein»,
+     Literatur oder Standard, Umkehrungen vollständig, keine Selbstverweise
   5. Feedback (E37, E39): je Fundstelle genau ein Link, ein Link zum Standard
      als Ganzes, keine `labels=` in der URL, Wortlaut gleich wie der Rohtext;
      die Bedienelemente stehen im HTML und sind vom Textvergleich ausgenommen;
@@ -39,6 +43,7 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
 import argparse
 import difflib
 import html
+import json
 import os
 import re
 import sys
@@ -77,8 +82,12 @@ FEEDBACK_LINK = re.compile(r'<a class="baustein-feedback[^"]*" data-feedback-(bb
 class Befunde:
     fehler: int = 0
     hinweise: int = 0
+    still: bool = False   # zählt nur, z.B. beim erneuten Lesen der Quelle
 
     def melde(self, stufe: str, text: str, datei: Path | None = None, zeile: int | None = None) -> None:
+        if self.still:
+            self.fehler += stufe == "fehler"
+            return
         ort = ""
         if datei is not None:
             ort = rel(datei) + (f":{zeile}" if zeile else "") + ": "
@@ -508,6 +517,96 @@ def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befu
     print(f"Feedback: {len(links)} Links, {sum(fundstellen.values())} Fundstellen, längste URL {laengste} Zeichen")
 
 
+def lies_quelle(std: dict) -> list["Baustein"]:
+    """Bausteine der Quelle, ohne Meldungen (die gibt die Phase «quelle»)."""
+    quelle = WURZEL / std["quelle"]
+    kennz = re.compile(r"^\[(" + "|".join(re.escape(k) for k in std["kennzeichnungen"]) + r")\]")
+    bausteine: list[Baustein] = []
+    for datei in [quelle / "index.qmd"] + sorted((quelle / "bausteine").rglob("*.md")):
+        zerlege(datei, lies(datei), bausteine, kennz, Befunde(still=True))
+    return bausteine
+
+
+UMKEHRUNG = {"is_part_of": "has_part", "has_part": "is_part_of", "refers_to": "is_referenced_by",
+             "is_referenced_by": "refers_to", "depends_on": "is_required_by", "is_required_by": "depends_on"}
+
+
+def pruefe_registry(std: dict, t: str, b: Befunde) -> None:
+    pfad = WURZEL / std["registry"]
+    if not pfad.exists():
+        b.fehler_(f"Registry fehlt: {rel(pfad)} (E09)")
+        return
+    try:
+        registry = json.loads(pfad.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as fehler:
+        b.fehler_(f"Registry ist kein gültiges JSON: {fehler}", pfad)
+        return
+    eintraege = {e["id"]: e for e in registry.get("bausteine", [])}
+    quelle = lies_quelle(std)
+    kennz = re.compile(r"^\[(" + "|".join(re.escape(k) for k in std["kennzeichnungen"]) + r")\]")
+    soll: dict[str, Baustein] = {}
+    for x in quelle:
+        if x.art != "inline":
+            soll.setdefault(x.bb, x)
+    for bb in sorted(set(soll) - set(eintraege)):
+        b.fehler_(f"Registry: Baustein «{bb}» aus der Quelle fehlt", pfad)
+    for bb in sorted(set(eintraege) - set(soll)):
+        b.fehler_(f"Registry: «{bb}» steht nicht in der Quelle", pfad)
+    anzahl = {"grob": sum(1 for x in soll.values() if x.art == "grob"), "fein": sum(1 for x in soll.values() if x.art == "fein")}
+    if registry.get("anzahl") != anzahl:
+        b.fehler_(f"Registry: Anzahl {registry.get('anzahl')}, in der Quelle {anzahl}", pfad)
+
+    literatur = set(re.findall(r"^\s*-\s*schluessel:\s*(\S+)\s*$", lies(WURZEL / std["referenzen"]), re.M))
+    ids_html = set(re.findall(r'\sid="([^"]+)"', t))
+    bb_anker = set(re.findall(r'<section id="([^"]+)"[^>]*\sdata-bb="', t))
+    for bb, e in eintraege.items():
+        x = soll.get(bb)
+        if x is None:
+            continue
+        if e.get("granularitaet") != x.art or e.get("building_block_type") != x.attr.get("typ"):
+            b.fehler_(f"Registry: «{bb}» mit Granularität/Typ {e.get('granularitaet')}/{e.get('building_block_type')}, Quelle {x.art}/{x.attr.get('typ')}", pfad)
+        fund, seiten = e.get("source_reference") or [], (e.get("herkunft") or {}).get("seite", [])
+        if not fund or not all(f.get("title") for f in fund):
+            b.fehler_(f"Registry: «{bb}» ohne Fundstelle", pfad)
+        if "herkunft" in e and len(seiten) not in (1, len(fund)):
+            b.fehler_(f"Registry: «{bb}» hat {len(fund)} Fundstellen, aber {len(seiten)} Seiten (F43)", pfad)
+        if x.art == "fein":
+            k = next((m[1] for a in x.absaetze if (m := kennz.match(a))), None)
+            if e.get("kennzeichnung") != k:
+                b.fehler_(f"Registry: «{bb}» mit Kennzeichnung {e.get('kennzeichnung')}, Quelle {k} (V1)", pfad)
+        bezug = sorted(x.attr.get("bezug", "").split())
+        depends = sorted(r["target"] for r in e.get("relationships", []) if r["type"] == "depends_on")
+        if bezug != depends:
+            b.fehler_(f"Registry: depends_on von «{bb}» {depends}, bezug in der Quelle {bezug} (E30)", pfad)
+        paare = {(r["type"], r["target"]) for r in e.get("relationships", [])}
+        for r in e.get("relationships", []):
+            typ, ziel, art = r.get("type"), r.get("target"), r.get("target_kind")
+            if ziel == bb:
+                b.fehler_(f"Registry: Selbstverweis bei «{bb}» (W5)", pfad)
+            if art == "baustein":
+                if ziel not in eintraege:
+                    b.fehler_(f"Registry: «{bb}» {typ} «{ziel}», den es nicht gibt", pfad)
+                elif typ in UMKEHRUNG and (UMKEHRUNG[typ], bb) not in {(q["type"], q["target"]) for q in eintraege[ziel].get("relationships", [])}:
+                    b.fehler_(f"Registry: Umkehrung fehlt: «{ziel}» hat kein {UMKEHRUNG[typ]} «{bb}» (W4)", pfad)
+            elif typ != "refers_to":
+                b.fehler_(f"Registry: «{bb}» {typ} auf ein Ziel ohne Baustein ({art})", pfad)
+            elif art == "noch_kein_baustein":
+                if ziel not in ids_html or ziel in bb_anker:
+                    b.fehler_(f"Registry: «{bb}» verweist auf «{ziel}», der kein Anker einer Überschrift ohne Baustein ist (W2)", pfad)
+            elif art == "literatur":
+                if ziel not in literatur:
+                    b.fehler_(f"Registry: «{bb}» zitiert «{ziel}», das in referenzen.yml fehlt", pfad)
+            elif art == "standard":
+                if not re.fullmatch(r"eCH-\d{4}", ziel or ""):
+                    b.fehler_(f"Registry: «{bb}» verweist auf den Standard «{ziel}» (W3)", pfad)
+            else:
+                b.fehler_(f"Registry: «{bb}» mit unbekannter Zielart «{art}»", pfad)
+        if ("is_part_of", bb) in paare:
+            b.fehler_(f"Registry: «{bb}» ist Teil von sich selbst", pfad)
+    print(f"Registry: {anzahl['grob']} grobe, {anzahl['fein']} feine Bausteine, "
+          f"{sum(len(e.get('relationships', [])) for e in eintraege.values())} Beziehungen")
+
+
 def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
     html_pfad, docx_pfad = WURZEL / std["html"], WURZEL / std["docx"]
     for pfad in (html_pfad, docx_pfad):
@@ -544,6 +643,7 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
             b.fehler_(f"HTML: Baustein «{bb}» hat {n} Anker #{bb}, erwartet genau einen (R6)", html_pfad)
 
     pruefe_feedback(std, html_roh, html_pfad, docx_pfad, b)
+    pruefe_registry(std, html_roh, b)
 
     # 1.–2. je überführtem Kapitel
     for kap in std.get("kapitel", []):

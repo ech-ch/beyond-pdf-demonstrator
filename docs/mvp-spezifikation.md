@@ -249,7 +249,54 @@ Die Auslöser für eine Neubeurteilung stehen in ADR 0001.
 | Einbettung, Verbindlichkeit, Beziehungen | – | – | erzeugt (B5, B6) |
 | `description`, `building_block_version`, `responsible_working_group` | – | – | nicht im MVP (Abweichung von ZHAW) |
 
-**Registry:** Der Build erzeugt bei jedem Lauf `bausteine.json` mit allen erfassten und erzeugten Werten und veröffentlicht sie mit der Website.
+**Registry (umgesetzt mit AP14, E45):** `filters/ech_registry.lua` erzeugt bei jedem Lauf `ech-0003/v11.1.0/bausteine.json` mit allen erfassten und erzeugten Werten. Die Datei liegt neben der Website (`_site/ech-0003/v11.1.0/bausteine.json`). Verlinkt ist sie auf der Startseite und auf der Standardseite unter «Weitere Links».
+
+| Teil | Inhalt |
+|---|---|
+| `hinweis` | Demonstrator, Regeln sind ein Vorschlag (E28) |
+| `erzeugt` | Datum und Commit des Builds, lokal «lokal» |
+| `standard` (Ebene 0) | ID, Nummer, Version, Sprache, Status, Vorlage-Fassung, Vorlagentexte mit Fassung und Fundstelle, Original, Kennzeichnungen (V4) |
+| `anzahl` | grobe und feine Bausteine (V11.1.0: 14 und 54) |
+| `bausteine[]` | je Baustein die Felder der Tabelle oben; dazu `granularitaet`, `kennzeichnung` (nur fein) und `verbindlichkeit` (Anzahl je Stufe, V2) |
+
+- **Fundstellen:** `source_reference` ist eine Liste, beim Mehrfachbaustein mit zwei Einträgen (E27).
+- **Seiten (F43):** `herkunft.seite` enthält eine Seite je Fundstelle, in derselben Reihenfolge. Der Mehrfachbaustein trägt in der Quelle `original-seite="31 32"`; in der Registry gehört 31 zu 7.8 und 32 zu 7.9.
+- **Beziehungen:** Typen sind `is_part_of`/`has_part`, `refers_to`/`is_referenced_by` und `depends_on`/`is_required_by`. Jede Beziehung hat ihre Umkehrung (W4). Selbstverweise und Verweise auf einen umschliessenden Baustein fehlen (W5).
+- **Ziele:** `target_kind` gibt an, was das Ziel ist:
+  - `baustein`
+  - `noch_kein_baustein`: Anker einer Gerüst-Überschrift, mit `title` (W2)
+  - `literatur`: Schlüssel in `referenzen.yml`
+  - `standard`: z.B. `eCH-0150` (W3)
+- Links auf Websites sind keine Beziehungen.
+
+Beispiel-Eintrag aus der erzeugten Registry:
+
+```json
+{
+  "id": "ech-0003-bb-schema-eigene-version",
+  "name": "Besteht nebst einem eCH-Dokument auch ein Schema …",
+  "standard": "ech-0003",
+  "building_block_type": "requirement",
+  "status": "draft",
+  "granularitaet": "fein",
+  "source_reference": [{ "section": "7.3", "title": "Versionierung" }],
+  "herkunft": { "dokument": "eCH-0003 V11.1.0", "seite": [28] },
+  "kennzeichnung": "MUSS",
+  "verbindlichkeit": { "MUSS": 1, "SOLLTE": 0, "DARF NICHT": 0 },
+  "relationships": [
+    { "type": "is_part_of", "target": "ech-0003-bb-versionierung", "target_kind": "baustein" }
+  ]
+}
+```
+
+`tools/pruefe.py ausgabe` prüft die Registry gegen die Quelle:
+
+- gültiges JSON und dieselben Bausteine wie die Quelle (14 grobe, 54 feine)
+- Typ, Granularität und Kennzeichnung wie in der Quelle
+- `depends_on` gleich `bezug`
+- je Fundstelle eine Seite
+- jedes Ziel vorhanden oder als `noch_kein_baustein`, `literatur` oder `standard` markiert
+- Umkehrungen vollständig, keine Selbstverweise
 
 **Ausgearbeitetes Beispiel: Baustein-Datei `bausteine/versionierung.md`** (grober Baustein 7.3 mit sieben feinen Bausteinen, darunter die Schema-Regel; Stand aller Entscheide E07–E15)
 
@@ -336,7 +383,7 @@ Dieselbe Erkennung liefert die Zählung für D4.
 | W6 | Manuelle Beziehungen mit Bedeutung kommen erst nach dem MVP (ADR 0003). Ausnahme: Rückbezüge im Text (E30). |
 | W7 | Rückbezüge zwischen feinen Bausteinen («hierbei», «Dies», «Diese Änderung» …) werden am abhängigen Baustein als `bezug="ech-0003-bb-…"` erfasst und ergeben `depends_on` samt Umkehrung. Rückbezüge auf das Thema des eigenen groben Bausteins werden nicht erfasst (E30). |
 
-**Stufen:** Registry mit Verbindlichkeit und Beziehungen: Stufe 1 (geplant). Sichtbar auf der Website: Stufe 2.
+**Stufen:** Registry mit Verbindlichkeit und Beziehungen: Stufe 1 (umgesetzt mit AP14). Sichtbar auf der Website: Stufe 2.
 
 ### 3.5 Querverweise (E11)
 
@@ -405,15 +452,16 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | `ech_docx_nummern.lua` | im DOCX: Word nummeriert, Quarto-Textnummern entfernen, unnummerierte Überschriften und Anhänge in eCH-Formatvorlagen | Spike S3 (Lösung A) | Block C |
 | `ech_anker.lua` | Anker = Baustein-ID, nur HTML; bei Mehrfachverwendung nur an der ersten Fundstelle (umgesetzt mit AP8) | neu | R6, E27, E35 |
 | `ech_feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML (umgesetzt mit AP9) | Spike S4; umgestellt von `.baustein` auf `bb` | E08, E09, E39, E41 |
-| Registry-Filter | `bausteine.json`: Metadaten, Fundstelle, Herkunft, Verbindlichkeit, Beziehungen | neu | E09, E10 |
+| `ech_registry.lua` | `bausteine.json`: Ebene 0, Metadaten, Fundstellen, Herkunft, Verbindlichkeit, Beziehungen mit Umkehrung; nur HTML (umgesetzt mit AP14) | neu | E09, E10, E27, E30, E45 |
 | `ech_referenzen.lua`, `{{< referenzen >}}` | Zitate `[@key]` aus `referenzen.yml` auf den Eintrag verlinken; Tabelle für Anhang A (umgesetzt mit AP13) | neu | E15, E32, E43 |
 | `{{< statustext >}}` | Statustext 1.1 aus Vorlage-Fassung | FOAG `{{< ech status >}}` | E14 |
 | `{{< vorlagentext … >}}` | Vorlagentext der gewählten Fassung einfügen, auf der Website mit Hinweis (umgesetzt mit AP12) | neu | E13, E43 |
 | `ech_docx_tabellen.lua` | im DOCX: Tabellenzellen in «Tabellentext» | neu | E43 |
+| `ech_docx_code.lua` | im DOCX: Codeblöcke in Consolas 9 pt, grau hinterlegt, ohne Änderung der eCH-Vorlage (umgesetzt mit AP15) | neu | E43, E46 |
 | Platzhalter | Platzhalter unter nicht überführten Überschriften | neu | E05 |
-| Deckblatt-Filter (DOCX) | Titel, Hinweis, Metadatentabelle, Zusammenfassung, Inhaltsverzeichnis-Feld, Textmarken der Fusszeile | neu; Textmarken aus Spike S3 | E17 |
+| Deckblatt-Filter (DOCX) | Titel, Hinweis, Metadatentabelle (OpenXML im Format des Originals, AP15), Zusammenfassung, Inhaltsverzeichnis-Feld, Textmarken der Fusszeile | neu; Textmarken aus Spike S3 | E17, E46 |
 | `aktualisiere_felder_beim_oeffnen.py` | Word aktualisiert Felder beim Öffnen | neu (F40) | E17 |
-| CI-Prüfungen (`tools/pruefe.py`, `tools/pruefe.toml`) | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein höchstens eine Kennzeichnung (G4-Bausteine ohne, E29); `bezug`-Ziele; Zählung 36/11/8; Textvergleich mit dem Rohtext; unaufgelöste Verweise als Fehler | neu (umgesetzt mit AP7) | E07, E08, E11, E12, D4, E34 |
+| CI-Prüfungen (`tools/pruefe.py`, `tools/pruefe.toml`) | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein höchstens eine Kennzeichnung (G4-Bausteine ohne, E29); `bezug`-Ziele; Zählung 36/11/8; Textvergleich mit dem Rohtext; unaufgelöste Verweise als Fehler; Feedback-Links (AP9); Registry (AP14) | neu (umgesetzt mit AP7) | E07, E08, E11, E12, D4, E34, E41, E45 |
 
 ## 4. Verzeichnisstruktur und Build-Pipeline
 
@@ -441,7 +489,12 @@ Ein Deckblatt-Filter erzeugt nur im DOCX, in dieser Reihenfolge:
 
 1. Titel «eCH-0003 – Leitfaden zur Genehmigung von Anträgen» (Formatvorlage «Titel»)
 2. Demonstrator-Hinweis (D5)
-3. Zweispaltige Tabelle: Beschriftungen aus `vorlage/2022/deckblatt.yml`, Werte aus den Metadaten des Standards; Beschriftungen in «Tabellentitel», Werte in «Tabellentext» wie in der eCH-Vorlage und im Original (E33)
+3. Zweispaltige Tabelle: Beschriftungen aus `vorlage/2022/deckblatt.yml`, Werte aus den Metadaten des Standards. Format wie im Word-Original (AP15, E46):
+   - Rahmen 0,5 pt aussen und innen, Spalten 2622/6589 dxa, Zellränder 70 dxa, senkrecht zentriert
+   - Beschriftungen fett in «Standard», Werte in «Standard»
+   - die drei Dateinamen der Beilagen in «Aufzählung»
+   - Website und E-Mail-Adresse verlinkt
+   - eine Leerzeile vor und zwei nach der Tabelle
 4. «Zusammenfassung» und Text
 5. Seitenumbruch
 6. Inhaltsverzeichnis als Word-Feld unter «Inhaltsverzeichnis» («TitelInhaltsverzeichnis»)
@@ -452,7 +505,9 @@ Zusätzlich:
 - Derselbe Filter setzt die Textmarken der Fusszeile.
 - Pandoc-Titelblock und `toc` sind für DOCX abgeschaltet.
 - Nach dem Rendern setzt `tools/aktualisiere_felder_beim_oeffnen.py` (nur Standardbibliothek) das Flag, damit Word Felder und Inhaltsverzeichnis beim Öffnen aktualisiert. Word fragt dabei einmal nach.
-- Bekannte Einschränkung: Pandoc verwendet eine eigene Tabellenformatvorlage, das Deckblatt hat deshalb womöglich Rahmenlinien. Für den MVP akzeptiert.
+- Die Tabelle entsteht als OpenXML, weil sich Rahmen und Zellränder einer Pandoc-Tabelle nicht steuern lassen. Links darin sind Felder HYPERLINK. Die frühere Einschränkung (Rahmen aus Pandocs Tabellenvorlage) entfällt.
+- Im Front matter markiert `aufzaehlung:` die Beilagen mit Aufzählung. Die Website zeigt sie weiter als Zeilen.
+- Codeblöcke (Anhang F) setzt `filters/ech_docx_code.lua` in Consolas 9 pt; die eCH-Vorlage bleibt unverändert (E46).
 - Die Inhaltssteuerelemente der Original-Vorlage werden nicht nachgebildet (F23, vor Abnahme).
 
 Website: Das Deckblatt-Partial `title-metadata.html` (FOAG) verwendet dieselben Beschriftungen und Werte.
@@ -739,13 +794,26 @@ Entfallen: AP11 (Vorschau mit Go/No-Go, E36); die Screenshots gehen in AP17 auf.
 
 Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
 
+### Wochenende 7./8.11. – zusätzlicher Umfang (E47)
+
+| # | Paket | Grundlage |
+|---|---|---|
+| AP21 | Beziehungen sichtbar: aufklappbare Liste je Baustein, Übersichtsseite mit Graph (Mermaid) und Tabelle, aus der Registry | E10, E30, E47 |
+| AP22 | A: Kap. 6, Anhang B, C, D als Bausteine | E15, E47 |
+| AP23 | B: 1.3.4, 1.3.9, 1.3.10 als Bausteine (IDs durch die Projektleitung prüfen) | E47 |
+| AP24 | Steckbrief eCH-0003 als Daten und Seite (Option A, `ausbau.md`) | E47, F47 |
+| AP25 | C: 1.3–1.4, falls Zeit (Abbildungen F10) | E47 |
+| AP26 | D: Kap. 2–5, falls Zeit (F26) | E47 |
+
+**Stichzeit Mo 9.11. 12 Uhr:** Was dann live ist, gilt als Stand des MVP.
+
 ### Mo 9.11. – Stufe 1 komplett, abends Material
 
 | # | Aufgabe | Grundlage |
 |---|---|---|
 | AP14 | Registry-Filter `bausteine.json` mit Fundstelle, Herkunft, Verbindlichkeit und Beziehungen; F43 | E09, E10, E30 |
 | AP15 | Feinschliff Deckblatt (Tabellenformat aus dem Word-Original), README fertig | E17, E36 |
-| AP16 | Fremdtest mit einer unbeteiligten Person | Stufe 1 DoD |
+| AP16 | Fremdtest mit einer unbeteiligten Person, nach der Stichzeit | Stufe 1 DoD, E47 |
 | AP17 | Inhalt des Materials gemeinsam festlegen und erstellen (Informationen, Visualisierungen, Storyline, Screenshots, QR-Code); Tag `v0.3-material` (E44); **abends an den Vorgesetzten** | E36 |
 | — | F45 entscheiden: Was von der Projektdoku bleibt öffentlich? | E36 |
 
