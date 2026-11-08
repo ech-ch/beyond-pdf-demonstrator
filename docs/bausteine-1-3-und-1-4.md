@@ -69,7 +69,7 @@ Die Kurznamen tragen keine Antragsform, wie bei 1.3.4, 1.3.9 und 1.3.10 (E50): 1
 | 1.3.8-3 | `ech-0003-bb-online-abstimmung` | SOLLTE | 11 | – | «Auf Antrag der Hauptreferentin … kann die Abstimmung online erfolgen …» |
 | 1.3.8-4 | `ech-0003-bb-beschluss-ohne-diskussion` | MUSS | 11 | 1.3.8-3 | «Wird keine Diskussion verlangt und ist das einfache Mehr … erreicht, …» |
 | 1.3.8-5 | `ech-0003-bb-genehmigung-unter-vorbehalt` | SOLLTE | 11 | – | «Um unnötige Prozessschritte zu vermeiden, kann ein Dokument unter Vorbehalt …» |
-| 1.4-1 | `ech-0003-bb-keine-ansprueche-aus-fristen` | DARF NICHT | 13 | – | «Es lassen sich daraus keinerlei Ansprüche ableiten.» (Fall 4) |
+| 1.4-1 | `ech-0003-bb-keine-ansprueche-aus-zeitangaben` | DARF NICHT | 13 | – | «Es lassen sich daraus keinerlei Ansprüche ableiten.» (Fall 4) |
 | 1.4-2 | `ech-0003-bb-genehmigung-online-oder-sitzung` | ohne Kennzeichnung (Typ `descriptive`, G4) | 13 | – | «Die Genehmigung selbst erfolgt entweder online oder an einer ordentlichen Sitzung …» (Fall 4) |
 
 **Zählung aus dem Rohtext:** 1.3.2: 6× MUSS; 1.3.3: 12× MUSS, 7× SOLLTE, 3× DARF NICHT; 1.3.5: 3× MUSS, 1× DARF NICHT; 1.3.6: 1× MUSS; 1.3.7: 3× MUSS, 1× SOLLTE, 1× DARF NICHT; 1.3.8: 3× MUSS, 2× SOLLTE; 1.4: 1× DARF NICHT. 1.3, 1.3.1 ohne Kennzeichnung. Zusammen 44 Klauseln (28 MUSS, 10 SOLLTE, 6 DARF NICHT) in 44 feinen Bausteinen; dazu 1.4-2 nach G4, also 45 feine Bausteine. Mit 1.3.4, 1.3.9 und 1.3.10 ist Kap. 1 damit vollständig überführt.
@@ -90,7 +90,7 @@ Die Kurznamen tragen keine Antragsform, wie bei 1.3.4, 1.3.9 und 1.3.10 (E50): 1
 
 ## Fälle für die Projektleitung
 
-Entscheid der Projektleitung (8.11.2026): alle Vorschläge freigegeben, für den MVP und als initialer Vorschlag, nicht für die Zukunft fixiert (E53).
+Entscheid der Projektleitung (8.11.2026): alle Vorschläge freigegeben, für den MVP und als initialer Vorschlag, nicht für die Zukunft fixiert (E53). Vor dem Push umbenannt: 1.4-1 heisst `keine-ansprueche-aus-zeitangaben` statt `keine-ansprueche-aus-fristen`, weil der Text von «Zeitangaben» spricht und Fristen nach 1.3.2-3 einzuhalten sind.
 
 1. **Zwischenzeilen in 1.3.2 und 1.3.3.** Im Word-Original haben «Generelle Kriterien für alle Antragsformen», «Antrag auf Standard, Hilfsmittel und White Paper», «Materielle Eignung», «Verständlichkeit», «Überschneidungsfreiheit und Konsistenz mit anderen eCH-Dokumenten», «Inhalt» und «Genügende Spezifikationstiefe von Interoperabilitätsstandards» die Formatvorlage **«Untertitel»** (Name `Subtitle`, fett, mit Aufzählungszeichen). Sie stehen nicht im Inhaltsverzeichnis.
    **Vorschlag:** Sie bleiben Teil des groben Bausteins, wie eine Einleitung, und stehen zwischen den feinen Bausteinen. Sie sind keine Klausel und keine Aussage, also weder G1 noch G4. In der Quelle: `::: {.zwischentitel custom-style="Subtitle"}`. Im Word erhalten sie dieselbe Formatvorlage wie im Original (die Vorlage 2025 hat sie, mit Aufzählungszeichen), auf der Website fett, ohne Aufzählungszeichen und ohne Eintrag im Inhaltsverzeichnis. Kein Feedback-Knopf, keine ID.

@@ -10,7 +10,7 @@ Diese Zeitangaben basieren auf Erfahrungswerten. Sie beinhaltet keine Verzögeru
 
 <!-- Fall 4: «daraus» meint die Zeitangaben der Einleitung (Thema des groben Bausteins), deshalb kein bezug. -->
 
-::: {bb="ech-0003-bb-keine-ansprueche-aus-fristen" typ="requirement" original-seite="13"}
+::: {bb="ech-0003-bb-keine-ansprueche-aus-zeitangaben" typ="requirement" original-seite="13"}
 [DARF NICHT] Es lassen sich daraus keinerlei Ansprüche ableiten.
 :::
 
