@@ -144,13 +144,31 @@ local function setze_listen(blocks, registry)
   return bearbeite(blocks)
 end
 
+-- Löst «.» und «..» rein textlich auf. Linux verlangt sonst, dass jeder Ordner
+-- im Pfad schon existiert; `_site/<version>/de/` legt Quarto aber erst am Ende
+-- von `quarto render` an. Windows löst «..» selbst auf, deshalb lief es dort
+-- (CI-Fehler bei e90d169).
+local function ohne_punkte(pfad)
+  local teile = {}
+  for teil in pfad:gmatch("[^/\\]+") do
+    if teil == ".." then
+      if #teile == 0 then common.abbruch("Beziehungen: Pfad zeigt aus der Ausgabe hinaus: " .. pfad) end
+      table.remove(teile)
+    elseif teil ~= "." then
+      table.insert(teile, teil)
+    end
+  end
+  if #teile == 0 then common.abbruch("Beziehungen: leerer Pfad: " .. pfad) end
+  return pandoc.path.join(teile)
+end
+
 -- Übersichtsseite: Graph in den Mermaid-Block, Tabelle in #beziehungen-tabelle
 local function uebersicht(doc)
   local quelle = stringify(doc.meta["beziehungen-aus"])
   local projekt = quarto.project.directory
   local ausgabe = quarto.project.output_directory or pandoc.path.join({ projekt, "_site" })
   local seite = pandoc.path.directory(pandoc.path.make_relative(quarto.doc.input_file, projekt))
-  local pfad = pandoc.path.join({ ausgabe, seite, quelle })
+  local pfad = pandoc.path.join({ ausgabe, ohne_punkte(pandoc.path.join({ seite, quelle })) })
   local datei = io.open(pfad, "rb")
   if not datei then
     common.abbruch("Beziehungen: " .. pfad .. " fehlt. Die Standardseite muss in derselben `quarto render` "
