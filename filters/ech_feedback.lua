@@ -191,7 +191,7 @@ function Pandoc(doc)
     doc.meta["demonstrator-repo"] = nil
     return doc
   end
-  if doc.meta.ech == nil then return nil end
+  if not common.standardseite(doc.meta) then return nil end
   local k = kontext(doc.meta)
   local praefix = k.standard .. "-bb-"
 

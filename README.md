@@ -26,7 +26,8 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | 1.2, 1.2.1, Kap. 8 und Anhang F als grobe Bausteine; Kap. 9 und 10 als Vorlagentexte 2022; Anhang A aus `referenzen.yml` | vorhanden |
 | Links aus dem Word-Original in den überführten Teilen (E-Mail, Website, Statuten, Kontaktangaben) | vorhanden |
 | Registry [`bausteine.json`](#registry): alle Bausteine mit Fundstellen, Herkunft, Verbindlichkeit und Beziehungen | vorhanden |
-| Anhang C, sichtbare Beziehungen auf der Website | folgt (AP18) |
+| Beziehungen auf der Website: «Beziehungen (n)» je Baustein, [Übersichtsseite](ech-0003/v11.1.0/de/beziehungen.qmd) mit Graph und Tabelle | vorhanden |
+| Anhang C | folgt (Paket A, AP22) |
 
 Das Original-PDF liegt unter [original/eCH-0003_V11.1.0_d.pdf](original/eCH-0003_V11.1.0_d.pdf). Kap. 10 des Standards erlaubt die Weiterverbreitung.
 
@@ -40,6 +41,7 @@ ech-0003/v11.1.0/
   referenzen.yml            Daten für Anhang A
   de/index.qmd              Gerüst; Kopfzeile mit sprachabhängiger Ebene 0
   de/bausteine/             eine Datei je grobem Baustein; mehrfach/ für Mehrfachbausteine
+  de/beziehungen.qmd        Übersichtsseite «Beziehungen»; Graph und Tabelle aus bausteine.json
 vorlage/
   2022/                     Vorlage-Fassung 2022: Vorlagentexte, Statustexte, Deckblatt
   word/                     Word-Referenzdokument (eCH-Vorlage vom 28.11.2025, lokale Kopie)
@@ -81,7 +83,7 @@ quarto preview
 
 `quarto render` erzeugt HTML und Word in einem Aufruf nach `_site/`. Nicht `quarto render --to docx` verwenden: Im Website-Projekt löscht das die übrigen Formate (Spike S1). Das Word heisst bewusst `DEMO_eCH-0003_V11.1.0_de.docx` und nicht nach eCH-Konvention (E18). Das Skript `aktualisiere_felder_beim_oeffnen.py` sorgt dafür, dass Word beim Öffnen das Inhaltsverzeichnis füllt; Word fragt dabei einmal nach.
 
-`tools/pruefe.py` prüft vor dem Rendern die Quelle (IDs, Kennzeichnungen, Nummern von Hand, `bezug`) und nach dem Rendern die Ausgabe: Zählung, Textvergleich mit `original/text/`, unaufgelöste Verweise, Feedback-Links und Registry. Welche Kapitel verglichen werden, steht in `tools/pruefe.toml`. Mit `--log` liest die Prüfung der Ausgabe zusätzlich die Warnungen von `quarto render`.
+`tools/pruefe.py` prüft vor dem Rendern die Quelle (IDs, Kennzeichnungen, Nummern von Hand, `bezug`) und nach dem Rendern die Ausgabe: Zählung, Textvergleich mit `original/text/`, unaufgelöste Verweise, Feedback-Links, Registry und Beziehungen. Mit `--log` liest sie zusätzlich die Ausgabe von `quarto render`: Jede Meldung «ERROR» ist ein Fehler, weil ein Fehler in einem Lua-Filter den Build in Quarto nicht abbricht (E48). Welche Kapitel verglichen werden, steht in `tools/pruefe.toml`.
 
 Den Rohtext erneut aus dem PDF ziehen (nur nötig, wenn sich das Skript ändert):
 
@@ -100,6 +102,8 @@ py -3.11 tools/extrahiere_rohtext.py
 
 Aufbau und Beispiel: [Spezifikation 3.3](docs/mvp-spezifikation.md#33-metadaten-e09-adr-0003). Die Registry ist von der Startseite und der Standardseite aus verlinkt. Wie bei den IDs gilt: Felder und Beziehungstypen sind ein Vorschlag.
 
+Auf der Website zeigt «Beziehungen (n)» unter einem Baustein seine Querverweise und Rückbezüge; die Seite «Beziehungen» zeigt alle als Graph und Tabelle. Beides entsteht aus `bausteine.json`. Die Übersichtsseite liest die Datei der Standardseite aus demselben Lauf und steht deshalb in der render-Liste von `_quarto.yml` nach ihr; `tools/pruefe.py` prüft das.
+
 ## CI und Veröffentlichung
 
 Der Workflow [build.yml](.github/workflows/build.yml) läuft bei jedem Push auf `main`, bei Pull Requests und bei Tags `v*`. Er prüft, rendert alle Formate in einem Aufruf, bearbeitet das Word nach und legt `_site/` als Artefakt «website» ab. Bei einem Tag entsteht ein Release mit dem Word.
@@ -112,11 +116,11 @@ GitHub Pages ist vorbereitet, aber ausgeschaltet, bis die Freigabe zum Veröffen
 
 | Datei hier | Datei im FOAG-Template | Änderung |
 |---|---|---|
-| `assets/ech.scss` | `docs/assets/ech.scss` | Regel zum Ausblenden der Anhänge im Inhaltsverzeichnis entfernt; Stile für Platzhalter und Sprungziele der Bausteine ergänzt; lange Werte im Deckblatt brechen auf dem Handy um |
+| `assets/ech.scss` | `docs/assets/ech.scss` | Regel zum Ausblenden der Anhänge im Inhaltsverzeichnis entfernt; Stile für Platzhalter und Sprungziele der Bausteine ergänzt; lange Werte im Deckblatt brechen auf dem Handy um; Stile für «Beziehungen (n)» und die Übersichtsseite |
 | `assets/ech_dark.scss` | `docs/assets/ech_dark.scss` | keine |
 | `assets/ech.svg`, `assets/favicon.svg` | `docs/assets/` | keine |
 | `assets/title-metadata.html` | `docs/assets/title-metadata.html` | keine |
-| `filters/ech_common.lua` | `docs/assets/ech_common.lua` | liest die Vorlage-Fassung statt `ech_vocabulary.yml`; deutsche Codes; Statustext; Beilagen mit Aufzählung; Namen der Bausteine |
+| `filters/ech_common.lua` | `docs/assets/ech_common.lua` | liest die Vorlage-Fassung statt `ech_vocabulary.yml`; deutsche Codes; Statustext; Beilagen mit Aufzählung; Namen der Bausteine; Erkennung der Standardseite; echter Abbruch (E48) |
 | `filters/ech_metadata.lua` | `docs/assets/ech_metadata.lua` | ohne Typst-Werte |
 | `filters/ech_shortcodes.lua` | `docs/assets/ech_shortcodes.lua` | nur noch `{{< statustext >}}` aus der Vorlage-Fassung; neu `{{< vorlagentext >}}` und `{{< referenzen >}}` |
 

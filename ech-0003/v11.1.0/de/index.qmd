@@ -16,7 +16,8 @@ autoren:
   - "Mitarbeitende der Geschäftsstelle, Verein eCH"
 format:
   html:
-    # Downloads auf der Standardseite (E18): Word, Original-PDF, Registry. Die
+    # Downloads auf der Standardseite (E18): Word, Original-PDF, Registry und die
+    # Übersicht der Beziehungen (AP21). Die
     # automatischen Format-Links sind aus, sonst steht das Word doppelt da.
     format-links: false
     other-links:
@@ -29,6 +30,9 @@ format:
       - text: Registry (bausteine.json)
         href: ../bausteine.json
         icon: filetype-json
+      - text: Beziehungen (Übersicht)
+        href: beziehungen.qmd
+        icon: diagram-3
   docx:
     output-file: DEMO_eCH-0003_V11.1.0_de.docx   # bewusst kein eCH-Dateiname (E18)
 ---

@@ -1,0 +1,56 @@
+---
+title: "Beziehungen"
+subtitle: "eCH-0003 V11.1.0 – Leitfaden zur Genehmigung von Anträgen"
+format: html
+number-sections: false
+# Übersichtsseite (E47, AP21): Graph und Tabelle erzeugt filters/ech_registry.lua
+# aus der Registry. Die Standardseite muss deshalb in derselben `quarto render`
+# vorher gerendert werden (render-Liste in _quarto.yml; prüft tools/pruefe.py).
+beziehungen-aus: ../bausteine.json
+---
+
+::: {.callout-note appearance="simple"}
+**Vorschlag, kein Hilfsmittel im Sinne von eCH-0003.** Diese Seite zeigt, wie sich eine Übersicht über Beziehungen aus Bausteinen erzeugen liesse. Wie Bausteine und ihre Beziehungen geregelt werden, entscheiden die zuständigen Gremien von eCH.
+:::
+
+Kapitel 7.10 von eCH-0003 verlangt: Soll das Zusammenspiel unterschiedlicher Standards, Best Practices oder Hilfsmittel dargestellt werden, erfolgt dies in einem separaten Hilfsmittel ([Regel in 7.10](index.qmd#ech-0003-bb-abhaengigkeiten-separates-hilfsmittel), `ech-0003-bb-abhaengigkeiten-separates-hilfsmittel`{.beziehung-id}). Diese Seite zeigt am Beispiel von eCH-0003, wie eine solche Übersicht aus den Bausteinen erzeugt werden könnte: für die Beziehungen innerhalb des Standards und für die Verweise auf andere Standards.
+
+Grenzen der Übersicht:
+
+- Sie zeigt nur Beziehungen, die der Build aus dem Text ableitet: Querverweise und Rückbezüge. Fachliche Abhängigkeiten, die nicht als Verweis im Text stehen, sind nicht erfasst.
+- Sie umfasst nur die Kapitel, die bisher in Bausteine überführt sind. Verweise auf Überschriften ohne Baustein sind als «noch kein Baustein» markiert.
+- Die Einbettung der feinen Bausteine in die groben ist nicht dargestellt; sie ergibt sich aus der Gliederung.
+
+Beim Standard selbst zeigt «Beziehungen (n)» unter einem Baustein dieselben Angaben für diesen Baustein.
+
+## Graph
+
+Jedes Kästchen ist ein grober Baustein, also ein Kapitel oder Unterkapitel. Ein Pfeil fasst alle Beziehungen der Bausteine darin zusammen; eine Zahl am Pfeil nennt die Anzahl, wenn es mehr als eine ist. Rückbezüge innerhalb desselben groben Bausteins stehen nur in der Tabelle.
+
+::: {.beziehungen-graph}
+```{mermaid}
+%% Platzhalter: filters/ech_registry.lua setzt den Graph aus bausteine.json ein.
+flowchart LR
+  platzhalter["Graph fehlt"]
+```
+:::
+
+Legende:
+
+- Rechteck: grober Baustein
+- Rechteck gestrichelt: Überschrift ohne Baustein («noch kein Baustein»)
+- abgerundet: anderer Standard
+- schräg: Literatureintrag (Anhang A)
+- Pfeil durchgezogen: Querverweis; Pfeil gestrichelt: Rückbezug
+- Pfeil mit zwei Spitzen: Beziehungen in beide Richtungen
+
+Die Kästchen sind nicht verlinkt. Die Links stehen in der Tabelle.
+
+## Alle Beziehungen
+
+Eine Zeile je Beziehung, in Richtung des Verweises: «Von» verweist auf «Nach» oder bezieht sich darauf zurück. Die Fundstelle ist die Stelle von «Von» im Standard. Die Tabelle enthält dieselben Angaben wie der Graph und zusätzlich die Rückbezüge innerhalb eines groben Bausteins.
+
+::: {#beziehungen-tabelle}
+:::
+
+Quelle: [bausteine.json](../bausteine.json), die vom Build erzeugte Registry aller Bausteine mit ihren Beziehungen.

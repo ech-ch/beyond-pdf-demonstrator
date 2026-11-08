@@ -22,6 +22,8 @@ Quelle (Gerüst und Baustein-Dateien):
   7. Ziele von `bezug` existieren (E30)
   8. Hinweis bei zeichengleichen Klauseln ohne Mehrfachverwendung (E27)
   9. Label `bb:<kurzname>` höchstens 50 Zeichen (Grenze von GitHub, E38)
+ 10. Übersicht «Beziehungen» steht in der render-Liste nach der Standardseite,
+     deren Registry sie liest (AP21)
 
 Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
   1. Zählung der Kennzeichnungen (D4)
@@ -29,7 +31,9 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
      normalisiert wird nur ASCII-Leerraum, ein geschütztes Leerzeichen gilt
      als Abweichung (E11)
   3. kein unaufgelöster Verweis: «?@…», «@sec-…» im Text oder die
-     Quarto-Warnung «Unable to resolve crossref» im Log (K3)
+     Quarto-Warnung «Unable to resolve crossref» im Log (K3); jede Meldung
+     «ERROR» im Log ist ein Fehler, denn `error()` in einem Lua-Filter bricht
+     den Build in Quarto nicht ab (E48); Warnungen sind Hinweise
   4. auf der Website hat jeder Baustein genau einen Anker #<baustein-id> (R6)
   6. Registry bausteine.json (E09, E10, E27, E30): gültiges JSON, dieselben
      Bausteine wie die Quelle, Kennzeichnung und bezug wie in der Quelle, jedes
@@ -39,9 +43,15 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
      als Ganzes, keine `labels=` in der URL, Wortlaut gleich wie der Rohtext;
      die Bedienelemente stehen im HTML und sind vom Textvergleich ausgenommen;
      im Word gibt es keine
+  7. Beziehungen (E47, AP21): «Beziehungen (n)» genau bei den Bausteinen mit
+     Querverweis oder Rückbezug in der Registry, je Fundstelle einmal, n und
+     Einträge stimmen, vom Textvergleich ausgenommen, nicht im Word; die
+     Übersichtsseite hat einen Graph, je Vorwärtsbeziehung eine Tabellenzeile,
+     die Prüfsumme der aktuellen Registry und nur auflösbare Links
 """
 import argparse
 import difflib
+import hashlib
 import html
 import json
 import os
@@ -314,6 +324,17 @@ def pruefe_quelle(std: dict, b: Befunde) -> None:
     grob = sum(1 for x in bausteine if x.art == "grob")
     fein = sum(1 for x in bausteine if x.art == "fein")
     print(f"{std['name']}: {len(dateien)} Baustein-Dateien, {grob} grobe und {fein} feine Bausteine in der Quelle")
+
+    # 10. Reihenfolge: Übersicht «Beziehungen» nach der Standardseite
+    if "beziehungen_quelle" in std:
+        konfig = WURZEL / "_quarto.yml"
+        block = re.search(r"^  render:\n((?:    .*\n|\s*\n)+)", lies(konfig), re.M)
+        liste = re.findall(r"^    -\s*(\S+)", block[1], re.M) if block else []
+        seite, uebersicht = f"{std['quelle']}/index.qmd", std["beziehungen_quelle"]
+        if seite not in liste or uebersicht not in liste:
+            b.fehler_(f"render-Liste: {seite} und {uebersicht} müssen beide aufgeführt sein (AP21)", konfig)
+        elif liste.index(uebersicht) < liste.index(seite):
+            b.fehler_(f"render-Liste: {uebersicht} liest die Registry von {seite} und muss danach stehen (AP21)", konfig)
 
 
 # --- Ausgabe -----------------------------------------------------------------
@@ -607,6 +628,96 @@ def pruefe_registry(std: dict, t: str, b: Befunde) -> None:
           f"{sum(len(e.get('relationships', [])) for e in eintraege.values())} Beziehungen")
 
 
+SICHTBAR = ("refers_to", "is_referenced_by", "depends_on", "is_required_by")   # ohne Einbettung
+VORWAERTS = ("refers_to", "depends_on")
+DETAILS = re.compile(r'<details class="baustein-beziehungen" data-beziehungen="([^"]+)" data-anzahl="(\d+)">'
+                     r"<summary>Beziehungen \((\d+)\)</summary>(.*?)</details>", re.S)
+
+
+def links_ok(von: Path, ausschnitt: str, b: Befunde, was: str) -> int:
+    """Interne Links eines HTML-Ausschnitts: Datei und Anker vorhanden. Gibt die Anzahl zurück."""
+    n = 0
+    for href in sorted(set(re.findall(r'<a [^>]*href="([^"]+)"', ausschnitt))):
+        u = urllib.parse.urlsplit(html.unescape(href))
+        if u.scheme in ("http", "https", "mailto"):
+            continue
+        n += 1
+        ziel = (von.parent / urllib.parse.unquote(u.path)).resolve() if u.path else von
+        if not ziel.exists():
+            b.fehler_(f"{was}: Link auf fehlende Datei «{href}»", von)
+        elif u.fragment and ziel.suffix == ".html" and f'id="{u.fragment}"' not in lies(ziel):
+            b.fehler_(f"{was}: Link auf fehlenden Anker «{href}»", von)
+    return n
+
+
+def pruefe_beziehungen(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befunde) -> None:
+    pfad = WURZEL / std["registry"]
+    try:
+        roh = pfad.read_bytes()
+        registry = json.loads(roh.decode("utf-8"))
+    except (OSError, ValueError):
+        return   # meldet pruefe_registry
+    soll: dict[str, tuple[int, int]] = {}   # ID -> (n, Fundstellen)
+    for e in registry["bausteine"]:
+        n = sum(1 for r in e["relationships"] if r["type"] in SICHTBAR)
+        if n:
+            soll[e["id"]] = (n, len(e["source_reference"]))
+
+    # Standardseite: «Beziehungen (n)» je Baustein und Fundstelle
+    ist: dict[str, int] = {}
+    for m in DETAILS.finditer(t):
+        bb, anzahl, summary, inhalt = m[1], int(m[2]), int(m[3]), m[4]
+        ist[bb] = ist.get(bb, 0) + 1
+        n = soll.get(bb, (0, 0))[0]
+        eintraege = len(re.findall(r"<li\b", inhalt))
+        if not (anzahl == summary == eintraege == n):
+            b.fehler_(f"HTML: «Beziehungen ({summary})» bei «{bb}» mit {eintraege} Einträgen, Registry {n}", html_pfad)
+    for bb in sorted(set(soll) | set(ist)):
+        erwartet = soll.get(bb, (0, 0))[1]
+        if ist.get(bb, 0) != erwartet:
+            b.fehler_(f"HTML: «{bb}» hat {ist.get(bb, 0)}× «Beziehungen», erwartet {erwartet} (je Fundstelle)", html_pfad)
+    if t.count('<details class="baustein-beziehungen"') != sum(ist.values()):
+        b.fehler_("HTML: «Beziehungen» mit unerwartetem Aufbau", html_pfad)
+    seite = HtmlText(set(std.get("html_ignorieren", [])))
+    seite.feed(t)
+    if re.search(r"Beziehungen \(\d+\)", "".join(seite.teile)):
+        b.fehler_("HTML: «Beziehungen (n)» steht im Klartext (html_ignorieren)", html_pfad)
+    n_links = links_ok(html_pfad, "".join(m[0] for m in DETAILS.finditer(t)), b, "HTML, Beziehungen")
+    with zipfile.ZipFile(docx_pfad) as z:
+        xml = z.read("word/document.xml").decode("utf-8")
+        if re.search(r"Beziehungen \(\d+\)", xml) or "baustein-beziehungen" in xml:
+            b.fehler_("Word: «Beziehungen» gehören nur auf die Website (E47)", docx_pfad)
+
+    # Übersichtsseite
+    uebersicht = WURZEL / std["beziehungen"]
+    if not uebersicht.exists():
+        b.fehler_(f"Übersicht fehlt: {rel(uebersicht)}")
+        return
+    u = lies(uebersicht)
+    haupt = u[u.find("<main"):u.find("</main>")]
+    graph = re.search(r'<pre class="mermaid mermaid-js"[^>]*>(.*?)</pre>', haupt, re.S)
+    graph_text = html.unescape(graph[1]) if graph else ""
+    if not graph_text.lstrip().startswith("flowchart") or "-->" not in graph_text or "platzhalter" in graph_text:
+        b.fehler_("Übersicht: Graph fehlt oder ist der Platzhalter", uebersicht)
+    for e in registry["bausteine"]:
+        for r in e["relationships"]:
+            if r["type"] in VORWAERTS and r["target_kind"] != "baustein" and r["target"] not in graph_text \
+                    and (r.get("title") or "") not in graph_text:
+                b.fehler_(f"Übersicht: Ziel «{r['target']}» ({r['target_kind']}) fehlt im Graph", uebersicht)
+    zeilen = re.findall(r'<tr data-von="([^"]+)" data-typ="([^"]+)" data-nach="([^"]+)">', haupt)
+    vorwaerts = [(e["id"], r["type"], r["target"]) for e in registry["bausteine"] for r in e["relationships"]
+                 if r["type"] in VORWAERTS]
+    if sorted(html.unescape(x) for z in zeilen for x in [" ".join(z)]) != sorted(" ".join(v) for v in vorwaerts):
+        b.fehler_(f"Übersicht: {len(zeilen)} Tabellenzeilen, Registry {len(vorwaerts)} Vorwärtsbeziehungen "
+                  f"oder andere Paare", uebersicht)
+    summe = re.search(r'data-registry-sha1="([0-9a-f]+)"', haupt)
+    if not summe or summe[1] != hashlib.sha1(roh).hexdigest():
+        b.fehler_("Übersicht: erzeugt aus einer anderen bausteine.json als der aktuellen (Render-Reihenfolge?)", uebersicht)
+    n_links += links_ok(uebersicht, haupt, b, "Übersicht")
+    print(f"Beziehungen: {sum(ist.values())}× «Beziehungen (n)» bei {len(soll)} Bausteinen, "
+          f"{len(zeilen)} Tabellenzeilen, Graph {graph_text.count(chr(10)) + 1} Zeilen, {n_links} interne Links")
+
+
 def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
     html_pfad, docx_pfad = WURZEL / std["html"], WURZEL / std["docx"]
     for pfad in (html_pfad, docx_pfad):
@@ -631,9 +742,13 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
             b.fehler_(f"{name}: unaufgelöster Verweis «{m[0]}» (K3)", html_pfad if name == "HTML" else docx_pfad)
     if log is not None:
         for nr, zeile in enumerate(log.read_text(encoding="utf-8", errors="replace").split("\n"), 1):
+            ohne_farben = re.sub(r"\x1b\[[0-9;]*m", "", zeile).strip()
             if "Unable to resolve crossref" in zeile:
-                ohne_farben = re.sub(r"\x1b\[[0-9;]*m", "", zeile).strip()
                 b.fehler_(f"Quarto: {ohne_farben} (K3)", log, nr)
+            elif re.match(r"(ERROR|FATAL)\b", ohne_farben):
+                b.fehler_(f"Quarto: {ohne_farben[:300]} (E48)", log, nr)
+            elif re.match(r"\[?WARN(ING)?\b", ohne_farben):
+                b.hinweis(f"Quarto: {ohne_farben[:300]}", log, nr)
 
     # 4. Anker = Baustein-ID auf der Website, genau einmal (R6, E27)
     ids = re.findall(r'\sid="([^"]+)"', html_roh)
@@ -644,6 +759,8 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
 
     pruefe_feedback(std, html_roh, html_pfad, docx_pfad, b)
     pruefe_registry(std, html_roh, b)
+    if "beziehungen" in std:
+        pruefe_beziehungen(std, html_roh, html_pfad, docx_pfad, b)
 
     # 1.–2. je überführtem Kapitel
     for kap in std.get("kapitel", []):

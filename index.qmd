@@ -16,7 +16,7 @@ Der Demonstrator zerlegt den Standard eCH-0003 V11.1.0 «Leitfaden zur Genehmigu
 
 ## Rundgang in drei Schritten
 
-1. **Eine Regel ansehen.** [Diese Regel zur Versionierung](ech-0003/v11.1.0/de/index.qmd#ech-0003-bb-schema-eigene-version) hat die feste Adresse `ech-0003-bb-schema-eigene-version`. Die Adresse soll bleiben, auch wenn die Regel in einer neuen Version anders formuliert ist oder in einem anderen Kapitel steht.
+1. **Eine Regel ansehen.** [Diese Regel zur Versionierung](ech-0003/v11.1.0/de/index.qmd#ech-0003-bb-schema-eigene-version) hat die feste Adresse `ech-0003-bb-schema-eigene-version`. Die Adresse soll bleiben, auch wenn die Regel in einer neuen Version anders formuliert ist oder in einem anderen Kapitel steht. Verweist eine Regel auf eine andere Stelle oder bezieht sie sich auf den Text davor, zeigt «Beziehungen (n)» darunter die Verbindungen. Alle auf einen Blick zeigt die Seite [Beziehungen](ech-0003/v11.1.0/de/beziehungen.qmd).
 
 2. **Feedback geben.** Neben jeder Regel steht das Symbol <i class="bi bi-chat-left-text" aria-label="Sprechblase"></i>, bei Kapiteln der Knopf «Feedback». Ein Klick öffnet bei GitHub ein vorbefülltes Formular. Ihr Feedback landet so direkt beim Baustein, statt bei «Kapitel X, Seite Y». Dafür braucht es ein kostenloses GitHub-Konto. Ihr Feedback ist öffentlich sichtbar und keine offizielle Rückmeldung an eCH.
 
@@ -26,4 +26,4 @@ Der Demonstrator zerlegt den Standard eCH-0003 V11.1.0 «Leitfaden zur Genehmigu
 
 - **Platzhalter:** Überführt sind 1.1–1.2.1, Kap. 7–10 und die Anhänge A und F. 1.3–1.4, Kap. 2–6 und die Anhänge B–E sind als Platzhalter markiert und verweisen auf die entsprechende Seite im [Original-PDF](original/eCH-0003_V11.1.0_d.pdf).
 - **Vorschlag:** Die Regeln für Bausteine und IDs sind ein Vorschlag und eine Diskussionsgrundlage für eCH, keine verbindliche Regel.
-- **Mehr dazu:** [Repository auf GitHub](https://github.com/ech-ch/beyond-pdf-demonstrator) · [Fragen und Entscheide](https://github.com/ech-ch/beyond-pdf-demonstrator/blob/main/docs/fragenlog.md) · [Liste aller Bausteine mit ihren Beziehungen](ech-0003/v11.1.0/bausteine.json) (Registry, JSON)
+- **Mehr dazu:** [Repository auf GitHub](https://github.com/ech-ch/beyond-pdf-demonstrator) · [Fragen und Entscheide](https://github.com/ech-ch/beyond-pdf-demonstrator/blob/main/docs/fragenlog.md) · [Liste aller Bausteine mit ihren Beziehungen](ech-0003/v11.1.0/bausteine.json) (Registry, JSON) · [Übersicht der Beziehungen](ech-0003/v11.1.0/de/beziehungen.qmd) (Graph und Tabelle)

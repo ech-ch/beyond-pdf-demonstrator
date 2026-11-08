@@ -444,6 +444,130 @@ $grid-margin-width: 375px;
   }
 }
 
+// Beziehungen (E47, AP21; filters/ech_beziehungen.lua). Je Baustein ein
+// aufklappbares «Beziehungen (n)» ohne JavaScript: grob in der Zeile unter der
+// Überschrift, fein am Ende des Bausteins. IDs brechen um, damit die Seite
+// auch auf dem Handy nicht quer scrollt.
+#quarto-content details.baustein-beziehungen {
+  font-size: 0.8rem;
+  color: $ech-muted;
+  > summary {
+    width: fit-content;
+    font-size: 0.72rem;
+    cursor: pointer;
+    &:hover,
+    &:focus-visible {
+      color: $ech-red;
+    }
+  }
+  &[open] {
+    margin-bottom: 0.5rem;
+    > summary {
+      margin-bottom: 0.15rem;
+    }
+  }
+  .beziehungen-richtung {
+    margin: 0.3rem 0 0.1rem;
+    font-weight: 600;
+  }
+  ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+  li {
+    margin: 0.1rem 0;
+  }
+  a {
+    color: inherit;
+    text-decoration: underline;
+    &:hover,
+    &:focus-visible {
+      color: $ech-red;
+    }
+  }
+}
+#quarto-content .baustein-grob details.baustein-beziehungen {
+  margin-top: 0.1rem;
+}
+#quarto-content .baustein-beziehungen-fein {
+  margin: -0.6rem 0 1rem;
+}
+#quarto-content code.beziehung-id {
+  font-size: 0.85em;
+  color: $ech-muted;
+  background: none;
+  padding: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+#quarto-content .beziehung-hinweis {
+  font-style: italic;
+  color: $ech-muted;
+}
+
+// Übersichtsseite «Beziehungen»: Graph in eigenem Container, der auf dem
+// Handy quer scrollt; Tabelle auf dem Handy als Liste untereinander.
+#quarto-content .beziehungen-graph {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+@media (max-width: 767.98px) {
+  #quarto-content .beziehungen-graph svg {
+    min-width: 640px;
+  }
+}
+#quarto-content table.beziehungen-tabelle {
+  table-layout: fixed;
+  width: 100%;
+  font-size: 0.875rem;
+  th:nth-child(1),
+  th:nth-child(3) {
+    width: 31%;
+  }
+  th:nth-child(2) {
+    width: 7rem;
+  }
+  td {
+    overflow-wrap: break-word;
+  }
+  code.beziehung-id {
+    display: block;
+  }
+  caption {
+    caption-side: top;
+  }
+}
+@media (max-width: 575.98px) {
+  #quarto-content table.beziehungen-tabelle {
+    &,
+    caption,
+    tbody,
+    tr,
+    td {
+      display: block;
+    }
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+    tr {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid $ech-stripe;
+    }
+    td {
+      border: none;
+      padding: 0.05rem 0;
+      &::before {
+        content: attr(data-label) ": ";
+        font-weight: 600;
+      }
+    }
+  }
+}
+
 // Hinweis unter Vorlagentexten (E13, filters/ech_shortcodes.lua)
 #quarto-content .vorlagentext-hinweis {
   margin: -0.35rem 0 0.75rem;

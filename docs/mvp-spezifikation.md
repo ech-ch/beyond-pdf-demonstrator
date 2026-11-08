@@ -266,7 +266,7 @@ Die Auslöser für eine Neubeurteilung stehen in ADR 0001.
   - `baustein`
   - `noch_kein_baustein`: Anker einer Gerüst-Überschrift, mit `title` (W2)
   - `literatur`: Schlüssel in `referenzen.yml`
-  - `standard`: z.B. `eCH-0150` (W3)
+  - `standard`: z.B. `eCH-0150` (W3), mit `title` und `url` des Links im Text (AP21)
 - Links auf Websites sind keine Beziehungen.
 
 Beispiel-Eintrag aus der erzeugten Registry:
@@ -383,7 +383,11 @@ Dieselbe Erkennung liefert die Zählung für D4.
 | W6 | Manuelle Beziehungen mit Bedeutung kommen erst nach dem MVP (ADR 0003). Ausnahme: Rückbezüge im Text (E30). |
 | W7 | Rückbezüge zwischen feinen Bausteinen («hierbei», «Dies», «Diese Änderung» …) werden am abhängigen Baustein als `bezug="ech-0003-bb-…"` erfasst und ergeben `depends_on` samt Umkehrung. Rückbezüge auf das Thema des eigenen groben Bausteins werden nicht erfasst (E30). |
 
-**Stufen:** Registry mit Verbindlichkeit und Beziehungen: Stufe 1 (umgesetzt mit AP14). Sichtbar auf der Website: Stufe 2.
+**Stufen:** Registry mit Verbindlichkeit und Beziehungen: Stufe 1 (umgesetzt mit AP14). Sichtbar auf der Website: umgesetzt mit AP21 (E47, E48), im Word nicht:
+
+- **Je Baustein:** «Beziehungen (n)» zum Aufklappen, ohne JavaScript. Es steht nur bei Bausteinen mit Querverweis oder Rückbezug, in einer der beiden Richtungen; die Einbettung zählt nicht. Beim groben Baustein steht es unter der Überschrift, beim feinen am Ende des Bausteins. Gruppen: «Querverweis auf», «Querverweis von», «Rückbezug auf», «Rückbezug von».
+- **Übersichtsseite** `ech-0003/v11.1.0/de/beziehungen.qmd`: Graph (Mermaid) auf Ebene der groben Bausteine und Tabelle aller Beziehungen in Vorwärtsrichtung. Aufhänger ist 7.10 (separates Hilfsmittel), formuliert als Vorschlag (E28).
+- **Eine Quelle:** Listen, Graph und Tabelle entstehen aus der geschriebenen `bausteine.json`. Die Übersicht liest sie aus dem Ausgabeordner und steht deshalb in der render-Liste nach der Standardseite (geprüft; Begründung E48).
 
 ### 3.5 Querverweise (E11)
 
@@ -452,7 +456,8 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | `ech_docx_nummern.lua` | im DOCX: Word nummeriert, Quarto-Textnummern entfernen, unnummerierte Überschriften und Anhänge in eCH-Formatvorlagen | Spike S3 (Lösung A) | Block C |
 | `ech_anker.lua` | Anker = Baustein-ID, nur HTML; bei Mehrfachverwendung nur an der ersten Fundstelle (umgesetzt mit AP8) | neu | R6, E27, E35 |
 | `ech_feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML (umgesetzt mit AP9) | Spike S4; umgestellt von `.baustein` auf `bb` | E08, E09, E39, E41 |
-| `ech_registry.lua` | `bausteine.json`: Ebene 0, Metadaten, Fundstellen, Herkunft, Verbindlichkeit, Beziehungen mit Umkehrung; nur HTML (umgesetzt mit AP14) | neu | E09, E10, E27, E30, E45 |
+| `ech_registry.lua` | `bausteine.json`: Ebene 0, Metadaten, Fundstellen, Herkunft, Verbindlichkeit, Beziehungen mit Umkehrung; nur HTML (umgesetzt mit AP14). Setzt «Beziehungen (n)» je Baustein und füllt die Übersichtsseite (AP21) | neu | E09, E10, E27, E30, E45, E48 |
+| `ech_beziehungen.lua` | Modul, kein Filter: Darstellung der Beziehungen aus der Registry (Listen, Mermaid-Graph, Tabelle) (umgesetzt mit AP21) | neu | E47, E48 |
 | `ech_referenzen.lua`, `{{< referenzen >}}` | Zitate `[@key]` aus `referenzen.yml` auf den Eintrag verlinken; Tabelle für Anhang A (umgesetzt mit AP13) | neu | E15, E32, E43 |
 | `{{< statustext >}}` | Statustext 1.1 aus Vorlage-Fassung | FOAG `{{< ech status >}}` | E14 |
 | `{{< vorlagentext … >}}` | Vorlagentext der gewählten Fassung einfügen, auf der Website mit Hinweis (umgesetzt mit AP12) | neu | E13, E43 |
@@ -461,7 +466,7 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | Platzhalter | Platzhalter unter nicht überführten Überschriften | neu | E05 |
 | Deckblatt-Filter (DOCX) | Titel, Hinweis, Metadatentabelle (OpenXML im Format des Originals, AP15), Zusammenfassung, Inhaltsverzeichnis-Feld, Textmarken der Fusszeile | neu; Textmarken aus Spike S3 | E17, E46 |
 | `aktualisiere_felder_beim_oeffnen.py` | Word aktualisiert Felder beim Öffnen | neu (F40) | E17 |
-| CI-Prüfungen (`tools/pruefe.py`, `tools/pruefe.toml`) | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein höchstens eine Kennzeichnung (G4-Bausteine ohne, E29); `bezug`-Ziele; Zählung 36/11/8; Textvergleich mit dem Rohtext; unaufgelöste Verweise als Fehler; Feedback-Links (AP9); Registry (AP14) | neu (umgesetzt mit AP7) | E07, E08, E11, E12, D4, E34, E41, E45 |
+| CI-Prüfungen (`tools/pruefe.py`, `tools/pruefe.toml`) | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein höchstens eine Kennzeichnung (G4-Bausteine ohne, E29); `bezug`-Ziele; Zählung 36/11/8; Textvergleich mit dem Rohtext; unaufgelöste Verweise als Fehler; Feedback-Links (AP9); Registry (AP14); Beziehungen und Reihenfolge der render-Liste (AP21); jede Meldung «ERROR» im Log von `quarto render` (E48) | neu (umgesetzt mit AP7) | E07, E08, E11, E12, D4, E34, E41, E45, E48 |
 
 ## 4. Verzeichnisstruktur und Build-Pipeline
 
@@ -798,7 +803,7 @@ Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
 
 | # | Paket | Grundlage |
 |---|---|---|
-| AP21 | Beziehungen sichtbar: aufklappbare Liste je Baustein, Übersichtsseite mit Graph (Mermaid) und Tabelle, aus der Registry | E10, E30, E47 |
+| AP21 | Beziehungen sichtbar: aufklappbare Liste je Baustein, Übersichtsseite mit Graph (Mermaid) und Tabelle, aus der Registry. Umgesetzt 8.11., nicht committet (E48) | E10, E30, E47, E48 |
 | AP22 | A: Kap. 6, Anhang B, C, D als Bausteine | E15, E47 |
 | AP23 | B: 1.3.4, 1.3.9, 1.3.10 als Bausteine (IDs durch die Projektleitung prüfen) | E47 |
 | AP24 | Steckbrief eCH-0003 als Daten und Seite (Option A, `ausbau.md`) | E47, F47 |

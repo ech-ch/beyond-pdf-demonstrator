@@ -140,7 +140,21 @@ function M.vorlage(meta, teil)
   return entry, fassung
 end
 
--- Gibt die Zeilen des Deckblatts zurück, oder nil ohne `ech`-Metadaten.
+-- Bricht den Build ab. In Quarto-Filtern schreibt das globale `error()` nur
+-- eine Meldung, und der Filter läuft weiter (Quarto, filters/main.lua);
+-- `assert` löst einen echten Lua-Fehler aus (E48).
+function M.abbruch(text)
+  assert(false, text)
+end
+
+-- Seite eines Standards (Text mit Bausteinen)? Die Übersichtsseite
+-- «Beziehungen» liegt im selben Ordner und erbt `ech` aus _metadata.yml; sie
+-- trägt `beziehungen-aus` und ist keine Standardseite (AP21).
+function M.standardseite(meta)
+  return meta.ech ~= nil and meta["beziehungen-aus"] == nil
+end
+
+-- Gibt die Zeilen des Deckblatts zurück, oder nil ausserhalb einer Standardseite.
 --
 --   rows      geordnete Liste von { key, label, values, bullets }
 --   summary   Beschriftung der Zusammenfassung
@@ -150,7 +164,7 @@ end
 function M.display(meta, options)
   options = options or {}
   local ech = meta.ech
-  if ech == nil then return nil end
+  if not M.standardseite(meta) then return nil end
   local voc = M.vorlage(meta, "deckblatt")
 
   local function code(value) return value and stringify(value) or nil end

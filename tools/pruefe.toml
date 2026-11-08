@@ -14,6 +14,10 @@ docx = "_site/ech-0003/v11.1.0/de/DEMO_eCH-0003_V11.1.0_de.docx"
 html_ignorieren = ["platzhalter-hinweis", "baustein-bedienung", "vorlagentext-hinweis"]
 # Registry (filters/ech_registry.lua) und Daten von Anhang A
 registry = "_site/ech-0003/v11.1.0/bausteine.json"
+# Übersichtsseite «Beziehungen» (AP21): liest die Registry der Standardseite und
+# muss deshalb in der render-Liste von _quarto.yml nach ihr stehen
+beziehungen_quelle = "ech-0003/v11.1.0/de/beziehungen.qmd"
+beziehungen = "_site/ech-0003/v11.1.0/de/beziehungen.html"
 referenzen = "ech-0003/v11.1.0/referenzen.yml"
 # Ziel der Feedback-Links (filters/ech_feedback.lua)
 feedback_repo = "https://github.com/ech-ch/beyond-pdf-demonstrator"

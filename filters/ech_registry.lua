@@ -19,11 +19,20 @@
 --                      auf einen umschliessenden Baustein fehlen (W5).
 --
 -- Ziel eines Verweises (target_kind): baustein, noch_kein_baustein (Anker
--- einer Überschrift ohne Baustein, W2), literatur (Eintrag in Anhang A) oder
--- standard (W3). Links auf Seiten ausserhalb des Standards sind keine
--- Querverweise.
+-- einer Überschrift ohne Baustein, W2, mit `title`), literatur (Eintrag in
+-- Anhang A) oder standard (W3, mit `title` und `url` wie im Text). Links auf
+-- Seiten ausserhalb des Standards sind keine Querverweise.
+--
+-- Darstellung (E47, AP21; filters/ech_beziehungen.lua): Auf der Standardseite
+-- erhält jeder Baustein mit Querverweis oder Rückbezug ein «Beziehungen (n)»
+-- in seinen Bedienelementen. Die Übersichtsseite (Metadatum `beziehungen-aus`)
+-- liest bausteine.json und setzt Graph und Tabelle ein. Beide verwenden die
+-- geschriebene Registry, keine zweite Ableitung. Die Übersicht braucht deshalb
+-- die Registry aus demselben Lauf: In der render-Liste steht die Standardseite
+-- vor ihr (prüft tools/pruefe.py); fehlt die Datei, bricht der Build ab.
 
 local common = dofile(quarto.utils.resolve_path("ech_common.lua"))
+local beziehungen = dofile(quarto.utils.resolve_path("ech_beziehungen.lua"))
 local stringify = pandoc.utils.stringify
 
 -- JSON mit fester Reihenfolge der Schlüssel ----------------------------------
@@ -64,7 +73,7 @@ local function kodiere(wert, einzug)
     end
     return "{\n" .. table.concat(teile, ",\n") .. "\n" .. einzug .. "}"
   end
-  error("Registry: Wert ohne JSON-Darstellung: " .. tostring(wert))
+  common.abbruch("Registry: Wert ohne JSON-Darstellung: " .. tostring(wert))
 end
 
 -- Hilfen ------------------------------------------------------------------
@@ -94,16 +103,104 @@ local function ausgabe_pfad()
   return pandoc.path.join({ ausgabe, version }), pandoc.path.join({ ausgabe, version, "bausteine.json" })
 end
 
+-- Darstellung ---------------------------------------------------------------
+
+-- «Beziehungen (n)» in die Bedienelemente der Bausteine (ech_feedback.lua):
+-- grob in die Zeile unter der Überschrift, fein ans Ende des Bausteins.
+local function setze_listen(blocks, registry)
+  local index = beziehungen.index(registry)
+  local function details(id)
+    return index[id] and beziehungen.details_html(index[id], index, "")
+  end
+  local function bearbeite(liste)
+    local neu = pandoc.Blocks({})
+    for _, b in ipairs(liste) do
+      if b.t == "RawBlock" and b.format == "html" and b.text:find("baustein-bedienung baustein-grob", 1, true) then
+        local d = details(b.text:match('data%-feedback%-bb="([^"]+)"') or "")
+        if d then b.text = b.text:gsub("</div>$", function() return d .. "</div>" end) end
+        neu:insert(b)
+      elseif b.t == "Div" and b.attributes["bb"] then
+        b.content = bearbeite(b.content)
+        local d = details(b.attributes["bb"])
+        if d then
+          local block = pandoc.RawBlock("html", '<div class="baustein-bedienung baustein-beziehungen-fein">' .. d .. "</div>")
+          local letzter = b.content[#b.content]
+          if letzter and letzter.t == "RawBlock" and letzter.text:find("baustein-auch", 1, true) then
+            b.content:insert(#b.content, block)
+          else
+            b.content:insert(block)
+          end
+        end
+        neu:insert(b)
+      elseif b.t == "Div" then
+        b.content = bearbeite(b.content)
+        neu:insert(b)
+      else
+        neu:insert(b)
+      end
+    end
+    return neu
+  end
+  return bearbeite(blocks)
+end
+
+-- Übersichtsseite: Graph in den Mermaid-Block, Tabelle in #beziehungen-tabelle
+local function uebersicht(doc)
+  local quelle = stringify(doc.meta["beziehungen-aus"])
+  local projekt = quarto.project.directory
+  local ausgabe = quarto.project.output_directory or pandoc.path.join({ projekt, "_site" })
+  local seite = pandoc.path.directory(pandoc.path.make_relative(quarto.doc.input_file, projekt))
+  local pfad = pandoc.path.join({ ausgabe, seite, quelle })
+  local datei = io.open(pfad, "rb")
+  if not datei then
+    common.abbruch("Beziehungen: " .. pfad .. " fehlt. Die Standardseite muss in derselben `quarto render` "
+      .. "vor dieser Seite stehen (render-Liste in _quarto.yml).")
+  end
+  local text = datei:read("a")
+  datei:close()
+  local registry = pandoc.json.decode(text, false)
+  local index = beziehungen.index(registry)
+  local graph = beziehungen.graph(registry, index)
+  local tabelle = beziehungen.tabelle(registry, index, "index.html", pandoc.utils.sha1(text))
+  local graph_ok, tabelle_ok = false, false
+  doc.blocks = doc.blocks:walk({
+    RawBlock = function(b)
+      if b.format == "html" and b.text:find('<pre class="mermaid mermaid-js"', 1, true) then
+        local neu, n = b.text:gsub('(<pre class="mermaid mermaid%-js"[^>]*>).-(</pre>)', function(auf, zu)
+          return auf .. beziehungen.esc(graph) .. zu
+        end)
+        if n == 1 then
+          graph_ok = true
+          b.text = neu
+          return b
+        end
+      end
+    end,
+    Div = function(d)
+      if d.identifier == "beziehungen-tabelle" then
+        d.content = pandoc.Blocks({ pandoc.RawBlock("html", tabelle) })
+        tabelle_ok = true
+        return d
+      end
+    end,
+  })
+  if not graph_ok then common.abbruch("Beziehungen: Mermaid-Block für den Graph nicht gefunden") end
+  if not tabelle_ok then common.abbruch("Beziehungen: Div #beziehungen-tabelle nicht gefunden") end
+  return doc
+end
+
 -- Dokument ------------------------------------------------------------------
 
 function Pandoc(doc)
-  if not quarto.doc.is_format("html") or doc.meta.ech == nil then return nil end
+  if not quarto.doc.is_format("html") then return nil end
+  if doc.meta["beziehungen-aus"] then return uebersicht(doc) end
+  if not common.standardseite(doc.meta) then return nil end
   local meta = doc.meta
   local nummer = stringify(meta.ech.nummer)
   local standard = nummer:lower()
   local stufen = {}
   for _, k in ipairs(meta.kennzeichnungen or {}) do table.insert(stufen, stringify(k)) end
-  if #stufen == 0 then error("Registry: Metadatum `kennzeichnungen` fehlt (V4)") end
+  if #stufen == 0 then common.abbruch("Registry: Metadatum `kennzeichnungen` fehlt (V4)") end
   local literatur = {}
   for _, e in ipairs(common.referenzen()) do literatur[e.schluessel] = true end
 
@@ -148,20 +245,24 @@ function Pandoc(doc)
     return menge
   end
 
-  local function verweis(quelle, ziel, art, titel)
+  local function verweis(quelle, ziel, art, titel, url)
     local e = eintraege[quelle]
     if ziel == quelle or (art == "baustein" and vorfahren(quelle)[ziel]) then return end   -- W5
     for _, v in ipairs(e.verweise) do
       if v.ziel == ziel and v.art == art then return end
     end
-    table.insert(e.verweise, { ziel = ziel, art = art, titel = titel })
+    table.insert(e.verweise, { ziel = ziel, art = art, titel = titel, url = url })
   end
 
   local function sammle_verweise(block, quelle)
     block:walk({
       Span = function(s)
         local std = s.attributes["standard"]
-        if std then verweis(quelle, std, "standard") end
+        if std then
+          local link = nil
+          s:walk({ Link = function(l) link = link or l end })
+          verweis(quelle, std, "standard", link and stringify(link.content), link and link.target)
+        end
       end,
       Link = function(l)
         local anker = l.target:match("^#(.+)$")
@@ -245,7 +346,7 @@ function Pandoc(doc)
   verarbeite(doc.blocks, nil)
   for _, bb in ipairs(reihenfolge) do
     for _, ziel in ipairs(eintraege[bb].bezug) do
-      if not eintraege[ziel] then error(string.format("Registry: bezug-Ziel «%s» von «%s» fehlt", ziel, bb)) end
+      if not eintraege[ziel] then common.abbruch(string.format("Registry: bezug-Ziel «%s» von «%s» fehlt", ziel, bb)) end
     end
   end
 
@@ -287,17 +388,18 @@ function Pandoc(doc)
       table.insert(fundstellen_, obj({ { "section", f.section or NULL }, { "title", f.title } }))
     end
     if original and #e.seiten ~= #e.fundstellen and #e.seiten ~= 1 then
-      error(string.format("Registry: «%s» hat %d Fundstellen, aber original-seite «%s»", bb, #e.fundstellen,
+      common.abbruch(string.format("Registry: «%s» hat %d Fundstellen, aber original-seite «%s»", bb, #e.fundstellen,
         e.element.attributes["original-seite"] or ""))
     end
 
-    local beziehungen = {}
-    local function beziehung(art, ziel, zielart, titel)
-      table.insert(beziehungen, obj({ { "type", art }, { "target", ziel }, { "target_kind", zielart }, { "title", titel } }))
+    local beziehungen_ = {}
+    local function beziehung(art, ziel, zielart, titel, url)
+      table.insert(beziehungen_, obj({ { "type", art }, { "target", ziel }, { "target_kind", zielart },
+        { "title", titel }, { "url", url } }))
     end
     for _, t in ipairs(e.teil_von) do beziehung("is_part_of", t, "baustein") end
     for _, t in ipairs(teile[bb] or {}) do beziehung("has_part", t, "baustein") end
-    for _, v in ipairs(e.verweise) do beziehung("refers_to", v.ziel, v.art, v.titel) end
+    for _, v in ipairs(e.verweise) do beziehung("refers_to", v.ziel, v.art, v.titel, v.url) end
     for _, t in ipairs(referenziert[bb] or {}) do beziehung("is_referenced_by", t, "baustein") end
     for _, t in ipairs(e.bezug) do beziehung("depends_on", t, "baustein") end
     for _, t in ipairs(benoetigt[bb] or {}) do beziehung("is_required_by", t, "baustein") end
@@ -314,7 +416,7 @@ function Pandoc(doc)
       { "herkunft", original and obj({ { "dokument", original }, { "seite", liste(e.seiten) } }) or nil },
       { "kennzeichnung", e.art == "fein" and (e.kennzeichnung or NULL) or nil },
       { "verbindlichkeit", obj(verbindlichkeit) },
-      { "relationships", liste(beziehungen) },
+      { "relationships", liste(beziehungen_) },
     }))
   end
 
@@ -341,8 +443,12 @@ function Pandoc(doc)
 
   local ordner, pfad = ausgabe_pfad()
   pandoc.system.make_directory(ordner, true)
+  local json = kodiere(registry, "") .. "\n"
   local datei = assert(io.open(pfad, "wb"), "Registry: kann nicht schreiben: " .. pfad)
-  datei:write(kodiere(registry, "") .. "\n")
+  datei:write(json)
   datei:close()
-  return nil
+
+  -- Darstellung aus der geschriebenen Registry, nicht aus Zwischenwerten
+  doc.blocks = setze_listen(doc.blocks, pandoc.json.decode(json, false))
+  return doc
 end
