@@ -29,7 +29,7 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Beziehungen auf der Website: «Beziehungen (n)» je Baustein, [Übersichtsseite](ech-0003/v11.1.0/de/beziehungen.qmd) mit Graph und Tabelle | vorhanden |
 | Kap. 6 als 2 grobe und 4 feine Bausteine; Anhänge B, C, D als grobe Bausteine, Anhang C mit einer Klausel (IDs freigegeben: [docs/bausteine-kap6-anhaenge.md](docs/bausteine-kap6-anhaenge.md)) | vorhanden |
 | 1.3.4, 1.3.9, 1.3.10 als 3 grobe und 18 feine Bausteine (IDs zur Durchsicht: [docs/bausteine-1-3.md](docs/bausteine-1-3.md)) | vorhanden |
-| Steckbrief | folgt (AP24) |
+| [Steckbrief](ech-0003/v11.1.0/de/steckbrief.qmd) nach dem Raster «eCH Steckbrief Standardisierungsinhalte» (V0.9): Angaben in `steckbrief.yml`, Raster als Vokabular in `vorlage/steckbrief/`, Bezüge und Strukturierung erzeugt; Texte und Auswahlen als Vorschlag | vorhanden |
 
 Das Original-PDF liegt unter [original/eCH-0003_V11.1.0_d.pdf](original/eCH-0003_V11.1.0_d.pdf). Kap. 10 des Standards erlaubt die Weiterverbreitung.
 
@@ -41,11 +41,14 @@ index.qmd                   Startseite
 ech-0003/v11.1.0/
   _metadata.yml             Ebene 0, sprachneutral (Codes, Vorlage-Fassung, Original, Kennzeichnungen)
   referenzen.yml            Daten für Anhang A
+  steckbrief.yml            Steckbrief, sprachneutral (Raster-Fassung, Auswahlen, offene Felder)
   de/index.qmd              Gerüst; Kopfzeile mit sprachabhängiger Ebene 0
   de/bausteine/             eine Datei je grobem Baustein; mehrfach/ für Mehrfachbausteine
   de/beziehungen.qmd        Übersichtsseite «Beziehungen»; Graph und Tabelle aus bausteine.json
+  de/steckbrief.qmd         Steckbrief; Texte in der Kopfzeile, Rest aus Daten und bausteine.json
 vorlage/
   2022/                     Vorlage-Fassung 2022: Vorlagentexte, Statustexte, Deckblatt
+  steckbrief/0.9/           Raster «eCH Steckbrief Standardisierungsinhalte» V0.9: Feldnamen, Auswahllisten
   word/                     Word-Referenzdokument (eCH-Vorlage vom 28.11.2025, lokale Kopie)
 original/
   eCH-0003_V11.1.0_d.pdf    Original
@@ -102,6 +105,8 @@ py -3.11 tools/extrahiere_rohtext.py
 - Kennzeichnung und Verbindlichkeit
 - Beziehungen: Einbettung, Verweise, Rückbezüge; jede mit Umkehrung
 
+Dazu die Gliederung: jede Überschrift des Gerüsts mit ihrem Stand (Baustein, Platzhalter, Vorlagentext, Statustext, Daten, ohne eigenen Text). Daneben schreibt der Build `steckbrief.json`, den Steckbrief als Daten.
+
 Aufbau und Beispiel: [Spezifikation 3.3](docs/mvp-spezifikation.md#33-metadaten-e09-adr-0003). Die Registry ist von der Startseite und der Standardseite aus verlinkt. Wie bei den IDs gilt: Felder und Beziehungstypen sind ein Vorschlag.
 
 Auf der Website zeigt «Beziehungen (n)» unter einem Baustein seine Querverweise und Rückbezüge; die Seite «Beziehungen» zeigt alle als Graph und Tabelle. Beides entsteht aus `bausteine.json`. Die Übersichtsseite liest die Datei der Standardseite aus demselben Lauf und steht deshalb in der render-Liste von `_quarto.yml` nach ihr; `tools/pruefe.py` prüft das.
@@ -122,8 +127,8 @@ GitHub Pages ist vorbereitet, aber ausgeschaltet, bis die Freigabe zum Veröffen
 | `assets/ech_dark.scss` | `docs/assets/ech_dark.scss` | keine |
 | `assets/ech.svg`, `assets/favicon.svg` | `docs/assets/` | keine |
 | `assets/title-metadata.html` | `docs/assets/title-metadata.html` | keine |
-| `filters/ech_common.lua` | `docs/assets/ech_common.lua` | liest die Vorlage-Fassung statt `ech_vocabulary.yml`; deutsche Codes; Statustext; Beilagen mit Aufzählung; Namen der Bausteine; Erkennung der Standardseite; echter Abbruch (E48) |
-| `filters/ech_metadata.lua` | `docs/assets/ech_metadata.lua` | ohne Typst-Werte |
+| `filters/ech_common.lua` | `docs/assets/ech_common.lua` | liest die Vorlage-Fassung statt `ech_vocabulary.yml`; deutsche Codes; Statustext; Beilagen mit Aufzählung; Namen der Bausteine; Erkennung der Standardseite; echter Abbruch (E48); YAML lesen für den Steckbrief |
+| `filters/ech_metadata.lua` | `docs/assets/ech_metadata.lua` | ohne Typst-Werte; Titel ohne Nummer in `ech-titel` (für die Registry) |
 | `filters/ech_shortcodes.lua` | `docs/assets/ech_shortcodes.lua` | nur noch `{{< statustext >}}` aus der Vorlage-Fassung; neu `{{< vorlagentext >}}` und `{{< referenzen >}}` |
 
 **Abweichungen vom FOAG-Template** (für eine spätere Rückführung in ein gemeinsames eCH-Template, F16):

@@ -257,9 +257,10 @@ Die Auslöser für eine Neubeurteilung stehen in ADR 0001.
 |---|---|
 | `hinweis` | Demonstrator, Regeln sind ein Vorschlag (E28) |
 | `erzeugt` | Datum und Commit des Builds, lokal «lokal» |
-| `standard` (Ebene 0) | ID, Nummer, Version, Sprache, Status, Vorlage-Fassung, Vorlagentexte mit Fassung und Fundstelle, Original, Kennzeichnungen (V4) |
+| `standard` (Ebene 0) | ID, Nummer, Version, Titel (ohne Nummer, AP24), Sprache, Status, Vorlage-Fassung, Vorlagentexte mit Fassung und Fundstelle, Original, Kennzeichnungen (V4) |
 | `anzahl` | grobe und feine Bausteine (V11.1.0: 14 und 54) |
 | `bausteine[]` | je Baustein die Felder der Tabelle oben; dazu `granularitaet`, `kennzeichnung` (nur fein) und `verbindlichkeit` (Anzahl je Stufe, V2) |
+| `gliederung[]` | jede Überschrift des Gerüsts in Reihenfolge: `section`, `title`, `ebene`, `anker`, `inhalt` (`baustein` mit `baustein`, `platzhalter`, `vorlagentext`, `statustext`, `daten` für Anhang A, `ohne_text`). Anker ohne Baustein können provisorisch sein (E05). Geprüft gegen das Inhaltsverzeichnis des Originals (AP24, E51) |
 
 - **Fundstellen:** `source_reference` ist eine Liste, beim Mehrfachbaustein mit zwei Einträgen (E27).
 - **Seiten (F43):** `herkunft.seite` enthält eine Seite je Fundstelle, in derselben Reihenfolge. Der Mehrfachbaustein trägt in der Quelle `original-seite="31 32"`; in der Registry gehört 31 zu 7.8 und 32 zu 7.9.
@@ -460,8 +461,9 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | `ech_docx_nummern.lua` | im DOCX: Word nummeriert, Quarto-Textnummern entfernen, unnummerierte Überschriften und Anhänge in eCH-Formatvorlagen | Spike S3 (Lösung A) | Block C |
 | `ech_anker.lua` | Anker = Baustein-ID, nur HTML; bei Mehrfachverwendung nur an der ersten Fundstelle (umgesetzt mit AP8) | neu | R6, E27, E35 |
 | `ech_feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML (umgesetzt mit AP9) | Spike S4; umgestellt von `.baustein` auf `bb` | E08, E09, E39, E41 |
-| `ech_registry.lua` | `bausteine.json`: Ebene 0, Metadaten, Fundstellen, Herkunft, Verbindlichkeit, Beziehungen mit Umkehrung; nur HTML (umgesetzt mit AP14). Setzt «Beziehungen (n)» je Baustein und füllt die Übersichtsseite (AP21) | neu | E09, E10, E27, E30, E45, E48 |
+| `ech_registry.lua` | `bausteine.json`: Ebene 0, Metadaten, Fundstellen, Herkunft, Verbindlichkeit, Beziehungen mit Umkehrung; nur HTML (umgesetzt mit AP14). Setzt «Beziehungen (n)» je Baustein und füllt die Übersichtsseite (AP21); Gliederung, Steckbrief-Seite und `steckbrief.json` (AP24) | neu | E09, E10, E27, E30, E45, E48, E51 |
 | `ech_beziehungen.lua` | Modul, kein Filter: Darstellung der Beziehungen aus der Registry (Listen, Mermaid-Graph, Tabelle) (umgesetzt mit AP21) | neu | E47, E48 |
+| `ech_steckbrief.lua` | Modul, kein Filter: Steckbrief aus Raster, `steckbrief.yml`, Texten der Sprachfassung und Registry; prüft die Codes gegen das Raster (umgesetzt mit AP24) | neu | E51 |
 | `ech_referenzen.lua`, `{{< referenzen >}}` | Zitate `[@key]` aus `referenzen.yml` auf den Eintrag verlinken; Tabelle für Anhang A (umgesetzt mit AP13) | neu | E15, E32, E43 |
 | `{{< statustext >}}` | Statustext 1.1 aus Vorlage-Fassung | FOAG `{{< ech status >}}` | E14 |
 | `{{< vorlagentext … >}}` | Vorlagentext der gewählten Fassung einfügen, auf der Website mit Hinweis (umgesetzt mit AP12) | neu | E13, E43 |
@@ -670,6 +672,22 @@ Einen Übersteuerungsmechanismus gibt es im MVP nicht. Weicht erzeugter Inhalt v
 | Vorlage | 2022 |
 | Original | eCH-0003 V11.1.0 (PDF) |
 
+### 5.5 Steckbrief (E51, AP24)
+
+Der Steckbrief von eCH-0003 V11.1.0 folgt dem Raster «eCH Steckbrief Standardisierungsinhalte» (V0.9, Entwurf der Geschäftsstelle) und erscheint als Seite `ech-0003/v11.1.0/de/steckbrief.qmd` (nur Website). Das Raster ist versioniert wie die Vorlage (Raster-Fassung, ADR 0005 sinngemäss).
+
+| Teil | Quelle |
+|---|---|
+| Aufbau, Feldnamen, Auswahllisten | Raster-Fassung `vorlage/steckbrief/0.9/raster.yml`; Codes vom Demonstrator, unbekannter Code bricht den Build ab |
+| Auswahlen, Stand, offene und nicht zutreffende Felder, `vorschlag` | `ech-0003/v11.1.0/steckbrief.yml` (sprachneutral) |
+| Texte (Zusammenfassung, vier Fragen, freie Texte, Gründe) | Kopfzeile der Sprachfassung (`steckbrief-texte`) |
+| Standard, Status, Daten | Ebene 0 (`_metadata.yml`, Titel aus der Registry), Beschriftungen der Vorlage-Fassung |
+| Referenzen auf andere eCH-Standards | Registry, Ziele der Art `standard` |
+| Bezüge zu externen Standards | Anhang A (`referenzen.yml`) ohne eCH-Standards, mit Fundstelle der Zitate aus der Registry |
+| Inhaltliche Strukturierung | Registry, `gliederung` und Bausteine: je grober Baustein eine Zeile, ein ganz unüberführter Teil in einer Zeile |
+
+Solange `vorschlag: true` steht, trägt jeder Abschnitt mit Texten oder Auswahlen die Kennzeichnung «Vorschlag, nicht geprüft». Die Seite liest die Registry desselben Laufs wie «Beziehungen» und steht deshalb in der render-Liste nach der Standardseite. Der Build schreibt `steckbrief.json` neben `bausteine.json` (Brücke zu DCAT, nicht ausgebaut).
+
 ## 6. Feedback (E21, E37; Session 3)
 
 **Formular** `.github/ISSUE_TEMPLATE/feedback.yml` (E37):
@@ -810,7 +828,7 @@ Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
 | AP21 | Beziehungen sichtbar: aufklappbare Liste je Baustein, Übersichtsseite mit Graph (Mermaid) und Tabelle, aus der Registry. Umgesetzt 8.11., committet als `e90d169` (E48) | E10, E30, E47, E48 |
 | AP22 | A: Kap. 6, Anhang B, C, D als Bausteine. Umgesetzt 8.11., committet als `062b21a`; IDs freigegeben in [bausteine-kap6-anhaenge.md](bausteine-kap6-anhaenge.md) (E49) | E15, E47, E49 |
 | AP23 | B: 1.3.4, 1.3.9, 1.3.10 als Bausteine. Dazu Nachbesserungen zu AP21/AP22: Graph ohne Pfeile aus Anhängen (F56), Zielarten «Vorlagentext» und «Statustext». Umgesetzt 8.11., nicht committet; IDs zur Durchsicht in [bausteine-1-3.md](bausteine-1-3.md) (E50) | E29, E30, E47, E50 |
-| AP24 | Steckbrief eCH-0003 als Daten und Seite (Option A, `ausbau.md`) | E47, F47 |
+| AP24 | Steckbrief eCH-0003 als Daten und Seite (Option A, `ausbau.md`). Umgesetzt 8.11., nicht committet; Texte und Auswahlen als Vorschlag zur Durchsicht (E51, Abschnitt 5.5) | E47, E51, F46, F47 |
 | AP25 | C: 1.3–1.4, falls Zeit (Abbildungen F10) | E47 |
 | AP26 | D: Kap. 2–5, falls Zeit (F26) | E47 |
 

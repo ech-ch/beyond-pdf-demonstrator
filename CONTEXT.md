@@ -121,7 +121,7 @@ Kapitel und Titel eines Bausteins im erzeugten Dokument einer bestimmten Version
 _Vermeiden_: Quelle (für die Fundstelle)
 
 **Steckbrief**:
-Raster mit Plandaten, Einordnung, Zusammenfassung und inhaltlicher Strukturierung eines Standards, entlang des Prozesses nachgeführt. Er gehört zur Ebene 0 und ist bisher ein Word-Dokument (offen: F47).
+Raster mit Plandaten, Einordnung, Zusammenfassung und inhaltlicher Strukturierung eines Standards, entlang des Prozesses nachgeführt. Er gehört zur Ebene 0 und ist bisher ein Word-Dokument. Im Demonstrator ist er als Daten geführt; was sich aus dem Standard ableiten lässt, wird erzeugt (E51). Welchen Stand des Rasters er verwendet, ist seine Raster-Fassung (z.B. «0.9»), analog zur Vorlage-Fassung.
 _Vermeiden_: Faktenblatt
 
 **Registry**:

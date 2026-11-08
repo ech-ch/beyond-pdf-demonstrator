@@ -1,0 +1,176 @@
+# Raster «eCH Steckbrief Standardisierungsinhalte», Fassung 0.9 (Entwurf der
+# Geschäftsstelle). Feldnamen und Auswahllisten stehen wörtlich wie im Raster,
+# auch wo die Schreibweise uneinheitlich ist; die Codes vergibt der
+# Demonstrator. Ins öffentliche Repo freigegeben durch die Projektleitung
+# (F46, 7.11.2026); Kürzel und Personen aus der Fusszeile gehören nicht hierher.
+#
+# Ein Steckbrief wählt seine Raster-Fassung im Feld `raster`
+# (z.B. ech-0003/v11.1.0/steckbrief.yml), so wie ein Standard seine
+# Vorlage-Fassung wählt (ADR 0005, E51). Ein Code, der hier fehlt, bricht den
+# Build ab (filters/ech_steckbrief.lua); tools/pruefe.py prüft dasselbe.
+#
+#   aufbau      Teile (Überschrift 1 im Raster) mit Abschnitten (Überschrift 2):
+#               `tabelle` = Felder als Zeilen, `text` = ein Textfeld,
+#               `gliederung` = inhaltliche Strukturierung
+#   auswahlen   je Feld die Zeilen des Rasters als Gruppen, je Gruppe die Werte;
+#               `frei: true` = Wert mit freiem Text («Weitere/Andere», «Modelle,
+#               wenn ja welche Typen»), der Text steht in der Sprachfassung
+#   de          Beschriftungen auf Deutsch
+
+fassung: "0.9"
+
+aufbau:
+  - teil: planung
+    abschnitte:
+      - abschnitt: kopf
+        tabelle: [fachgruppe, standard, aktualisiert, status, plandatum-oek, plandatum-publikation, standard-typ, inhaltselemente]
+      - abschnitt: einordnung
+        tabelle: [zielgruppe, verwaltungsebene, rollen, anwendungssituationen, referenzen-ech, projekte, externe-standards]
+  - teil: zusammenfassung-teil
+    abschnitte:
+      - abschnitt: zusammenfassung
+        text: zusammenfassung
+      - abschnitt: wen
+        text: wen
+      - abschnitt: warum
+        text: warum
+      - abschnitt: was
+        text: was
+      - abschnitt: erwartet
+        text: erwartet
+  - teil: strukturierung
+    abschnitte:
+      - abschnitt: gliederung
+        gliederung: true
+
+auswahlen:
+  standard-typ:
+    - werte:
+        - code: konzeptionell
+          de: "Konzeptionell"
+        - code: prozessual
+          de: "prozessual"
+        - code: technisch
+          de: "technisch"
+    - werte:
+        - code: semantisch
+          de: "Semantisch"
+        - code: daten
+          de: "Daten"
+        - code: schnittstelle
+          de: "Schnittstelle"
+  inhaltselemente:
+    - werte:
+        - code: fliesstexte
+          de: "Fliesstexte"
+        - code: abbildungen
+          de: "Abbildungen"
+        - code: modelle
+          de: "Modelle, wenn ja welche Typen"
+          frei: true
+  zielgruppe:
+    - werte:
+        - code: allgemein-wenig-fachwissen
+          de: "Allgemeine breite Zielgruppe mit wenig Fachwissen"
+    - werte:
+        - code: breit-entscheider
+          de: "Breite Zielgruppen mit Entscheidern"
+    - werte:
+        - code: breit-fachleute
+          de: "Breite Zielgruppe mit Fachleuten"
+    - werte:
+        - code: spezifisches-fachpublikum
+          de: "Spezifisches Fachpublikum"
+    - werte:
+        - code: weitere
+          de: "Weitere/Andere"
+          frei: true
+  verwaltungsebene:
+    - werte:
+        - code: bund
+          de: "Bund"
+        - code: kantone
+          de: "Kantone"
+        - code: staedte
+          de: "Städte"
+        - code: gemeinden
+          de: "Gemeinden"
+  rollen:
+    - de: "Verwaltungen"
+      werte:
+        - code: verwaltung-leitung
+          de: "Leitung"
+        - code: verwaltung-projektleitung
+          de: "Projektleitung"
+        - code: verwaltung-fachperson
+          de: "Fachperson"
+    - de: "Beratungsfirmen"
+      werte:
+        - code: beratung-management
+          de: "Management"
+        - code: beratung-berater
+          de: "Berater"
+    - de: "Softwareanbieter"
+      werte:
+        - code: software-management
+          de: "Management"
+        - code: software-produktmanager
+          de: "Produktmanager"
+        - code: software-entwickler
+          de: "Entwickler"
+        - code: software-sales
+          de: "Sales"
+    - werte:
+        - code: andere
+          de: "Andere"
+          frei: true
+  anwendungssituationen:
+    - werte:
+        - code: strategieplanung
+          de: "Strategieplanung"
+        - code: projektsetup
+          de: "Projektsetup"
+        - code: ausschreibung
+          de: "Ausschreibung"
+        - code: konzeption
+          de: "Konzeption"
+        - code: umsetzung-technische-loesung
+          de: "Umsetzung einer technischen Lösung"
+    - werte:
+        - code: weitere
+          de: "Weitere/Andere"
+          frei: true
+
+de:
+  titel: "eCH Steckbrief Standardisierungsinhalte"
+  teile:
+    planung: "Planung- und Steuerungsinformationen"
+    zusammenfassung-teil: "Zusammenfassung des Standardisierungsdokuments"
+    strukturierung: "Inhaltliche Strukturierung"
+  abschnitte:
+    kopf: "Kopf-/Plandaten"
+    einordnung: "Strukturierte Einordnung"
+    zusammenfassung: "Zusammenfassung"
+    wen: "Wen betrifft dieses Dokument"
+    warum: "Warum ist dieses Dokument notwendig"
+    was: "Was regelt dieses Dokument auf welche Weise"
+    erwartet: "Was wird von den Betroffenen erwünscht/erwartet"
+  felder:
+    fachgruppe: "Fachgruppe"
+    standard: "Standard"
+    aktualisiert: "Letzte Update-Datum Faktenblatt"
+    status: "Status"
+    plandatum-oek: "Plandatum Start öK"
+    plandatum-publikation: "Plandatum Publikation"
+    standard-typ: "Standard-Typ"
+    inhaltselemente: "Hauptsächliche Inhaltselemente"
+    zielgruppe: "Zielgruppe"
+    verwaltungsebene: "Adressierte Verwaltungsebene"
+    rollen: "Rollen der Nutzer"
+    anwendungssituationen: "Anwendungssituationen"
+    referenzen-ech: "Referenzen auf andere eCH-Standards"
+    projekte: "Bezüge zu laufenden Projekten"
+    externe-standards: "Bezüge zu externen Standards"
+    gliederung: "Kapitel / «Building Blocks»"
+  ja: "Ja"
+  nein: "Nein"

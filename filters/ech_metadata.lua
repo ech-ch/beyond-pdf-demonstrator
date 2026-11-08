@@ -9,6 +9,7 @@
 -- assets/title-metadata.html. Auf der Website stellt der Filter dem Titel die
 -- eCH-Nummer voran («eCH-0003 – Leitfaden …», wie im Original) und macht aus
 -- der Zusammenfassung ein unnummeriertes, nicht gelistetes erstes Kapitel.
+-- Den Titel ohne Nummer behält er in `ech-titel` (für die Registry, AP24).
 -- Das Deckblatt im Word erzeugt ein eigener Filter (E17, AP6).
 
 local common = dofile(quarto.utils.resolve_path("ech_common.lua"))
@@ -24,6 +25,7 @@ function Pandoc(doc)
   end
   meta["ech-rows"] = rows
   if quarto.doc.is_format("html") and display.number and meta.title then
+    meta["ech-titel"] = meta.title
     local title = pandoc.Inlines({})
     title:extend(display.number)
     title:extend(pandoc.Inlines(pandoc.Str(" – ")))

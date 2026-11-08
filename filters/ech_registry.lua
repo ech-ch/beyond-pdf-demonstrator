@@ -34,9 +34,21 @@
 -- geschriebene Registry, keine zweite Ableitung. Die Übersicht braucht deshalb
 -- die Registry aus demselben Lauf: In der render-Liste steht die Standardseite
 -- vor ihr (prüft tools/pruefe.py); fehlt die Datei, bricht der Build ab.
+--
+-- Gliederung (AP24, E51): `gliederung` nennt jede Überschrift des Gerüsts mit
+-- Nummer, Titel, Ebene, Anker und Inhalt: baustein (mit `baustein`),
+-- platzhalter, vorlagentext, statustext, daten (Anhang A, `feedback-id`) oder
+-- ohne_text (Kapitel ohne eigenen Text). Anker ohne Baustein können
+-- provisorisch sein (E05). Der Titel des Standards steht unter `standard`.
+--
+-- Steckbrief (AP24, E51; filters/ech_steckbrief.lua): Die Seite mit dem
+-- Metadatum `steckbrief-aus` liest die Registry wie die Übersichtsseite, dazu
+-- steckbrief.yml im Ordner der Version und das Raster, und schreibt
+-- steckbrief.json neben bausteine.json.
 
 local common = dofile(quarto.utils.resolve_path("ech_common.lua"))
 local beziehungen = dofile(quarto.utils.resolve_path("ech_beziehungen.lua"))
+local steckbrief = dofile(quarto.utils.resolve_path("ech_steckbrief.lua"))
 local stringify = pandoc.utils.stringify
 
 -- JSON mit fester Reihenfolge der Schlüssel ----------------------------------
@@ -166,21 +178,28 @@ local function ohne_punkte(pfad)
   return pandoc.path.join(teile)
 end
 
--- Übersichtsseite: Graph in den Mermaid-Block, Tabelle in #beziehungen-tabelle
-local function uebersicht(doc)
-  local quelle = stringify(doc.meta["beziehungen-aus"])
+-- Registry derselben `quarto render` aus dem Ausgabeordner; `schluessel` ist
+-- das Metadatum mit dem Pfad relativ zur Seite (beziehungen-aus, steckbrief-aus).
+-- Gibt Registry, Text und Pfad zurück.
+local function lies_registry(doc, schluessel)
+  local quelle = stringify(doc.meta[schluessel])
   local projekt = quarto.project.directory
   local ausgabe = quarto.project.output_directory or pandoc.path.join({ projekt, "_site" })
   local seite = pandoc.path.directory(pandoc.path.make_relative(quarto.doc.input_file, projekt))
   local pfad = pandoc.path.join({ ausgabe, ohne_punkte(pandoc.path.join({ seite, quelle })) })
   local datei = io.open(pfad, "rb")
   if not datei then
-    common.abbruch("Beziehungen: " .. pfad .. " fehlt. Die Standardseite muss in derselben `quarto render` "
+    common.abbruch("Registry: " .. pfad .. " fehlt. Die Standardseite muss in derselben `quarto render` "
       .. "vor dieser Seite stehen (render-Liste in _quarto.yml).")
   end
   local text = datei:read("a")
   datei:close()
-  local registry = pandoc.json.decode(text, false)
+  return pandoc.json.decode(text, false), text, pfad
+end
+
+-- Übersichtsseite: Graph in den Mermaid-Block, Tabelle in #beziehungen-tabelle
+local function uebersicht(doc)
+  local registry, text = lies_registry(doc, "beziehungen-aus")
   local index = beziehungen.index(registry)
   local graph, verwendet = beziehungen.graph(registry, index)
   local tabelle = beziehungen.tabelle(registry, index, "index.html", pandoc.utils.sha1(text))
@@ -216,11 +235,49 @@ local function uebersicht(doc)
   return doc
 end
 
+-- Steckbrief-Seite: Inhalt in #steckbrief, Untertitel, steckbrief.json
+local function steckbrief_seite(doc)
+  local registry, text, pfad = lies_registry(doc, "steckbrief-aus")
+  -- steckbrief.yml liegt im Ordner der Version, wie referenzen.yml
+  local daten_pfad = pandoc.path.join({ pandoc.path.directory(quarto.doc.input_file), "..", "steckbrief.yml" })
+  local daten = common.lies_yaml(daten_pfad)
+  local fassung = daten.raster and stringify(daten.raster) or ""
+  if not fassung:match("^[0-9][0-9.]*$") then common.abbruch("Steckbrief: `raster` fehlt oder ist ungültig in " .. daten_pfad) end
+  local raster_pfad = quarto.utils.resolve_path("../vorlage/steckbrief/" .. fassung .. "/raster.yml")
+  local probe = io.open(raster_pfad, "r")
+  if not probe then common.abbruch("Steckbrief: Raster-Fassung " .. fassung .. " fehlt: " .. raster_pfad) end
+  probe:close()
+  local deckblatt = common.vorlage(doc.meta, "deckblatt")
+  local bloecke, json, untertitel = steckbrief.erzeuge({
+    meta = doc.meta, daten = daten, raster = common.lies_yaml(raster_pfad), deckblatt = deckblatt,
+    registry = registry, referenzen = common.referenzen(), pruefsumme = pandoc.utils.sha1(text),
+    json = { obj = obj, liste = liste, NULL = NULL }, basis = "index.html",
+  })
+  local ok = false
+  doc.blocks = doc.blocks:walk({
+    Div = function(d)
+      if d.identifier == "steckbrief" then
+        d.content = bloecke
+        ok = true
+        return d
+      end
+    end,
+  })
+  if not ok then common.abbruch("Steckbrief: Div #steckbrief nicht gefunden") end
+  doc.meta.subtitle = pandoc.Inlines(untertitel)
+  local ziel = pandoc.path.join({ pandoc.path.directory(pfad), "steckbrief.json" })
+  local datei = assert(io.open(ziel, "wb"), "Steckbrief: kann nicht schreiben: " .. ziel)
+  datei:write(kodiere(json, "") .. "\n")
+  datei:close()
+  return doc
+end
+
 -- Dokument ------------------------------------------------------------------
 
 function Pandoc(doc)
   if not quarto.doc.is_format("html") then return nil end
   if doc.meta["beziehungen-aus"] then return uebersicht(doc) end
+  if doc.meta["steckbrief-aus"] then return steckbrief_seite(doc) end
   if not common.standardseite(doc.meta) then return nil end
   local meta = doc.meta
   local nummer = stringify(meta.ech.nummer)
@@ -245,9 +302,10 @@ function Pandoc(doc)
   -- Überschriften mit erzeugtem Inhalt aus der Vorlage-Fassung (ADR 0005):
   -- Vorlagentext (Attribut aus ech_shortcodes.lua) oder Statustext (Span
   -- .statustext im Abschnitt darunter, 1.1)
-  local vorlage_inhalt, abschnitt = {}, nil
+  local vorlage_inhalt, abschnitt, kopfzeilen = {}, nil, {}
   for _, b in ipairs(doc.blocks) do
     if b.t == "Header" then
+      table.insert(kopfzeilen, b)
       abschnitt = b.identifier ~= "" and b.identifier or nil
       if abschnitt and b.attributes["vorlagentext"] then vorlage_inhalt[abschnitt] = "vorlagentext" end
     elseif abschnitt then
@@ -469,6 +527,21 @@ function Pandoc(doc)
     }))
   end
 
+  -- Gliederung: jede Überschrift mit ihrem Inhalt (AP24, E51); ohne die nicht
+  -- gelistete Zusammenfassung, die ech_metadata.lua auf der Website voranstellt
+  local gliederung = {}
+  for _, h in ipairs(kopfzeilen) do
+    if h.classes:includes("unlisted") then goto weiter end
+    local f = fundstelle(h)
+    local bb = h.attributes["bb"]
+    local inhalt = bb and "baustein" or vorlage_inhalt[h.identifier]
+      or (h.classes:includes("platzhalter") and "platzhalter")
+      or (h.attributes["feedback-id"] and "daten") or "ohne_text"
+    table.insert(gliederung, obj({ { "section", f.section or NULL }, { "title", f.title }, { "ebene", h.level },
+      { "anker", h.identifier }, { "inhalt", inhalt }, { "baustein", bb } }))
+    ::weiter::
+  end
+
   local sha = os.getenv("GITHUB_SHA") or ""
   local stufen_json = {}
   for _, s in ipairs(stufen) do table.insert(stufen_json, s) end
@@ -479,6 +552,8 @@ function Pandoc(doc)
       { "id", standard },
       { "nummer", nummer },
       { "version", stringify(meta.ech.version) },
+      -- ohne die Nummer, die ech_metadata.lua auf der Website voranstellt
+      { "titel", (meta["ech-titel"] or meta.title) and stringify(meta["ech-titel"] or meta.title) or NULL },
       { "sprache", meta.lang and stringify(meta.lang) or NULL },
       { "status", meta.ech.status and stringify(meta.ech.status) or NULL },
       { "vorlage", common.vorlage_fassung(meta) },
@@ -488,6 +563,7 @@ function Pandoc(doc)
     }) },
     { "anzahl", obj({ { "grob", anzahl.grob }, { "fein", anzahl.fein } }) },
     { "bausteine", liste(bausteine) },
+    { "gliederung", liste(gliederung) },
   })
 
   local ordner, pfad = ausgabe_pfad()

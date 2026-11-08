@@ -23,7 +23,10 @@ Quelle (Gerüst und Baustein-Dateien):
   8. Hinweis bei zeichengleichen Klauseln ohne Mehrfachverwendung (E27)
   9. Label `bb:<kurzname>` höchstens 50 Zeichen (Grenze von GitHub, E38)
  10. Übersicht «Beziehungen» steht in der render-Liste nach der Standardseite,
-     deren Registry sie liest (AP21)
+     deren Registry sie liest (AP21), ebenso der Steckbrief (AP24)
+ 11. Steckbrief (AP24, E51): Raster-Fassung vorhanden, jede Auswahl in
+     steckbrief.yml nur mit Codes aus dem Vokabular des Rasters, jede Auswahl
+     des Rasters belegt
 
 Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
   1. Zählung der Kennzeichnungen (D4)
@@ -53,6 +56,13 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
      Links
   8. interne Links aller Seiten unter _site/: Zieldatei und Anker vorhanden,
      z. B. kein Link auf eine .qmd-Quelle (404 auf GitHub Pages)
+  9. Steckbrief (AP24, E51): aus der aktuellen Registry erzeugt (Prüfsumme),
+     Auswahlen wie in steckbrief.yml, Referenzen auf eCH-Standards wie in der
+     Registry, externe Standards wie Anhang A ohne eCH-Standards,
+     Strukturierung deckt die Gliederung der Registry ab (jeder grobe Baustein
+     einmal, Zahl der feinen Bausteine), Kennzeichnung «Vorschlag, nicht
+     geprüft» genau solange `vorschlag: true`; die Gliederung der Registry
+     entspricht dem Inhaltsverzeichnis des Originals
 """
 import argparse
 import difflib
@@ -330,16 +340,182 @@ def pruefe_quelle(std: dict, b: Befunde) -> None:
     fein = sum(1 for x in bausteine if x.art == "fein")
     print(f"{std['name']}: {len(dateien)} Baustein-Dateien, {grob} grobe und {fein} feine Bausteine in der Quelle")
 
-    # 10. Reihenfolge: Übersicht «Beziehungen» nach der Standardseite
-    if "beziehungen_quelle" in std:
+    # 10. Reihenfolge: Übersicht «Beziehungen» und Steckbrief nach der Standardseite
+    for schluessel in ("beziehungen_quelle", "steckbrief_quelle"):
+        if schluessel not in std:
+            continue
         konfig = WURZEL / "_quarto.yml"
         block = re.search(r"^  render:\n((?:    .*\n|\s*\n)+)", lies(konfig), re.M)
         liste = re.findall(r"^    -\s*(\S+)", block[1], re.M) if block else []
-        seite, uebersicht = f"{std['quelle']}/index.qmd", std["beziehungen_quelle"]
+        seite, uebersicht = f"{std['quelle']}/index.qmd", std[schluessel]
         if seite not in liste or uebersicht not in liste:
-            b.fehler_(f"render-Liste: {seite} und {uebersicht} müssen beide aufgeführt sein (AP21)", konfig)
+            b.fehler_(f"render-Liste: {seite} und {uebersicht} müssen beide aufgeführt sein (AP21, AP24)", konfig)
         elif liste.index(uebersicht) < liste.index(seite):
-            b.fehler_(f"render-Liste: {uebersicht} liest die Registry von {seite} und muss danach stehen (AP21)", konfig)
+            b.fehler_(f"render-Liste: {uebersicht} liest die Registry von {seite} und muss danach stehen (AP21, AP24)", konfig)
+
+    # 11. Steckbrief: Codes aus dem Vokabular der Raster-Fassung
+    if "steckbrief_daten" in std:
+        sb = lies_steckbrief(std, b)
+        if sb:
+            print(f"Steckbrief: Raster {sb['raster']}, {sum(len(v) for v in sb['auswahl'].values())} Codes "
+                  f"in {len(sb['auswahl'])} Auswahlen, vorschlag: {str(sb['vorschlag']).lower()}")
+
+
+def lies_steckbrief(std: dict, b: Befunde) -> dict | None:
+    """Angaben aus steckbrief.yml und Vokabular des Rasters (ohne YAML-Bibliothek,
+    die Dateien haben einen festen, einfachen Aufbau). Meldet ungültige Codes."""
+    pfad = WURZEL / std["steckbrief_daten"]
+    if not pfad.exists():
+        b.fehler_(f"Steckbrief: {rel(pfad)} fehlt")
+        return None
+    t = lies(pfad)
+    raster = re.search(r'^raster:\s*"([^"]+)"\s*(?:#.*)?$', t, re.M)
+    vorschlag = re.search(r"^vorschlag:\s*(true|false)\s*(?:#.*)?$", t, re.M)
+    block = re.search(r"^auswahl:\n((?:  .*\n?)+)", t, re.M)
+    if not raster or not vorschlag or not block:
+        b.fehler_("Steckbrief: `raster`, `vorschlag` oder `auswahl` fehlt oder hat eine unerwartete Form", pfad)
+        return None
+    auswahl = {m[1]: [c.strip() for c in m[2].split(",") if c.strip()]
+               for m in re.finditer(r"^  ([a-z-]+):\s*\[([^\]]*)\]", block[1], re.M)}
+    rpfad = WURZEL / std["steckbrief_raster"] / raster[1] / "raster.yml"
+    if not rpfad.exists():
+        b.fehler_(f"Steckbrief: Raster-Fassung {raster[1]} fehlt ({rel(rpfad)})", pfad)
+        return None
+    vokabular: dict[str, list[str]] = {}
+    feld = None
+    im_block = False
+    for zeile in lies(rpfad).split("\n"):
+        if re.match(r"^auswahlen:\s*$", zeile):
+            im_block = True
+        elif re.match(r"^\S", zeile):
+            im_block = False
+        elif im_block and (m := re.match(r"^  ([a-z-]+):\s*$", zeile)):
+            feld = m[1]
+            vokabular[feld] = []
+        elif im_block and feld and (m := re.match(r"^\s+- code: ([a-z0-9-]+)\s*$", zeile)):
+            vokabular[feld].append(m[1])
+    for f, codes in auswahl.items():
+        if f not in vokabular:
+            b.fehler_(f"Steckbrief: «{f}» ist im Raster {raster[1]} keine Auswahl", pfad)
+            continue
+        for c in codes:
+            if c not in vokabular[f]:
+                b.fehler_(f"Steckbrief: Code «{c}» steht nicht im Vokabular «{f}» des Rasters {raster[1]} "
+                          f"(erlaubt: {', '.join(vokabular[f])})", pfad)
+    for f in sorted(set(vokabular) - set(auswahl)):
+        b.fehler_(f"Steckbrief: Auswahl «{f}» fehlt (leere Liste mit Begründung möglich)", pfad)
+    return {"raster": raster[1], "vorschlag": vorschlag[1] == "true", "auswahl": auswahl, "vokabular": vokabular}
+
+
+def pruefe_steckbrief(std: dict, registry_pfad: Path, b: Befunde) -> None:
+    sb = lies_steckbrief(std, b)
+    seite, jpfad = WURZEL / std["steckbrief"], WURZEL / std["steckbrief_json"]
+    for p in (seite, jpfad):
+        if not p.exists():
+            b.fehler_(f"Steckbrief fehlt: {rel(p)}")
+            return
+    try:
+        roh = registry_pfad.read_bytes()
+        registry = json.loads(roh.decode("utf-8"))
+        sj = json.loads(jpfad.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as fehler:
+        b.fehler_(f"Steckbrief: JSON nicht lesbar: {fehler}", jpfad)
+        return
+    if sj.get("registry_sha1") != hashlib.sha1(roh).hexdigest():
+        b.fehler_("Steckbrief: erzeugt aus einer anderen bausteine.json als der aktuellen (Render-Reihenfolge?)", jpfad)
+    t = lies(seite)
+    haupt = t[t.find("<main"):t.find("</main>")]
+    zeilen = {m[1]: m[0] for m in re.finditer(r'<tr data-feld="([^"]+)" data-herkunft="[^"]+">.*?</tr>', haupt, re.S)}
+    herkunft = dict(re.findall(r'<tr data-feld="([^"]+)" data-herkunft="([^"]+)">', haupt))
+
+    # Auswahlen wie in steckbrief.yml
+    if sb:
+        if sj.get("vorschlag") != sb["vorschlag"]:
+            b.fehler_(f"Steckbrief: vorschlag {sj.get('vorschlag')} im JSON, {sb['vorschlag']} in steckbrief.yml", jpfad)
+        for f, codes in sb["auswahl"].items():
+            z = zeilen.get(f, "")
+            ist = re.findall(r'data-code="([^"]+)" data-gewaehlt="ja"', z)
+            alle = re.findall(r'data-code="([^"]+)"', z)
+            if sorted(ist) != sorted(codes):
+                b.fehler_(f"Steckbrief: Auswahl «{f}» zeigt {ist}, steckbrief.yml hat {codes}", seite)
+            if alle != sb["vokabular"].get(f, []):
+                b.fehler_(f"Steckbrief: Auswahl «{f}» zeigt nicht alle Werte des Rasters in dessen Reihenfolge", seite)
+
+    # Vorschlag gekennzeichnet, solange `vorschlag: true`
+    marken = re.findall(r'<p class="steckbrief-vorschlag" data-vorschlag="([^"]+)">', haupt)
+    mit_vorschlag = [ab["abschnitt"] for ab in sj.get("abschnitte", [])
+                     if any(f.get("herkunft") == "vorschlag" for f in ab.get("felder", []))]
+    if sb and sb["vorschlag"]:
+        if not mit_vorschlag or sorted(marken) != sorted(mit_vorschlag):
+            b.fehler_(f"Steckbrief: Kennzeichnung «Vorschlag» bei {sorted(marken)}, erwartet {sorted(mit_vorschlag)}", seite)
+        for f, h in herkunft.items():
+            if f in (sb["auswahl"] if sb else {}) and h != "vorschlag":
+                b.fehler_(f"Steckbrief: Auswahl «{f}» nicht als Vorschlag gekennzeichnet", seite)
+    elif marken or "vorschlag" in herkunft.values() or mit_vorschlag:
+        b.fehler_("Steckbrief: Kennzeichnung «Vorschlag», obwohl steckbrief.yml `vorschlag: false` hat", seite)
+
+    # Referenzen auf eCH-Standards = Ziele der Art «standard» in der Registry
+    soll = sorted({r["target"] for e in registry["bausteine"] for r in e["relationships"]
+                   if r["type"] == "refers_to" and r["target_kind"] == "standard"})
+    ist = sorted(re.findall(r'<li data-standard="([^"]+)">', zeilen.get("referenzen-ech", "")))
+    if ist != soll or herkunft.get("referenzen-ech") != "registry":
+        b.fehler_(f"Steckbrief: Referenzen auf eCH-Standards {ist}, Registry {soll}", seite)
+
+    # Bezüge zu externen Standards = Anhang A ohne eCH-Standards
+    alle_ref = re.findall(r"^\s*-\s*schluessel:\s*(\S+)\s*$", lies(WURZEL / std["referenzen"]), re.M)
+    soll = [k for k in alle_ref if not k.startswith("eCH-")]
+    ist = re.findall(r'<li data-referenz="([^"]+)">', zeilen.get("externe-standards", ""))
+    if ist != soll or herkunft.get("externe-standards") != "anhang-a":
+        b.fehler_(f"Steckbrief: Bezüge zu externen Standards {ist}, Anhang A ohne eCH-Standards {soll}", seite)
+
+    # Strukturierung deckt die Gliederung ab
+    gliederung = registry.get("gliederung", [])
+    feine: dict[str, int] = {}
+    for e in registry["bausteine"]:
+        if e["granularitaet"] == "fein":
+            for r in e["relationships"]:
+                if r["type"] == "is_part_of":
+                    feine[r["target"]] = feine.get(r["target"], 0) + 1
+    tab = re.search(r'<table class="table table-sm steckbrief-gliederung" data-registry-sha1="([0-9a-f]+)">(.*?)</table>', haupt, re.S)
+    if not tab or tab[1] != hashlib.sha1(roh).hexdigest():
+        b.fehler_("Steckbrief: Strukturierung fehlt oder ist aus einer anderen Registry erzeugt", seite)
+        return
+    reihen = [(m[1], m[2], m[3]) for m in re.finditer(
+        r'<tr class="ebene-\d" data-anker="([^"]+)" data-stand="([^"]+)"(?: data-baustein="([^"]+)" data-feine="\d+")?>', tab[2])]
+    feine_ist = dict(re.findall(r'data-baustein="([^"]+)" data-feine="(\d+)"', tab[2]))
+    grobe = [e["id"] for e in registry["bausteine"] if e["granularitaet"] == "grob"]
+    gezeigt = [r[2] for r in reihen if r[2]]
+    if sorted(gezeigt) != sorted(grobe):
+        b.fehler_(f"Steckbrief: Strukturierung zeigt {len(gezeigt)} grobe Bausteine, Registry {len(grobe)}", seite)
+    for bb, n in feine_ist.items():
+        if int(n) != feine.get(bb, 0):
+            b.fehler_(f"Steckbrief: «{bb}» mit {n} feinen Bausteinen, Registry {feine.get(bb, 0)}", seite)
+    ueberfuehrt = {"baustein", "vorlagentext", "statustext", "daten"}
+    stand_soll = {"baustein": "baustein", "vorlagentext": "vorlagentext", "statustext": "statustext",
+                  "daten": "daten", "platzhalter": "nicht-ueberfuehrt", "ohne_text": "gliederung"}
+    i, k = 0, 0
+    while i < len(gliederung):
+        g = gliederung[i]
+        ende = i + 1
+        while ende < len(gliederung) and gliederung[ende]["ebene"] > g["ebene"]:
+            ende += 1
+        if k >= len(reihen) or reihen[k][0] != g["anker"]:
+            b.fehler_(f"Steckbrief: Strukturierung ohne Zeile für «{g.get('section')} {g['title']}»", seite)
+            break
+        stand = reihen[k][1]
+        teilbaum_leer = not any(x["inhalt"] in ueberfuehrt for x in gliederung[i:ende])
+        if stand == "nicht-ueberfuehrt" and teilbaum_leer:
+            i = ende   # ganzer Teilbaum in einer Zeile
+        elif stand != stand_soll.get(g["inhalt"]):
+            b.fehler_(f"Steckbrief: «{g.get('section')} {g['title']}» als {stand}, Registry {g['inhalt']}", seite)
+            i += 1
+        else:
+            i += 1
+        k += 1
+    if k != len(reihen):
+        b.fehler_(f"Steckbrief: Strukturierung mit {len(reihen) - k} Zeilen ausserhalb der Gliederung", seite)
+    print(f"Steckbrief: {len(zeilen)} Felder, {len(marken)}× «Vorschlag, nicht geprüft», "
+          f"Strukturierung {len(reihen)} Zeilen mit {len(gezeigt)} groben Bausteinen")
 
 
 # --- Ausgabe -----------------------------------------------------------------
@@ -644,8 +820,25 @@ def pruefe_registry(std: dict, t: str, b: Befunde) -> None:
                 b.fehler_(f"Registry: «{bb}» mit unbekannter Zielart «{art}»", pfad)
         if ("is_part_of", bb) in paare:
             b.fehler_(f"Registry: «{bb}» ist Teil von sich selbst", pfad)
+    # Gliederung (AP24): jede Überschrift des Inhaltsverzeichnisses, gleiche
+    # Nummer, Titel und Ebene; «ohne_text» genau dort, wo das Original keinen
+    # eigenen Text hat; Bausteine mit ihrer Überschrift
+    toc = [z.split("\t") for z in lies(WURZEL / std["inhaltsverzeichnis"]).split("\n")[1:] if z.strip()]
+    gliederung = registry.get("gliederung", [])
+    if len(gliederung) != len(toc):
+        b.fehler_(f"Registry: Gliederung mit {len(gliederung)} Überschriften, Inhaltsverzeichnis {len(toc)}", pfad)
+    for g, (ebene, nr, titel, _, eigen) in zip(gliederung, toc):
+        if (g.get("section"), g.get("title"), g.get("ebene")) != (nr, titel, int(ebene)):
+            b.fehler_(f"Registry: Gliederung «{g.get('section')} {g.get('title')}» (Ebene {g.get('ebene')}), "
+                      f"Inhaltsverzeichnis «{nr} {titel}» (Ebene {ebene})", pfad)
+        if (g.get("inhalt") == "ohne_text") != (eigen == "nein"):
+            b.fehler_(f"Registry: «{nr} {titel}» als {g.get('inhalt')}, eigener Text im Original: {eigen}", pfad)
+        if (g.get("inhalt") == "baustein") != bool(g.get("baustein")) or \
+                (g.get("baustein") and eintraege.get(g["baustein"], {}).get("granularitaet") != "grob"):
+            b.fehler_(f"Registry: Gliederung «{nr} {titel}» mit Baustein «{g.get('baustein')}», kein grober Baustein", pfad)
     print(f"Registry: {anzahl['grob']} grobe, {anzahl['fein']} feine Bausteine, "
-          f"{sum(len(e.get('relationships', [])) for e in eintraege.values())} Beziehungen")
+          f"{sum(len(e.get('relationships', [])) for e in eintraege.values())} Beziehungen, "
+          f"Gliederung {len(gliederung)} Überschriften")
 
 
 SICHTBAR = ("refers_to", "is_referenced_by", "depends_on", "is_required_by")   # ohne Einbettung
@@ -815,6 +1008,8 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
     pruefe_registry(std, html_roh, b)
     if "beziehungen" in std:
         pruefe_beziehungen(std, html_roh, html_pfad, docx_pfad, b)
+    if "steckbrief" in std:
+        pruefe_steckbrief(std, WURZEL / std["registry"], b)
 
     # 8. interne Links aller Seiten der Website
     seiten = sorted((WURZEL / "_site").rglob("*.html"))

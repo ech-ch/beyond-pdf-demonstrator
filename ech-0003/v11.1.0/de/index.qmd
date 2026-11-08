@@ -16,8 +16,8 @@ autoren:
   - "Mitarbeitende der Geschäftsstelle, Verein eCH"
 format:
   html:
-    # Downloads auf der Standardseite (E18): Word, Original-PDF, Registry und die
-    # Übersicht der Beziehungen (AP21). Die
+    # Downloads auf der Standardseite (E18): Word, Original-PDF, Registry, die
+    # Übersicht der Beziehungen (AP21) und der Steckbrief (AP24). Die
     # automatischen Format-Links sind aus, sonst steht das Word doppelt da.
     # Quarto übernimmt `other-links` unverändert: Ziel ist die Ausgabe (.html),
     # nicht die Quelle (.qmd), sonst 404 auf GitHub Pages.
@@ -35,6 +35,9 @@ format:
       - text: Beziehungen (Übersicht)
         href: beziehungen.html
         icon: diagram-3
+      - text: Steckbrief
+        href: steckbrief.html
+        icon: card-text
   docx:
     output-file: DEMO_eCH-0003_V11.1.0_de.docx   # bewusst kein eCH-Dateiname (E18)
 ---

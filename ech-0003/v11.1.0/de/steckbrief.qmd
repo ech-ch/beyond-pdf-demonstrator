@@ -1,0 +1,39 @@
+---
+title: "Steckbrief"
+format: html
+number-sections: false
+# Steckbrief (AP24, E51): filters/ech_registry.lua setzt den Inhalt aus
+# ../steckbrief.yml (sprachneutral, im Ordner der Version wie referenzen.yml),
+# dem Raster (vorlage/steckbrief/<fassung>/raster.yml) und der Registry ein;
+# der Untertitel kommt aus der Registry. Die Standardseite muss deshalb in
+# derselben `quarto render` vorher gerendert werden (render-Liste in
+# _quarto.yml; prüft tools/pruefe.py). Nur Website, kein Word.
+steckbrief-aus: ../bausteine.json
+# Sprachabhängige Texte des Steckbriefs (wie Ebene 0 in der Kopfzeile der
+# Sprachfassung). Aus dem Text von eCH-0003 V11.1.0 abgeleitet; ob sie
+# geprüft sind, steuert `vorschlag` in ../steckbrief.yml.
+steckbrief-texte:
+  zusammenfassung: "eCH-0003 richtet sich an alle, die beim Verein eCH Anträge erarbeiten, prüfen und genehmigen: Antragstellende und Fachgruppen, Referentinnen und Referenten, den Expertenausschuss und die Geschäftsstelle. Der Standard beschreibt in Fliesstext und Abbildungen die Prozesse («Lebenszyklen») für Standards, Best Practices, Hilfsmittel und White Papers, mit Abläufen, Akteuren, Fristen und einheitlichen Beurteilungskriterien. Er kommt zur Anwendung, wenn ein Antrag erarbeitet, geprüft, konsultiert, genehmigt, publiziert oder überprüft wird, und bei späteren Änderungen wie Minor Change, Major Change oder Addendum. Grundlage sind die Statuten des Vereins eCH (Art. 40 Abs. 3); für Change und Releasemanagement verweist der Standard auf eCH-0150."
+  wen: "Alle Beteiligten am Standardisierungsprozess des Vereins eCH: Antragstellende und Fachgruppen, Referentinnen und Referenten, den Expertenausschuss, die Geschäftsstelle und den Vorstand. Mitglieder des Vereins eCH und Interessierte sind über die öffentliche Konsultation beteiligt."
+  warum: "Der Standard definiert gemäss den Statuten des Vereins eCH (Art. 40 Abs. 3) den Standardisierungsprozess. Festgelegte Abläufe, Akteure und Fristen sollen die Verbindlichkeit stärken; einheitliche Beurteilungskriterien sollen eine objektive Bewertung der eingereichten Dokumente ermöglichen."
+  was: "Er beschreibt die Prozessmodule, die alle Antragsformen ganz oder teilweise durchlaufen: von der Erarbeitung über Qualitätssicherung, öffentliche Konsultation und Genehmigung bis zu Publikation und Überprüfung. Für jede Antragsform legt er Antragstellende und Prozess fest, für das Fachgruppendokument die Publikation. Dazu regelt er das Formale: eCH-Nummer, zulässige Formate, Versionierung, Reifegrad, Bearbeitungsstatus, Änderungen sowie Voraussetzungen und Abhängigkeiten. Vorgaben sind als Richtlinie (MUSS, DARF NICHT) oder als Empfehlung (SOLLTE) gekennzeichnet."
+  erwartet: "Antragstellende verwenden die zur Antragsform passende und aktuelle Vorlage und durchlaufen die Prozessmodule ihrer Antragsform. Alle Beteiligten halten die Fristen ein und erfüllen die Richtlinien (MUSS, DARF NICHT); von einer Empfehlung (SOLLTE) weichen sie nur ab, wenn sie die Auswirkungen verstanden und sorgfältig abgewogen haben."
+  # Text zu «Weitere/Andere» und «Modelle» sowie Begründung einer leeren Auswahl
+  auswahl:
+    zielgruppe: "Beteiligte am Standardisierungsprozess des Vereins eCH: Antragstellende und Fachgruppen, Referentinnen und Referenten, Expertenausschuss, Geschäftsstelle und Vorstand; über die öffentliche Konsultation auch Mitglieder des Vereins eCH und Interessierte"
+    verwaltungsebene: "eCH-0003 regelt den Standardisierungsprozess des Vereins eCH und nennt keine Verwaltungsebene."
+    rollen: "Rollen im Standardisierungsprozess: Antragstellende, Fachgruppenleitung, Referentinnen und Referenten, Expertenausschuss, Geschäftsstelle, Vorstand"
+    anwendungssituationen: "Erarbeitung, Prüfung, öffentliche Konsultation, Genehmigung, Publikation und Überprüfung von Anträgen beim Verein eCH; Änderungen an publizierten Dokumenten (formale Änderung, Addendum, Minor Change, Major Change)"
+  nicht-zutreffend:
+    plandatum-oek: "Der Standard ist genehmigt und publiziert; seine öffentliche Konsultation ist abgeschlossen."
+    plandatum-publikation: "Der Standard ist genehmigt und publiziert."
+---
+
+::: {.callout-note appearance="simple"}
+**Vorschlag, kein offizieller Steckbrief.** Diese Seite folgt dem Raster «eCH Steckbrief Standardisierungsinhalte» (V0.9, Entwurf der Geschäftsstelle). Sie zeigt, wie ein Steckbrief als Daten des Standards aussehen könnte (E28). Was sich aus dem Standard ableiten lässt, ist erzeugt: Standard, Status und Daten aus den Metadaten, die Bezüge aus der Registry und aus Anhang A, die inhaltliche Strukturierung aus den Bausteinen. Die übrigen Angaben stehen in [steckbrief.yml](https://github.com/ech-ch/beyond-pdf-demonstrator/blob/main/ech-0003/v11.1.0/steckbrief.yml) und in der Kopfzeile dieser Seite.
+:::
+
+::: {#steckbrief}
+:::
+
+Quelle: [steckbrief.json](../steckbrief.json), vom Build erzeugt aus den Angaben, dem Raster und der Registry [bausteine.json](../bausteine.json).

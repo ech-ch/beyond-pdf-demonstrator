@@ -98,6 +98,9 @@ local function read_yaml(path)
   return yaml_cache[path]
 end
 
+-- YAML-Datei als Metadaten (Pandoc), zwischengespeichert
+M.lies_yaml = read_yaml
+
 -- Name der Vorlage-Fassung des Dokuments (Metadatum `vorlage`, ADR 0005).
 function M.vorlage_fassung(meta)
   local fassung = meta.vorlage and stringify(meta.vorlage) or ""
@@ -149,9 +152,10 @@ end
 
 -- Seite eines Standards (Text mit Bausteinen)? Die Übersichtsseite
 -- «Beziehungen» liegt im selben Ordner und erbt `ech` aus _metadata.yml; sie
--- trägt `beziehungen-aus` und ist keine Standardseite (AP21).
+-- trägt `beziehungen-aus` und ist keine Standardseite (AP21), ebenso der
+-- Steckbrief mit `steckbrief-aus` (AP24).
 function M.standardseite(meta)
-  return meta.ech ~= nil and meta["beziehungen-aus"] == nil
+  return meta.ech ~= nil and meta["beziehungen-aus"] == nil and meta["steckbrief-aus"] == nil
 end
 
 -- Gibt die Zeilen des Deckblatts zurück, oder nil ausserhalb einer Standardseite.

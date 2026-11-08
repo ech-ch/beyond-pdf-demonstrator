@@ -602,3 +602,118 @@ $grid-margin-width: 375px;
     margin: 0;
   }
 }
+
+// Steckbrief (AP24, E51; filters/ech_steckbrief.lua). Felder als Tabelle mit
+// Herkunft; Auswahlen zeigen alle Werte des Rasters, die gewählten
+// unterstrichen wie im Raster verlangt (für Screenreader mit «ausgewählt»).
+// Auf dem Handy stehen die Zellen untereinander, wie bei den Beziehungen.
+#quarto-content table.steckbrief-tabelle,
+#quarto-content table.steckbrief-gliederung {
+  table-layout: fixed;
+  width: 100%;
+  font-size: 0.875rem;
+  td,
+  th {
+    overflow-wrap: break-word;
+  }
+  ul {
+    margin: 0.2rem 0 0;
+    padding-left: 1.1rem;
+  }
+  caption {
+    caption-side: top;
+  }
+}
+#quarto-content table.steckbrief-tabelle {
+  // erste Spalte breit genug für «Anwendungssituationen» ohne Umbruch im Wort
+  thead th:nth-child(1) {
+    width: 27%;
+  }
+  thead th:nth-child(3) {
+    width: 19%;
+  }
+  tbody th {
+    font-weight: 600;
+    hyphens: auto;
+  }
+  td[data-label="Herkunft"] {
+    color: $ech-muted;
+  }
+  tr[data-herkunft="vorschlag"] td[data-label="Herkunft"] {
+    color: $ech-red;
+    font-weight: 600;
+  }
+}
+#quarto-content table.steckbrief-gliederung {
+  thead th:nth-child(2) {
+    width: 42%;
+  }
+  thead th:nth-child(3) {
+    width: 8rem;
+  }
+  tr.ebene-2 td:first-child {
+    padding-left: 1.2rem;
+  }
+  tr.ebene-3 td:first-child {
+    padding-left: 2.4rem;
+  }
+}
+#quarto-content .steckbrief-wert {
+  color: $ech-muted;
+  &.gewaehlt {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+#quarto-content .steckbrief-keine,
+#quarto-content .steckbrief-offen {
+  font-style: italic;
+}
+#quarto-content p.steckbrief-vorschlag {
+  border-left: 3px solid $ech-red;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.875rem;
+  background: $ech-stripe;
+}
+@media (max-width: 575.98px) {
+  #quarto-content table.steckbrief-tabelle,
+  #quarto-content table.steckbrief-gliederung {
+    &,
+    caption,
+    tbody,
+    tr,
+    td,
+    tbody th {
+      display: block;
+    }
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+    tr {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid $ech-stripe;
+    }
+    td,
+    tbody th {
+      border: none;
+      padding: 0.05rem 0;
+    }
+    td::before {
+      content: attr(data-label) ": ";
+      font-weight: 600;
+    }
+    td[data-label="Angabe"]::before {
+      content: none;
+    }
+    tr.ebene-2 td:first-child,
+    tr.ebene-3 td:first-child {
+      padding-left: 0;
+    }
+  }
+}

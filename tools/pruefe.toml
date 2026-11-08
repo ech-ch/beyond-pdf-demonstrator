@@ -18,6 +18,13 @@ registry = "_site/ech-0003/v11.1.0/bausteine.json"
 # muss deshalb in der render-Liste von _quarto.yml nach ihr stehen
 beziehungen_quelle = "ech-0003/v11.1.0/de/beziehungen.qmd"
 beziehungen = "_site/ech-0003/v11.1.0/de/beziehungen.html"
+# Steckbrief (AP24, E51): Angaben und Raster (Vokabular) in der Quelle; die
+# Seite liest die Registry wie «Beziehungen» und steht deshalb auch danach
+steckbrief_daten = "ech-0003/v11.1.0/steckbrief.yml"
+steckbrief_raster = "vorlage/steckbrief"            # <fassung>/raster.yml
+steckbrief_quelle = "ech-0003/v11.1.0/de/steckbrief.qmd"
+steckbrief = "_site/ech-0003/v11.1.0/de/steckbrief.html"
+steckbrief_json = "_site/ech-0003/v11.1.0/steckbrief.json"
 referenzen = "ech-0003/v11.1.0/referenzen.yml"
 # Ziel der Feedback-Links (filters/ech_feedback.lua)
 feedback_repo = "https://github.com/ech-ch/beyond-pdf-demonstrator"

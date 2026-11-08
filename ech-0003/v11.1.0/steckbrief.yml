@@ -1,0 +1,34 @@
+# Steckbrief von eCH-0003 V11.1.0, sprachneutral (AP24, E51; Option A in
+# docs/ausbau.md). Raster: vorlage/steckbrief/<raster>/raster.yml.
+#
+# Hier steht nur, was sich nicht ableiten lässt. Nicht hier (nichts doppelt):
+#   Standard, Status, Daten       ../_metadata.yml (Ebene 0), Titel der Sprachfassung
+#   Referenzen auf eCH-Standards  Registry bausteine.json (Ziele der Art «standard»)
+#   Bezüge zu externen Standards  Anhang A (referenzen.yml), ohne eCH-Standards
+#   Inhaltliche Strukturierung    Registry (Gliederung und Bausteine)
+# Die Texte stehen in der Sprachfassung (de/steckbrief.qmd, Feld steckbrief-texte).
+# Die Seite erzeugt filters/ech_steckbrief.lua; tools/pruefe.py prüft die Codes.
+
+raster: "0.9"
+stand: "2026-11-08"          # Letzte Update-Datum Faktenblatt
+
+# true: Texte und Auswahlen sind ein Vorschlag, nicht geprüft (Kennzeichnung auf
+# der Seite). false: von der Projektleitung durchgesehen und freigegeben
+# (8.11.2026, E51 Nachtrag).
+vorschlag: false
+
+# Felder ohne Angabe: offen (noch zu ergänzen) oder nicht zutreffend (Grund in
+# der Sprachfassung). Nichts erfinden.
+offen: [fachgruppe, projekte]
+nicht-zutreffend: [plandatum-oek, plandatum-publikation]
+
+# Auswahlen: nur Codes aus dem Raster. Ein Wert mit freiem Text (weitere,
+# andere, modelle) braucht seinen Text in der Sprachfassung, eine leere Liste
+# eine Begründung.
+auswahl:
+  standard-typ: [prozessual]
+  inhaltselemente: [fliesstexte, abbildungen]
+  zielgruppe: [spezifisches-fachpublikum, weitere]
+  verwaltungsebene: []
+  rollen: [andere]
+  anwendungssituationen: [weitere]

@@ -39,7 +39,10 @@ Stand: 6.11.2026. Grundlage sind die Unterlagen und Anregungen aus dem Meeting v
 
 Die Aufwände sind Schätzungen.
 
-### A. Steckbrief als Daten des Standards (F47)
+### A. Steckbrief als Daten des Standards (F47) – umgesetzt mit AP24 (E51)
+
+**Stand 8.11.2026:** umgesetzt, siehe [Spezifikation 5.5](mvp-spezifikation.md) und E51. Die Seite heisst «Steckbrief»; die Texte und Auswahlen sind ein Vorschlag, bis die Projektleitung sie geprüft hat. Zusätzlich zur Beschreibung unten sind auch Bezüge zu externen Standards (Anhang A), Standard, Status und Daten erzeugt.
+
 
 - **Was:** Die Felder des Steckbriefs werden für eCH-0003 V11.1.0 als Daten im Repo erfasst (Ebene 0, z.B. `steckbrief.yml`) und auf der Website als Seite gezeigt. Die Auswahllisten werden Vokabulare.
 - **Erzeugt statt erfasst:**
@@ -48,7 +51,7 @@ Die Aufwände sind Schätzungen.
 - **KI-Vorschläge:** Die Texte können als Vorschlag generiert werden, wenn sie als Vorschlag gekennzeichnet und geprüft sind. E19 gilt nur für den Standardtext.
 - **Wert:** ausdrücklicher Wunsch. Ebene 0 wird sichtbar, und der Steckbrief ist die Brücke zu Metadaten wie DCAT und CSSV.
 - **Aufwand:** ca. 3 Stunden.
-- **Voraussetzung:** Wortlaut der Felder öffentlich zeigen (F46).
+- **Voraussetzung:** Wortlaut der Felder öffentlich zeigen (F46; für das Raster entschieden am 7.11.2026).
 
 ### B. eCH-0299 × eCH-0003: Synopse «Erarbeitung» (F48, F49, F50)
 

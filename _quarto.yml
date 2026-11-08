@@ -10,8 +10,9 @@ project:
   render:
     - index.qmd
     - ech-0003/v11.1.0/de/index.qmd
-    # Nach der Standardseite: liest deren bausteine.json (AP21, pruefe.py quelle)
+    # Nach der Standardseite: lesen deren bausteine.json (AP21, AP24, pruefe.py quelle)
     - ech-0003/v11.1.0/de/beziehungen.qmd
+    - ech-0003/v11.1.0/de/steckbrief.qmd
   resources:
     - original/eCH-0003_V11.1.0_d.pdf   # Linkziel der Platzhalter (E05)
 
@@ -42,6 +43,8 @@ website:
         href: ech-0003/v11.1.0/de/index.qmd
       - text: Beziehungen
         href: ech-0003/v11.1.0/de/beziehungen.qmd
+      - text: Steckbrief
+        href: ech-0003/v11.1.0/de/steckbrief.qmd
     right:
       - icon: github
         href: https://github.com/ech-ch/beyond-pdf-demonstrator
