@@ -18,14 +18,18 @@ Kapitel 7.10 von eCH-0003 verlangt: Soll das Zusammenspiel unterschiedlicher Sta
 Grenzen der Übersicht:
 
 - Sie zeigt nur Beziehungen, die der Build aus dem Text ableitet: Querverweise und Rückbezüge. Fachliche Abhängigkeiten, die nicht als Verweis im Text stehen, sind nicht erfasst.
-- Sie umfasst nur die Kapitel, die bisher in Bausteine überführt sind. Verweise auf Überschriften ohne Baustein sind als «noch kein Baustein» markiert.
+- Sie umfasst nur die Kapitel, die bisher in Bausteine überführt sind. Verweise auf Kapitel, die noch nicht überführt sind, sind als «noch kein Baustein» markiert.
+- Verweise auf 1.1 und die Kapitel 9 und 10 sind als «Statustext» bzw. «Vorlagentext» markiert. Dieser Inhalt wird aus der Vorlage erzeugt und wird nie ein Baustein.
 - Die Einbettung der feinen Bausteine in die groben ist nicht dargestellt; sie ergibt sich aus der Gliederung.
 
 Beim Standard selbst zeigt «Beziehungen (n)» unter einem Baustein dieselben Angaben für diesen Baustein.
 
 ## Graph
 
-Jedes Kästchen ist ein grober Baustein, also ein Kapitel oder Unterkapitel. Ein Pfeil fasst alle Beziehungen der Bausteine darin zusammen; eine Zahl am Pfeil nennt die Anzahl, wenn es mehr als eine ist. Rückbezüge innerhalb desselben groben Bausteins stehen nur in der Tabelle.
+Jedes Kästchen ist ein grober Baustein, also ein Kapitel oder Unterkapitel. Ein Pfeil fasst alle Beziehungen der Bausteine darin zusammen. Nur in der Tabelle stehen:
+
+- Rückbezüge innerhalb desselben groben Bausteins;
+- Verweise, die in einem Anhang beginnen, etwa im Glossar oder in der Änderungsübersicht. Dort wird nachgeschlagen, nicht geregelt. Verweise in einen Anhang hinein zeigt der Graph.
 
 ::: {.beziehungen-graph}
 ```{mermaid}
@@ -35,20 +39,16 @@ flowchart LR
 ```
 :::
 
-Legende:
+Legende (nur, was im Graph vorkommt):
 
-- Rechteck: grober Baustein
-- Rechteck gestrichelt: Überschrift ohne Baustein («noch kein Baustein»)
-- abgerundet: anderer Standard
-- schräg: Literatureintrag (Anhang A)
-- Pfeil durchgezogen: Querverweis; Pfeil gestrichelt: Rückbezug
-- Pfeil mit zwei Spitzen: Beziehungen in beide Richtungen
+::: {#beziehungen-legende}
+:::
 
 Die Kästchen sind nicht verlinkt. Die Links stehen in der Tabelle.
 
 ## Alle Beziehungen
 
-Eine Zeile je Beziehung, in Richtung des Verweises: «Von» verweist auf «Nach» oder bezieht sich darauf zurück. Die Fundstelle ist die Stelle von «Von» im Standard. Die Tabelle enthält dieselben Angaben wie der Graph und zusätzlich die Rückbezüge innerhalb eines groben Bausteins.
+Eine Zeile je Beziehung, in Richtung des Verweises: «Von» verweist auf «Nach» oder bezieht sich darauf zurück. Die Fundstelle ist die Stelle von «Von» im Standard. Die Tabelle enthält dieselben Angaben wie der Graph, dazu die Rückbezüge innerhalb eines groben Bausteins und die Verweise aus den Anhängen.
 
 ::: {#beziehungen-tabelle}
 :::

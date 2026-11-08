@@ -18,10 +18,14 @@
 --                      und is_required_by (W4). Selbstverweise und Verweise
 --                      auf einen umschliessenden Baustein fehlen (W5).
 --
--- Ziel eines Verweises (target_kind): baustein, noch_kein_baustein (Anker
--- einer Überschrift ohne Baustein, W2, mit `title`), literatur (Eintrag in
--- Anhang A) oder standard (W3, mit `title` und `url` wie im Text). Links auf
--- Seiten ausserhalb des Standards sind keine Querverweise.
+-- Ziel eines Verweises (target_kind): baustein; noch_kein_baustein (Anker
+-- einer Platzhalter-Überschrift, W2, mit `title`); vorlagentext oder
+-- statustext (Anker einer Überschrift mit erzeugtem Inhalt aus der
+-- Vorlage-Fassung, nie ein Baustein, ADR 0005, E50, mit `title`); literatur
+-- (Eintrag in Anhang A) oder standard (W3, mit `title` und `url` wie im
+-- Text). Ein Verweis auf eine andere Überschrift ohne Baustein bricht ab: Ihre
+-- Art ist erst zu entscheiden. Links auf Seiten ausserhalb des Standards sind
+-- keine Querverweise.
 --
 -- Darstellung (E47, AP21; filters/ech_beziehungen.lua): Auf der Standardseite
 -- erhält jeder Baustein mit Querverweis oder Rückbezug ein «Beziehungen (n)»
@@ -178,9 +182,9 @@ local function uebersicht(doc)
   datei:close()
   local registry = pandoc.json.decode(text, false)
   local index = beziehungen.index(registry)
-  local graph = beziehungen.graph(registry, index)
+  local graph, verwendet = beziehungen.graph(registry, index)
   local tabelle = beziehungen.tabelle(registry, index, "index.html", pandoc.utils.sha1(text))
-  local graph_ok, tabelle_ok = false, false
+  local graph_ok, tabelle_ok, legende_ok = false, false, false
   doc.blocks = doc.blocks:walk({
     RawBlock = function(b)
       if b.format == "html" and b.text:find('<pre class="mermaid mermaid-js"', 1, true) then
@@ -199,11 +203,16 @@ local function uebersicht(doc)
         d.content = pandoc.Blocks({ pandoc.RawBlock("html", tabelle) })
         tabelle_ok = true
         return d
+      elseif d.identifier == "beziehungen-legende" then
+        d.content = pandoc.Blocks({ pandoc.RawBlock("html", beziehungen.legende_html(verwendet)) })
+        legende_ok = true
+        return d
       end
     end,
   })
   if not graph_ok then common.abbruch("Beziehungen: Mermaid-Block für den Graph nicht gefunden") end
   if not tabelle_ok then common.abbruch("Beziehungen: Div #beziehungen-tabelle nicht gefunden") end
+  if not legende_ok then common.abbruch("Beziehungen: Div #beziehungen-legende nicht gefunden") end
   return doc
 end
 
@@ -233,6 +242,20 @@ function Pandoc(doc)
       if d.attributes["bb"] then bekannte[d.attributes["bb"]] = true end
     end,
   })
+  -- Überschriften mit erzeugtem Inhalt aus der Vorlage-Fassung (ADR 0005):
+  -- Vorlagentext (Attribut aus ech_shortcodes.lua) oder Statustext (Span
+  -- .statustext im Abschnitt darunter, 1.1)
+  local vorlage_inhalt, abschnitt = {}, nil
+  for _, b in ipairs(doc.blocks) do
+    if b.t == "Header" then
+      abschnitt = b.identifier ~= "" and b.identifier or nil
+      if abschnitt and b.attributes["vorlagentext"] then vorlage_inhalt[abschnitt] = "vorlagentext" end
+    elseif abschnitt then
+      b:walk({ Span = function(s)
+        if s.classes:includes("statustext") then vorlage_inhalt[abschnitt] = "statustext" end
+      end })
+    end
+  end
 
   local eintraege, reihenfolge, vorlagentexte = {}, {}, {}
 
@@ -293,8 +316,16 @@ function Pandoc(doc)
         elseif ueberschriften[anker] and ueberschriften[anker].attributes["bb"] then
           verweis(quelle, ueberschriften[anker].attributes["bb"], "baustein")
         elseif ueberschriften[anker] then
-          local f = fundstelle(ueberschriften[anker])
-          verweis(quelle, anker, "noch_kein_baustein", ((f.section and (f.section .. " ") or "") .. f.title))
+          local h = ueberschriften[anker]
+          local f = fundstelle(h)
+          local titel = (f.section and (f.section .. " ") or "") .. f.title
+          local art = vorlage_inhalt[anker]
+          if not art and h.classes:includes("platzhalter") then art = "noch_kein_baustein" end
+          if not art then
+            common.abbruch(string.format("Registry: «%s» verweist auf «%s» (%s), eine Überschrift ohne Baustein, "
+              .. "Platzhalter oder Vorlagentext. Die Zielart ist erst zu entscheiden (E50).", quelle, anker, titel))
+          end
+          verweis(quelle, anker, art, titel)
         end
       end,
     })

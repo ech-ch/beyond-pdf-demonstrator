@@ -8,6 +8,10 @@
 -- Sichtbar sind Querverweise (refers_to, W1–W3) und Rückbezüge (depends_on,
 -- E30), je in beiden Richtungen. Die Einbettung (is_part_of/has_part) zeigt die
 -- Gliederung; sie zählt nicht.
+--
+-- Ziele ohne Baustein tragen ihre Art als Hinweis (CONTEXT.md): «noch kein
+-- Baustein» nur für Platzhalter; «Vorlagentext» und «Statustext» für erzeugten
+-- Inhalt aus der Vorlage-Fassung, der nie ein Baustein wird (ADR 0005, E50).
 
 local M = {}
 
@@ -25,6 +29,15 @@ M.ARTEN = {
 }
 local ART = {}
 for _, a in ipairs(M.ARTEN) do ART[a.typ] = a end
+
+-- Hinweis hinter einem Ziel ohne Baustein, je target_kind
+M.ZIEL_HINWEIS = {
+  noch_kein_baustein = "noch kein Baustein",
+  vorlagentext = "Vorlagentext",
+  statustext = "Statustext",
+  literatur = "Literatur",
+  standard = "anderer Standard",
+}
 
 function M.esc(s)
   return (tostring(s):gsub("&", "&amp;"):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub('"', "&quot;"))
@@ -94,18 +107,18 @@ function M.ziel_html(r, index, basis)
     local e = index[r.target]
     if not e then abbruch("Beziehungen: Ziel «" .. r.target .. "» fehlt in der Registry") end
     return M.baustein_html(e, basis)
-  elseif art == "noch_kein_baustein" then
-    return string.format('<a href="%s#%s">%s</a> <span class="beziehung-hinweis">noch kein Baustein</span>',
-      esc(basis), esc(r.target), esc(wert(r.title) or r.target))
-  elseif art == "literatur" then
-    return string.format('<a href="%s#ref-%s">[%s]</a> <span class="beziehung-hinweis">Literatur</span>',
-      esc(basis), esc(r.target), esc(r.target))
-  elseif art == "standard" then
-    local url, titel = wert(r.url), wert(r.title) or r.target
-    local text = url and string.format('<a href="%s">%s</a>', esc(url), esc(titel)) or esc(titel)
-    return text .. ' <span class="beziehung-hinweis">anderer Standard</span>'
   end
-  abbruch("Beziehungen: unbekannte Zielart «" .. tostring(art) .. "»")
+  local hinweis = M.ZIEL_HINWEIS[art]
+  if not hinweis then abbruch("Beziehungen: unbekannte Zielart «" .. tostring(art) .. "»") end
+  hinweis = ' <span class="beziehung-hinweis">' .. esc(hinweis) .. "</span>"
+  if art == "noch_kein_baustein" or art == "vorlagentext" or art == "statustext" then
+    return string.format('<a href="%s#%s">%s</a>', esc(basis), esc(r.target), esc(wert(r.title) or r.target)) .. hinweis
+  elseif art == "literatur" then
+    return string.format('<a href="%s#ref-%s">[%s]</a>', esc(basis), esc(r.target), esc(r.target)) .. hinweis
+  else   -- standard
+    local url, titel = wert(r.url), wert(r.title) or r.target
+    return (url and string.format('<a href="%s">%s</a>', esc(url), esc(titel)) or esc(titel)) .. hinweis
+  end
 end
 
 -- «Beziehungen (n)» je Baustein, oder nil ohne Querverweis und Rückbezug
@@ -141,15 +154,51 @@ local function mermaid_text(s)
   return (s:gsub('"', "#quot;"))
 end
 
+-- Grober Baustein in einem Anhang («Anhang C» usw.)
+function M.im_anhang(e)
+  local nr = wert(e.source_reference[1].section)
+  return nr ~= nil and nr:match("^Anhang ") ~= nil
+end
+
+-- Legende: nur, was im Graph vorkommt (Schlüssel wie `verwendet` in M.graph)
+M.LEGENDE = {
+  { "baustein", "Rechteck: grober Baustein" },
+  { "nochkein", "Rechteck gestrichelt: Überschrift ohne Baustein («noch kein Baustein»)" },
+  { "vorlage", "Rechteck gepunktet: Vorlagentext oder Statustext (erzeugter Inhalt, nie ein Baustein)" },
+  { "standard", "abgerundet: anderer Standard" },
+  { "literatur", "schräg: Literatureintrag (Anhang A)" },
+  { "refers_to", "Pfeil durchgezogen: Querverweis" },
+  { "depends_on", "Pfeil gestrichelt: Rückbezug" },
+  { "doppelt", "Pfeil mit zwei Spitzen: Beziehungen in beide Richtungen" },
+  { "anzahl", "Zahl am Pfeil: Anzahl der Beziehungen, wenn es mehr als eine ist" },
+}
+
+function M.legende_html(verwendet)
+  local teile = { '<ul class="beziehungen-legende">' }
+  for _, l in ipairs(M.LEGENDE) do
+    if verwendet[l[1]] then
+      table.insert(teile, string.format('<li data-legende="%s">%s</li>', esc(l[1]), esc(l[2])))
+    end
+  end
+  table.insert(teile, "</ul>")
+  return table.concat(teile)
+end
+
 -- Graph auf Ebene der groben Bausteine (Mermaid). Kanten fassen die
 -- Vorwärtsbeziehungen der Bausteine je grobem Quell- und Zielbaustein zusammen;
--- Beziehungen innerhalb desselben groben Bausteins und die Einbettung fehlen.
+-- Beziehungen innerhalb desselben groben Bausteins und die Einbettung fehlen,
+-- ebenso Pfeile, die in einem Anhang beginnen (F56, Variante a): Glossar und
+-- Änderungsübersicht sind Nachschlagestellen. Sie stehen in der Tabelle.
+-- Pfeile in einen Anhang hinein bleiben (7.3 -> Anhang F).
+-- Gibt den Mermaid-Text und `verwendet` zurück (Knotenklassen und Pfeilarten
+-- im Bild, für die Legende).
 function M.graph(registry, index)
-  local knoten, knoten_liste, kanten, kanten_liste = {}, {}, {}, {}
+  local knoten, knoten_liste, kanten, kanten_liste, verwendet = {}, {}, {}, {}, {}
   local function knoten_von(schluessel, text, form, klasse)
     if not knoten[schluessel] then
       local id = "n" .. (#knoten_liste + 1)
       knoten[schluessel] = id
+      verwendet[klasse] = true
       local links, rechts = form:match("^(.-)%%s(.-)$")
       table.insert(knoten_liste, string.format('  %s%s"%s"%s:::%s', id, links, mermaid_text(text), rechts, klasse))
     end
@@ -161,6 +210,9 @@ function M.graph(registry, index)
   local function ziel_knoten(r)
     if r.target_kind == "noch_kein_baustein" then
       return knoten_von("anker:" .. r.target, (wert(r.title) or r.target) .. " (noch kein Baustein)", "[%s]", "nochkein")
+    elseif r.target_kind == "vorlagentext" or r.target_kind == "statustext" then
+      return knoten_von("anker:" .. r.target, (wert(r.title) or r.target) .. " (" .. M.ZIEL_HINWEIS[r.target_kind] .. ")",
+        "[%s]", "vorlage")
     elseif r.target_kind == "standard" then
       return knoten_von("standard:" .. r.target, r.target .. " (anderer Standard)", "([%s])", "standard")
     elseif r.target_kind == "literatur" then
@@ -176,7 +228,7 @@ function M.graph(registry, index)
         local ziele = r.target_kind == "baustein" and grobe(index[r.target]) or { false }
         for _, q in ipairs(grobe(e)) do
           for _, z in ipairs(ziele) do
-            if z ~= q then
+            if z ~= q and not M.im_anhang(index[q]) then
               local von = grob_knoten(q)
               local nach = z and grob_knoten(z) or ziel_knoten(r)
               local schluessel = von .. ">" .. nach .. ">" .. r.type
@@ -201,17 +253,26 @@ function M.graph(registry, index)
     local doppelt = gegen and gegen.anzahl == k.anzahl
     if not (doppelt and gegen.gezeichnet) then
       local pfeil = k.typ == "depends_on" and "-.->" or "-->"
-      if doppelt then pfeil = "<" .. pfeil end
-      local beschriftung = k.anzahl > 1 and ("|" .. k.anzahl .. "|") or ""
+      verwendet[k.typ] = true
+      if doppelt then
+        pfeil = "<" .. pfeil
+        verwendet.doppelt = true
+      end
+      local beschriftung = ""
+      if k.anzahl > 1 then
+        beschriftung = "|" .. k.anzahl .. "|"
+        verwendet.anzahl = true
+      end
       table.insert(zeilen, string.format("  %s %s%s %s", k.von, pfeil, beschriftung, k.nach))
       k.gezeichnet = true
     end
   end
   table.insert(zeilen, "  classDef baustein stroke-width: 1px")
   table.insert(zeilen, "  classDef nochkein stroke-dasharray: 5 4")
+  table.insert(zeilen, "  classDef vorlage stroke-dasharray: 1 3")
   table.insert(zeilen, "  classDef standard stroke-width: 2px")
   table.insert(zeilen, "  classDef literatur stroke-width: 1px")
-  return table.concat(zeilen, "\n"), #knoten_liste, #kanten_liste
+  return table.concat(zeilen, "\n"), verwendet
 end
 
 -- Tabelle aller Beziehungen in Vorwärtsrichtung (Textalternative zum Graph)

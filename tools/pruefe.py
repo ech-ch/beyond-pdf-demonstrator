@@ -37,8 +37,9 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
   4. auf der Website hat jeder Baustein genau einen Anker #<baustein-id> (R6)
   6. Registry bausteine.json (E09, E10, E27, E30): gültiges JSON, dieselben
      Bausteine wie die Quelle, Kennzeichnung und bezug wie in der Quelle, jedes
-     Ziel einer Beziehung vorhanden oder ausdrücklich «noch kein Baustein»,
-     Literatur oder Standard, Umkehrungen vollständig, keine Selbstverweise
+     Ziel einer Beziehung vorhanden oder ausdrücklich «noch kein Baustein»
+     (nur Platzhalter), Vorlagentext, Statustext (E50), Literatur oder
+     Standard, Umkehrungen vollständig, keine Selbstverweise
   5. Feedback (E37, E39): je Fundstelle genau ein Link, ein Link zum Standard
      als Ganzes, keine `labels=` in der URL, Wortlaut gleich wie der Rohtext;
      die Bedienelemente stehen im HTML und sind vom Textvergleich ausgenommen;
@@ -46,8 +47,12 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
   7. Beziehungen (E47, AP21): «Beziehungen (n)» genau bei den Bausteinen mit
      Querverweis oder Rückbezug in der Registry, je Fundstelle einmal, n und
      Einträge stimmen, vom Textvergleich ausgenommen, nicht im Word; die
-     Übersichtsseite hat einen Graph, je Vorwärtsbeziehung eine Tabellenzeile,
-     die Prüfsumme der aktuellen Registry und nur auflösbare Links
+     Übersichtsseite hat einen Graph ohne Pfeile aus Anhängen (F56), eine
+     Legende genau für das, was im Graph vorkommt, je Vorwärtsbeziehung eine
+     Tabellenzeile, die Prüfsumme der aktuellen Registry und nur auflösbare
+     Links
+  8. interne Links aller Seiten unter _site/: Zieldatei und Anker vorhanden,
+     z. B. kein Link auf eine .qmd-Quelle (404 auf GitHub Pages)
 """
 import argparse
 import difflib
@@ -580,6 +585,16 @@ def pruefe_registry(std: dict, t: str, b: Befunde) -> None:
     literatur = set(re.findall(r"^\s*-\s*schluessel:\s*(\S+)\s*$", lies(WURZEL / std["referenzen"]), re.M))
     ids_html = set(re.findall(r'\sid="([^"]+)"', t))
     bb_anker = set(re.findall(r'<section id="([^"]+)"[^>]*\sdata-bb="', t))
+    platzhalter = set(re.findall(r'<section id="([^"]+)" class="[^"]*\bplatzhalter\b', t))
+
+    def abschnitt(anker: str) -> str:
+        """HTML vom Abschnitt mit dem Anker bis zum nächsten Abschnitt."""
+        m = re.search(rf'<section id="{re.escape(anker)}"', t)
+        if not m:
+            return ""
+        ende = t.find("<section ", m.end())
+        return t[m.end():ende if ende >= 0 else len(t)]
+    vorlage_merkmal = {"vorlagentext": 'class="vorlagentext-hinweis', "statustext": '<span class="statustext">'}
     for bb, e in eintraege.items():
         x = soll.get(bb)
         if x is None:
@@ -614,6 +629,11 @@ def pruefe_registry(std: dict, t: str, b: Befunde) -> None:
             elif art == "noch_kein_baustein":
                 if ziel not in ids_html or ziel in bb_anker:
                     b.fehler_(f"Registry: «{bb}» verweist auf «{ziel}», der kein Anker einer Überschrift ohne Baustein ist (W2)", pfad)
+                elif ziel not in platzhalter:
+                    b.fehler_(f"Registry: «{bb}» verweist auf «{ziel}» als «noch kein Baustein», aber dort steht kein Platzhalter (E50)", pfad)
+            elif art in vorlage_merkmal:
+                if ziel not in ids_html or ziel in bb_anker or vorlage_merkmal[art] not in abschnitt(ziel):
+                    b.fehler_(f"Registry: «{bb}» verweist auf «{ziel}» als {art}, aber der Abschnitt enthält keinen (E50)", pfad)
             elif art == "literatur":
                 if ziel not in literatur:
                     b.fehler_(f"Registry: «{bb}» zitiert «{ziel}», das in referenzen.yml fehlt", pfad)
@@ -630,6 +650,19 @@ def pruefe_registry(std: dict, t: str, b: Befunde) -> None:
 
 SICHTBAR = ("refers_to", "is_referenced_by", "depends_on", "is_required_by")   # ohne Einbettung
 VORWAERTS = ("refers_to", "depends_on")
+KNOTEN = re.compile(r'^\s*(n\d+)\W*"([^"]*)"\W*:::(\w+)\s*$', re.M)
+PFEIL = re.compile(r"^\s*(n\d+) (<?)(-->|-\.->)(\|\d+\|)? (n\d+)\s*$", re.M)
+
+
+def grobe_von(e: dict, eintraege: dict) -> list[dict]:
+    """Grobe Bausteine, zu denen ein Baustein gehört (sich selbst, wenn er grob ist)."""
+    if e["granularitaet"] == "grob":
+        return [e]
+    return [eintraege[r["target"]] for r in e["relationships"] if r["type"] == "is_part_of" and r["target"] in eintraege]
+
+
+def im_anhang(e: dict) -> bool:
+    return (e["source_reference"][0].get("section") or "").startswith("Anhang ")
 DETAILS = re.compile(r'<details class="baustein-beziehungen" data-beziehungen="([^"]+)" data-anzahl="(\d+)">'
                      r"<summary>Beziehungen \((\d+)\)</summary>(.*?)</details>", re.S)
 
@@ -639,7 +672,7 @@ def links_ok(von: Path, ausschnitt: str, b: Befunde, was: str) -> int:
     n = 0
     for href in sorted(set(re.findall(r'<a [^>]*href="([^"]+)"', ausschnitt))):
         u = urllib.parse.urlsplit(html.unescape(href))
-        if u.scheme in ("http", "https", "mailto"):
+        if u.scheme or u.netloc:   # extern (http, mailto, …)
             continue
         n += 1
         ziel = (von.parent / urllib.parse.unquote(u.path)).resolve() if u.path else von
@@ -699,11 +732,31 @@ def pruefe_beziehungen(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: B
     graph_text = html.unescape(graph[1]) if graph else ""
     if not graph_text.lstrip().startswith("flowchart") or "-->" not in graph_text or "platzhalter" in graph_text:
         b.fehler_("Übersicht: Graph fehlt oder ist der Platzhalter", uebersicht)
+    alle = {e["id"]: e for e in registry["bausteine"]}
     for e in registry["bausteine"]:
+        if all(im_anhang(g) for g in grobe_von(e, alle)):
+            continue   # Verweise aus Anhängen nur in der Tabelle (F56)
         for r in e["relationships"]:
             if r["type"] in VORWAERTS and r["target_kind"] != "baustein" and r["target"] not in graph_text \
                     and (r.get("title") or "") not in graph_text:
                 b.fehler_(f"Übersicht: Ziel «{r['target']}» ({r['target_kind']}) fehlt im Graph", uebersicht)
+    knoten = {m[1]: (m[2], m[3]) for m in KNOTEN.finditer(graph_text)}
+    pfeile = list(PFEIL.finditer(graph_text))
+    verwendet = {k for _, k in knoten.values()}
+    for p in pfeile:
+        von, doppelt, art, anzahl, nach = p[1], p[2], p[3], p[4], p[5]
+        verwendet |= {"refers_to" if art == "-->" else "depends_on"} | ({"doppelt"} if doppelt else set()) \
+            | ({"anzahl"} if anzahl else set())
+        if von not in knoten or nach not in knoten:
+            b.fehler_(f"Übersicht: Pfeil «{p[0].strip()}» mit unbekanntem Knoten", uebersicht)
+        elif knoten[von][0].startswith("Anhang ") or (doppelt and knoten[nach][0].startswith("Anhang ")):
+            b.fehler_(f"Übersicht: Pfeil aus einem Anhang im Graph: {knoten[von][0]} (F56)", uebersicht)
+    n_pfeile = sum(1 for z in graph_text.split("\n") if re.search(r"--|-\.-", z))
+    if n_pfeile != len(pfeile):
+        b.fehler_(f"Übersicht: {n_pfeile} Pfeilzeilen im Graph, {len(pfeile)} lesbar", uebersicht)
+    legende = re.findall(r'<li data-legende="([^"]+)">', haupt)
+    if sorted(legende) != sorted(verwendet):
+        b.fehler_(f"Übersicht: Legende {sorted(legende)}, im Graph {sorted(verwendet)}", uebersicht)
     zeilen = re.findall(r'<tr data-von="([^"]+)" data-typ="([^"]+)" data-nach="([^"]+)">', haupt)
     vorwaerts = [(e["id"], r["type"], r["target"]) for e in registry["bausteine"] for r in e["relationships"]
                  if r["type"] in VORWAERTS]
@@ -715,7 +768,8 @@ def pruefe_beziehungen(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: B
         b.fehler_("Übersicht: erzeugt aus einer anderen bausteine.json als der aktuellen (Render-Reihenfolge?)", uebersicht)
     n_links += links_ok(uebersicht, haupt, b, "Übersicht")
     print(f"Beziehungen: {sum(ist.values())}× «Beziehungen (n)» bei {len(soll)} Bausteinen, "
-          f"{len(zeilen)} Tabellenzeilen, Graph {graph_text.count(chr(10)) + 1} Zeilen, {n_links} interne Links")
+          f"{len(zeilen)} Tabellenzeilen, Graph {len(knoten)} Knoten und {len(pfeile)} Pfeile, "
+          f"Legende {len(legende)} Einträge, {n_links} interne Links")
 
 
 def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
@@ -761,6 +815,11 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
     pruefe_registry(std, html_roh, b)
     if "beziehungen" in std:
         pruefe_beziehungen(std, html_roh, html_pfad, docx_pfad, b)
+
+    # 8. interne Links aller Seiten der Website
+    seiten = sorted((WURZEL / "_site").rglob("*.html"))
+    n_links = sum(links_ok(s, lies(s), b, f"HTML {rel(s)}") for s in seiten)
+    print(f"Interne Links: {n_links} auf {len(seiten)} Seiten geprüft")
 
     # 1.–2. je überführtem Kapitel
     for kap in std.get("kapitel", []):

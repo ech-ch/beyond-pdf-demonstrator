@@ -1,0 +1,12 @@
+--- Seite 12 ---
+1.3.9 Publikation
+
+[MUSS] Ist ein Antrag genehmigt, publiziert die Geschäftsstelle das Dokument auf der Webseite. Sind weitere Minor Changes (siehe Kapitel 7.8) von diesem Antrag betroffen (siehe Kapitel 1.3.4), werden diese ebenfalls publiziert.
+
+[MUSS] Dies erfolgt in den geforderten Sprachen, d. h. in Originalsprache (Deutsch oder Französisch, in Ausnahmefällen Englisch) sowie in der Übersetzung (Französisch oder Deutsch), falls die Originalsprache nicht Englisch ist.
+
+[MUSS] Die Originalsprache wird in den Dokumenten entsprechend gekennzeichnet.
+
+[SOLLTE] Für übersetzte Dokumente erfolgt vorgängig eine fachliche Qualitätsprüfung durch die Fachgruppe.
+
+Auf Wunsch der Antragstellenden (beziehungsweise nach Ermessen der Referentinnen und Referenten oder der Geschäftsstelle) können weitere Kommunikationsmassnahmen, wie der Versand von Newslettern oder von E-Mails an alle eCH-Mitglieder, eingeleitet werden.

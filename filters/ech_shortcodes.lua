@@ -20,7 +20,8 @@ local stringify = pandoc.utils.stringify
 
 return {
   ["statustext"] = function(args, kwargs, meta)
-    return common.statustext(meta)
+    -- Span .statustext: Daran erkennt die Registry 1.1 als Ziel «Statustext» (E50)
+    return pandoc.Inlines({ pandoc.Span(common.statustext(meta), pandoc.Attr("", { "statustext" })) })
   end,
 
   ["vorlagentext"] = function(args, kwargs, meta)

@@ -49,6 +49,9 @@ ZIEL = Path("original/text")
 # Rohtext-Dateien: (Datei, erste Überschrift, Überschrift danach (exklusiv)).
 KAPITEL = [
     ("kap01-1.1-bis-1.2.1.txt", "1", "1.3"),
+    ("kap01-1.3.4.txt", "1.3.4", "1.3.5"),
+    ("kap01-1.3.9.txt", "1.3.9", "1.3.10"),
+    ("kap01-1.3.10.txt", "1.3.10", "1.4"),
     ("kap06.txt", "6", "7"),
     ("kap07.txt", "7", "8"),
     ("kap08.txt", "8", "9"),

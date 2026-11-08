@@ -1,0 +1,26 @@
+--- Seite 10 ---
+1.3.4 Öffentliche Konsultation
+
+Bei der öffentlichen Konsultation werden die Anträge für Standards, Best Practices und White Paper während einer definierten Frist durch die interessierte Öffentlichkeit geprüft. Die Resultate der Prüfung sollten als Rückmeldungen formuliert werden.
+
+[MUSS] Die Freigabe zur öffentlichen Konsultation erfolgt durch die Referentinnen und Referenten.
+
+[SOLLTE] Detaillierte inhaltliche Rückmeldungen der Referentinnen und Referenten bzw. des Expertenausschusses, welche eine Publikation nicht verhindern, erfolgen im Rahmen der öffentlichen Konsultation.
+
+[MUSS] Nach der Freigabe wird die Entwurfsversion durch die Geschäftsstelle auf der Webseite publiziert.
+
+[MUSS] Zusätzlich wird jeweils eine aktuelle Übersicht der sich in Konsultation befindlichen Anträge auf der Newsübersicht publiziert.
+
+[SOLLTE] Erfolgen aufgrund eines Antrags in abhängigen oder anderen eCH-Dokumenten Minor Changes (siehe Kapitel 7.8), werden diese «im Paket» mit dem Antrag zur Verfügung gestellt.
+
+[MUSS] Erfolgen aufgrund eines Antrags in abhängigen oder anderen eCH-Dokumenten Major Changes (siehe Kapitel 7.9), sind diese in einem separaten Prozess als ordentliche Anträge zu behandeln.
+
+[MUSS] Die Mitglieder des Vereins eCH und Interessierte (Abonnenten News-Mail) werden per E-Mail zur Konsultation eingeladen. Die Antragstellenden können der Geschäftsstelle weitere Teilnehmende für die öffentliche Konsultation melden, welche dann ebenfalls per E-Mail zur Teilnahme eingeladen werden.
+
+[MUSS] Die öffentliche Konsultation wird in der Originalsprache und in der Übersetzung (Französisch oder Deutsch) durchgeführt. Ausnahmsweise können öffentliche Konsultationen bei Dokumenten, welche ausschliesslich in englischer Sprache vorliegen, einsprachig durchgeführt werden.
+
+[MUSS] Eine öffentliche Konsultation startet nach der Übersetzung und dauert mindestens 6 Wochen.
+
+Während der öffentlichen Konsultation kann die laufende Frist individuell nach einem begründeten Gesuch an die Geschäftsstelle verlängert werden.
+
+[MUSS] Die zuständige Fachgruppenleitung entscheidet abschliessend über die Gewährung einer individuellen Fristverlängerung im Umfang von maximal zwei Wochen.

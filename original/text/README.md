@@ -5,6 +5,9 @@ Text von eCH-0003 V11.1.0, aus [../eCH-0003_V11.1.0_d.pdf](../eCH-0003_V11.1.0_d
 | Datei | Inhalt | Seiten |
 |---|---|---|
 | `kap01-1.1-bis-1.2.1.txt` | 1 Einleitung, 1.1 Status, 1.2 Anwendungsgebiet, 1.2.1 Beschreibungsterminologie | 6 |
+| `kap01-1.3.4.txt` | 1.3.4 Öffentliche Konsultation | 10 |
+| `kap01-1.3.9.txt` | 1.3.9 Publikation | 12 |
+| `kap01-1.3.10.txt` | 1.3.10 Überprüfung | 12 |
 | `kap06.txt` | 6 Fachgruppendokument, 6.1–6.2 | 26 |
 | `kap07.txt` | 7 Formales, 7.1–7.10 | 27–32 |
 | `kap08.txt` | 8 Sicherheitsüberlegungen | 32 |
@@ -54,6 +57,12 @@ Fehler des Originals bleiben zeichengleich stehen, etwa «Die Nummer sind» (7.3
 - Kap. 6, Anhang B und D wurden mit dem Word-Original von V11.1.0 verglichen (nur gelesen, nicht im Repo).
 - Anhang D hat drei Spalten und keine zusammengefassten Zellen. «1.3.4 / 1.3.9» steht im Original mit Leerzeichen; das Skript verbindet «1.3.4 /» und «1.3.9» deshalb mit Leerzeichen. Bei «Beilage» ist die Seite leer. Die Kopfzeile wiederholt sich im Original auf Seite 36 (Tabellenkopf auf jeder Seite).
 - Anhang B: Die Reihenfolge ist wie im Original nicht ganz alphabetisch (QS nach UML).
+- Die schon vorhandenen Rohtexte sind nach dem erneuten Lauf unverändert.
+
+## Prüfung gegen das Word-Original (8.11.2026, AP23)
+
+- 1.3.4, 1.3.9 und 1.3.10 stimmen Absatz für Absatz mit dem Word-Original überein (12, 5 und 3 Absätze; nur gelesen, nicht im Repo). Das bestätigt auch die Absatzgrenzen der beiden Absätze ohne Kennzeichnung.
+- Die Verweise auf 7.8, 7.9 und 1.3.4 sind im Word-Original Felder (REF). Verlinkt sind «Webseite» und «Newsübersicht» in 1.3.4 (`https://www.ech.ch/`) und «Webseite» in 1.3.9 (`http://www.ech.ch`).
 - Die schon vorhandenen Rohtexte sind nach dem erneuten Lauf unverändert.
 
 ## Werkzeug

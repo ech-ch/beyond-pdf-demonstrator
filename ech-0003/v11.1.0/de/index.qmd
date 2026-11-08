@@ -19,6 +19,8 @@ format:
     # Downloads auf der Standardseite (E18): Word, Original-PDF, Registry und die
     # Übersicht der Beziehungen (AP21). Die
     # automatischen Format-Links sind aus, sonst steht das Word doppelt da.
+    # Quarto übernimmt `other-links` unverändert: Ziel ist die Ausgabe (.html),
+    # nicht die Quelle (.qmd), sonst 404 auf GitHub Pages.
     format-links: false
     other-links:
       - text: Word herunterladen
@@ -31,7 +33,7 @@ format:
         href: ../bausteine.json
         icon: filetype-json
       - text: Beziehungen (Übersicht)
-        href: beziehungen.qmd
+        href: beziehungen.html
         icon: diagram-3
   docx:
     output-file: DEMO_eCH-0003_V11.1.0_de.docx   # bewusst kein eCH-Dateiname (E18)
@@ -72,7 +74,7 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
 ### Inhaltliche Qualitätssicherung 1 {.platzhalter original-seite="8"}
 
-### Öffentliche Konsultation {#sec-oeffentliche-konsultation .platzhalter original-seite="10"}
+{{< include bausteine/oeffentliche-konsultation.md >}}
 
 ### Einarbeitung Rückmeldungen {.platzhalter original-seite="10"}
 
@@ -82,9 +84,9 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
 ### Genehmigung/Ablehnung {.platzhalter original-seite="11"}
 
-### Publikation {#sec-publikation .platzhalter original-seite="12"}
+{{< include bausteine/publikation.md >}}
 
-### Überprüfung {#sec-ueberpruefung .platzhalter original-seite="12"}
+{{< include bausteine/ueberpruefung.md >}}
 
 ## Fristen und Termine {.platzhalter original-seite="13"}
 

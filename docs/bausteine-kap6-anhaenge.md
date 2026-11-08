@@ -1,7 +1,7 @@
 # Entwurf: Baustein-IDs für Kap. 6 und die Anhänge B, C, D (eCH-0003 V11.1.0)
 
 Quelle: Original-PDF eCH-0003 V11.1.0, Seiten 26 und 34–36, Rohtext in `original/text/kap06.txt`, `anhang-b.txt`, `anhang-c.txt`, `anhang-d.txt`. Aufbau der Tabellen nach dem Word-Original geprüft. Regeln: [MVP-Spezifikation 3.2 und 3.6](mvp-spezifikation.md), ADR 0002 und ADR 0004, E15, E29, E30.
-Status: **zur Durchsicht** (Umsetzung AP22, 8.11.2026, E49). IDs werden mit der Veröffentlichung eingefroren (ADR 0002); die Projektleitung prüft sie vor dem Push. Die `#`-Nummern (z.B. 6.2-1) sind nur Arbeitsnummern und nicht Teil der ID.
+Status: **Freigegebene Liste** (Projektleitung, 8.11.2026; Umsetzung AP22, E49). IDs werden mit der Veröffentlichung eingefroren (ADR 0002). Die `#`-Nummern (z.B. 6.2-1) sind nur Arbeitsnummern und nicht Teil der ID.
 
 ## Liste
 
@@ -34,7 +34,7 @@ Zählung aus dem Rohtext: Kap. 6 2× MUSS, 2× DARF NICHT; Anhang C 1× MUSS; An
 | 6 | `sec-fachgruppendokument` | Kapitel ohne eigenen Text, wie `sec-formales` bei Kap. 7; Beginn des Textvergleichs |
 | 2.1.4 | `sec-standard-datenschemata` | Verweisziel aus Anhang D; Antragsform im Anker (siehe Hinweis 1) |
 
-Neue Verweisziele «noch kein Baustein» (W2): 1.1 (aus Anhang D), 1.3.4 (aus Anhang D, schon aus 7.3 und 7.8), 1.3.9 (aus Anhang C und D), 1.3.10 (aus Anhang C), 2.1.4 (aus Anhang D).
+Neue Verweisziele ohne Baustein (W2), Stand AP22: 1.1 (aus Anhang D), 1.3.4 (aus Anhang D, schon aus 7.3 und 7.8), 1.3.9 (aus Anhang C und D), 1.3.10 (aus Anhang C), 2.1.4 (aus Anhang D). Nachtrag AP23 (E50): 1.3.4, 1.3.9 und 1.3.10 sind jetzt Bausteine ([bausteine-1-3.md](bausteine-1-3.md)); 1.1 ist als «Statustext» markiert; «noch kein Baustein» bleibt nur 2.1.4.
 
 ## Hinweise und Grenzfälle
 
@@ -46,4 +46,4 @@ Neue Verweisziele «noch kein Baustein» (W2): 1.1 (aus Anhang D), 1.3.4 (aus An
 6. **Anhang C, Verweise mit Titel.** «gemäss Kapitel 7.1 Zuteilung einer eCH-Nummer» und die übrigen acht Stellen sind erzeugte Querverweise mit Titel (`[-@sec-…]{.mit-titel}`, E11), «gemäss Kapitel 1.2.» nur mit Nummer. Der Text ist zeichengleich mit dem Original (HTML und Word geprüft).
 7. **Anhang D, ID.** `aenderungsuebersicht` bezeichnet die Rolle des Anhangs (Übersicht der Änderungen gegenüber der Vorversion), nicht die Version, weil der Inhalt mit jeder Version wechselt. Sie unterscheidet sich klar vom Mehrfachbaustein `ech-0003-bb-aenderungen-vorversion`, der Klausel aus 7.8 und 7.9, die ein solches Kapitel verlangt. Erwogen: `aenderungsprotokoll` (Verwechslung mit dem «Protokoll in Textform» aus 7.3-7), `aenderungen-gegenueber-vorversion` (zu nahe an der Klausel), `aenderungsnachweis`.
 8. **Anhang D, Tabelle.** Im Word-Original gibt es keine zusammengefassten Zellen. «1.3.4 / 1.3.9» steht in einer Zelle, die Seite bei «Beilage» ist leer, die graue Kopfzeile wiederholt sich auf Seite 36. Die Kapitelnummern sind erzeugte Querverweise, «Div.» und «Beilage» bleiben Text. Die Seitenangaben bleiben wörtlich; sie beziehen sich auf das Original (E49, F57).
-9. **Anhang D, «Kapitel 1.1 Status».** Erzeugter Verweis mit Titel. 1.1 ist erzeugter Inhalt (Statustext) und wird nie ein Baustein; das Ziel bleibt deshalb dauerhaft «noch kein Baustein» (W2).
+9. **Anhang D, «Kapitel 1.1 Status».** Erzeugter Verweis mit Titel. 1.1 ist erzeugter Inhalt (Statustext) und wird nie ein Baustein. Das Ziel war deshalb falsch als «noch kein Baustein» markiert; seit AP23 trägt es die eigene Zielart `statustext` (E50).

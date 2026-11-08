@@ -520,7 +520,8 @@ $grid-margin-width: 375px;
 }
 @media (max-width: 767.98px) {
   // Mermaid verkleinert den Graph auf die Spaltenbreite; mit 960 px bleibt die
-  // Schrift beim heutigen Graph (natürliche Breite rund 1150 px) bei etwa 13 px.
+  // Schrift beim heutigen Graph (natürliche Breite rund 1060 px) bei etwa
+  // 14,5 px, ohne diese Breite bei etwa 5 px (gemessen AP23, E50).
   #quarto-content .beziehungen-graph svg {
     min-width: 960px;
   }

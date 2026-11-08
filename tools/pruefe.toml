@@ -33,6 +33,29 @@ von = "einleitung"
 bis = "prozessmodule"
 rohtext = "original/text/kap01-1.1-bis-1.2.1.txt"
 
+# «einarbeitung-rückmeldungen» und «fristen-und-termine» sind provisorische
+# Anker (1.3.5 und 1.4 sind noch Platzhalter).
+[[standard.kapitel]]
+name = "1.3.4 Öffentliche Konsultation"
+von = "sec-oeffentliche-konsultation"
+bis = "einarbeitung-rückmeldungen"
+rohtext = "original/text/kap01-1.3.4.txt"
+zaehlung = { "MUSS" = 8, "SOLLTE" = 2, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "1.3.9 Publikation"
+von = "sec-publikation"
+bis = "sec-ueberpruefung"
+rohtext = "original/text/kap01-1.3.9.txt"
+zaehlung = { "MUSS" = 3, "SOLLTE" = 1, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "1.3.10 Überprüfung"
+von = "sec-ueberpruefung"
+bis = "fristen-und-termine"
+rohtext = "original/text/kap01-1.3.10.txt"
+zaehlung = { "MUSS" = 2, "SOLLTE" = 1, "DARF NICHT" = 0 }
+
 [[standard.kapitel]]
 name = "6 Fachgruppendokument"
 von = "sec-fachgruppendokument"

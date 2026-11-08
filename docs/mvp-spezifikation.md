@@ -85,18 +85,18 @@ Umfang gemäss E02 und E04:
 |---|---|---|
 | 1 | Gerüst aller Überschriften (Kap. 1–10, Anhänge A–F); Kap. 7 (7.1–7.10) vollständig als Bausteine; Website mit Feedback-Knopf; Word mit Deckblatt, Inhaltsverzeichnis und Querverweisen | fest zugesagt (Durchstich) |
 | 1 | 1.1 Status, 1.2 Anwendungsgebiet, 1.2.1 Beschreibungsterminologie; Kap. 8; Kap. 9 und 10 als Vorlagentexte (Fassung 2022); Anhang A; Anhang F | geplant |
-| 1+ | Kap. 6, Anhänge B, C, D (AP22); sichtbare Beziehungen (AP21) | umgesetzt am Wochenende 7./8.11. (E47–E49) |
+| 1+ | Kap. 6, Anhänge B, C, D (AP22); 1.3.4, 1.3.9, 1.3.10 (AP23); sichtbare Beziehungen (AP21) | umgesetzt am Wochenende 7./8.11. (E47–E50) |
 | 2 | Vorlagentexte in der Fassung 2025 mit Umschalten über Metadaten; PDF | wenn Zeit bleibt |
 | 3 | Rückmeldungsliste aus Issues; Wechsel V11.1.0 → V12.0.0 bei gleicher ID; Französisch | nach MVP |
 
-**Nicht im MVP:** 1.3–1.4, Kap. 2–5 und Anhang E. Sie sind Platzhalter. Anhang E wird künftig erzeugt (E15). Für 1.3.4, 1.3.9, 1.3.10 (Paket B) und 1.3–1.4, Kap. 2–5 (Pakete C, D) siehe E47.
+**Nicht im MVP:** 1.3–1.4 ausser 1.3.4, 1.3.9 und 1.3.10, dazu Kap. 2–5 und Anhang E. Sie sind Platzhalter. Anhang E wird künftig erzeugt (E15). Für 1.3–1.4 und Kap. 2–5 (Pakete C, D) siehe E47.
 
 **Gerüst und Platzhalter (E05):**
 
 - Alle rund 92 Überschriften von V11.1.0 stehen im Gerüst. Nummerierung und Inhaltsverzeichnis entsprechen damit dem Original.
 - Einen festen Anker (`sec-…`) tragen nur:
   - Überschriften in Pilotkapiteln
-  - Verweisziele aus überführtem Inhalt: 1.1 (aus Anhang D), 1.3.4 (aus 7.3, 7.8 und Anhang D), 1.3.9 (aus Anhang C und D), 1.3.10 (aus Anhang C), 2.1.4 (aus Anhang D, `sec-standard-datenschemata`)
+  - Verweisziele aus überführtem Inhalt: 1.1 (aus Anhang D; Statustext, E50), 1.3.4 (aus 7.3, 7.8, 1.3.9 und Anhang D), 1.3.9 (aus Anhang C und D), 1.3.10 (aus Anhang C), 2.1.4 (aus Anhang D, `sec-standard-datenschemata`). 1.3.4, 1.3.9 und 1.3.10 sind seit AP23 Bausteine; ihre Anker sind geblieben.
   - Kapitel ohne eigenen Text vor überführten Unterkapiteln: 6 (`sec-fachgruppendokument`), 7 (`sec-formales`)
 
   Eine Baustein-ID (`bb`) tragen nur Bausteine (E08, R7).
@@ -106,7 +106,7 @@ Umfang gemäss E02 und E04:
   > *Dieser Abschnitt ist im Demonstrator nicht in Bausteine überführt. Massgebend ist das Original: eCH-0003 V11.1.0, Seite N.*
 
   Er verlinkt auf die PDF-Seite. Auf der Website erscheint er als grauer Hinweiskasten, im Word als kursiver Satz. Die Seitenzahlen stammen aus dem Inhaltsverzeichnis des Originals.
-- Die Startseite der Website nennt die überführten Teile und die Platzhalter (Stand AP22: Platzhalter sind 1.3–1.4, Kap. 2–5 und Anhang E).
+- Die Startseite der Website nennt die überführten Teile und die Platzhalter (Stand AP23: Platzhalter sind 1.3–1.4 ausser 1.3.4, 1.3.9 und 1.3.10, dazu Kap. 2–5 und Anhang E).
 
 **Referenzbaustein 7.3 Versionierung:** Bis auf «Unterkapitel 1.3.4» führen alle Verweise aus 7.3 auf überführten Inhalt:
 
@@ -114,7 +114,7 @@ Umfang gemäss E02 und E04:
 - Anhang F
 - das Zitat [SemVer] in Anhang A (eCH-0150 wird aus 7.8 und 7.9 zitiert und steht ebenfalls dort)
 
-«Unterkapitel 1.3.4» führt bewusst auf einen Platzhalter.
+«Unterkapitel 1.3.4» führte bis AP23 bewusst auf einen Platzhalter; seither ist 1.3.4 ein Baustein (E50).
 
 ## 3. Bausteinmodell
 
@@ -215,7 +215,7 @@ Die Auslöser für eine Neubeurteilung stehen in ADR 0001.
 | R4 Stabilität | Ab der ersten Veröffentlichung (Release oder Pages) wird eine ID nie geändert, auch wenn sich der Wortlaut ändert. Vorher darf sie noch angepasst werden (E27). |
 | R5 Eindeutigkeit | Die ID ist eindeutig im Standard. Bei Kollisionen kommt ein unterscheidendes Inhaltswort hinzu, kein Zähler. |
 | R6 Ort | Die ID steht bei jedem Baustein im Attribut `bb`. Grobe Bausteine tragen an der Überschrift zusätzlich den Anker `#sec-<kurzname>` mit demselben Kurznamen. Die CI prüft Eindeutigkeit und Übereinstimmung. Auf der Website ist jeder Baustein unter `…#<baustein-id>` erreichbar; den Anker setzt ein Filter. |
-| R7 Kein Baustein | Gerüst-Überschriften ohne Baustein tragen nur einen `sec-`-Anker (z.B. die Verweisziele 1.3.4, 1.3.9, 1.3.10). |
+| R7 Kein Baustein | Gerüst-Überschriften ohne Baustein tragen nur einen `sec-`-Anker (z.B. die Verweisziele 1.1 und 2.1.4). |
 
 **Grobe Bausteine Kap. 7:**
 
@@ -266,10 +266,12 @@ Die Auslöser für eine Neubeurteilung stehen in ADR 0001.
 - **Beziehungen:** Typen sind `is_part_of`/`has_part`, `refers_to`/`is_referenced_by` und `depends_on`/`is_required_by`. Jede Beziehung hat ihre Umkehrung (W4). Selbstverweise und Verweise auf einen umschliessenden Baustein fehlen (W5).
 - **Ziele:** `target_kind` gibt an, was das Ziel ist:
   - `baustein`
-  - `noch_kein_baustein`: Anker einer Gerüst-Überschrift, mit `title` (W2)
+  - `noch_kein_baustein`: Anker einer Platzhalter-Überschrift, mit `title` (W2)
+  - `vorlagentext`, `statustext`: Anker einer Überschrift, deren Inhalt aus der Vorlage-Fassung erzeugt wird (Kap. 9 und 10 bzw. 1.1), mit `title`. Dieser Inhalt wird nie ein Baustein (ADR 0005, E50).
   - `literatur`: Schlüssel in `referenzen.yml`
   - `standard`: z.B. `eCH-0150` (W3), mit `title` und `url` des Links im Text (AP21)
 - Links auf Websites sind keine Beziehungen.
+- Ein Verweis auf eine andere Überschrift ohne Baustein bricht den Build ab, etwa auf ein Kapitel ohne eigenen Text. Seine Zielart ist erst zu entscheiden (E50).
 
 Beispiel-Eintrag aus der erzeugten Registry:
 
@@ -293,11 +295,11 @@ Beispiel-Eintrag aus der erzeugten Registry:
 
 `tools/pruefe.py ausgabe` prüft die Registry gegen die Quelle:
 
-- gültiges JSON und dieselben Bausteine wie die Quelle (14 grobe, 54 feine)
+- gültiges JSON und dieselben Bausteine wie die Quelle (Stand AP23: 22 grobe, 77 feine)
 - Typ, Granularität und Kennzeichnung wie in der Quelle
 - `depends_on` gleich `bezug`
 - je Fundstelle eine Seite
-- jedes Ziel vorhanden oder als `noch_kein_baustein`, `literatur` oder `standard` markiert
+- jedes Ziel vorhanden oder als `noch_kein_baustein` (nur Platzhalter), `vorlagentext`, `statustext` (Abschnitt mit Hinweis «Vorlagentext» bzw. Statustext), `literatur` oder `standard` markiert
 - Umkehrungen vollständig, keine Selbstverweise
 
 **Ausgearbeitetes Beispiel: Baustein-Datei `bausteine/versionierung.md`** (grober Baustein 7.3 mit sieben feinen Bausteinen, darunter die Schema-Regel; Stand aller Entscheide E07–E15)
@@ -353,7 +355,7 @@ Daraus erzeugt der Build unter anderem:
 | Querverweise (E11) | «(siehe Kapitel 7.5)», «Anhang F unten», «gemäss Kapitel 7.8», «gemäss Unterkapitel 1.3.4», «Semantic Versioning»[SemVer], alle zeichengleich |
 | Einbettung (E10, W4) | 7 feine Bausteine `is_part_of` `ech-0003-bb-versionierung` |
 | Verbindlichkeit (E10, V2) | grob: 7× MUSS; jeder feine Baustein: MUSS |
-| Beziehungen (E10, W1–W5) | `prinzip-zielversion` → `bearbeitungsstatus`; `struktur-versionsschema-semver` → Literatureintrag SemVer; `versionierung` (grob) → `formale-syntax` (Absatz ohne Kennzeichnung); `versionsstufe-dokument` → `minor-change`, `major-change`; `externe-quelle-versionierung` → 1.3.4 («noch kein Baustein»); Selbstverweis auf 7.3 nicht erfasst |
+| Beziehungen (E10, W1–W5) | `prinzip-zielversion` → `bearbeitungsstatus`; `struktur-versionsschema-semver` → Literatureintrag SemVer; `versionierung` (grob) → `formale-syntax` (Absatz ohne Kennzeichnung); `versionsstufe-dokument` → `minor-change`, `major-change`; `externe-quelle-versionierung` → 1.3.4 (bis AP23 «noch kein Baustein», seither `oeffentliche-konsultation`); Selbstverweis auf 7.3 nicht erfasst |
 | Name des feinen Bausteins (E12) | aus den ersten Wörtern, z.B. «Besteht nebst einem eCH-Dokument auch ein Schema …» |
 | Herkunft (E09) | eCH-0003 V11.1.0, Seite 27 bzw. 28 |
 | Website (E18) | Anker `#ech-0003-bb-schema-eigene-version`, Feedback-Symbol am Rand, ID beim Darüberfahren |
@@ -378,7 +380,7 @@ Dieselbe Erkennung liefert die Zählung für D4.
 | Regel | Inhalt |
 |---|---|
 | W1 | Jeder Querverweis ergibt eine Beziehung `refers_to`. Quelle ist der innerste umschliessende Baustein. |
-| W2 | Ziel ist die Baustein-ID der Überschrift mit `bb`. Bei einer Gerüst-Überschrift ohne Baustein ist es der Anker, markiert als «noch kein Baustein»; nach der Überführung wird daraus automatisch eine Baustein-Beziehung. Bei einem Zitat ist es der Literatureintrag. |
+| W2 | Ziel ist die Baustein-ID der Überschrift mit `bb`. Bei einer Platzhalter-Überschrift ist es der Anker, markiert als «noch kein Baustein»; nach der Überführung wird daraus automatisch eine Baustein-Beziehung. Bei einer Überschrift mit Vorlagentext oder Statustext ist es der Anker, markiert als «Vorlagentext» bzw. «Statustext» (E50). Bei einem Zitat ist es der Literatureintrag. |
 | W3 | Verweise auf andere eCH-Standards werden markiert, ohne den Text zu ändern: `[«eCH-0150: Change und Releasemanagement von eCH-Standards»]{standard="eCH-0150"}`. Daraus entsteht eine Beziehung zum Standard. |
 | W4 | Die Umkehrung «wird referenziert von» wird erzeugt. Die Einbettung `is_part_of` / `has_part` ergibt sich aus der Verschachtelung. |
 | W5 | Selbstverweise werden nicht erfasst. |
@@ -388,7 +390,7 @@ Dieselbe Erkennung liefert die Zählung für D4.
 **Stufen:** Registry mit Verbindlichkeit und Beziehungen: Stufe 1 (umgesetzt mit AP14). Sichtbar auf der Website: umgesetzt mit AP21 (E47, E48), im Word nicht:
 
 - **Je Baustein:** «Beziehungen (n)» zum Aufklappen, ohne JavaScript. Es steht nur bei Bausteinen mit Querverweis oder Rückbezug, in einer der beiden Richtungen; die Einbettung zählt nicht. Beim groben Baustein steht es unter der Überschrift, beim feinen am Ende des Bausteins. Gruppen: «Querverweis auf», «Querverweis von», «Rückbezug auf», «Rückbezug von».
-- **Übersichtsseite** `ech-0003/v11.1.0/de/beziehungen.qmd`: Graph (Mermaid) auf Ebene der groben Bausteine und Tabelle aller Beziehungen in Vorwärtsrichtung. Aufhänger ist 7.10 (separates Hilfsmittel), formuliert als Vorschlag (E28).
+- **Übersichtsseite** `ech-0003/v11.1.0/de/beziehungen.qmd`: Graph (Mermaid) auf Ebene der groben Bausteine und Tabelle aller Beziehungen in Vorwärtsrichtung. Pfeile, die in einem Anhang beginnen, stehen nur in der Tabelle; Pfeile in einen Anhang hinein zeigt der Graph (F56, Variante a). Die Legende nennt nur, was im Graph vorkommt. Aufhänger ist 7.10 (separates Hilfsmittel), formuliert als Vorschlag (E28).
 - **Eine Quelle:** Listen, Graph und Tabelle entstehen aus der geschriebenen `bausteine.json`. Die Übersicht liest sie aus dem Ausgabeordner und steht deshalb in der render-Liste nach der Standardseite (geprüft; Begründung E48).
 
 ### 3.5 Querverweise (E11)
@@ -805,9 +807,9 @@ Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
 
 | # | Paket | Grundlage |
 |---|---|---|
-| AP21 | Beziehungen sichtbar: aufklappbare Liste je Baustein, Übersichtsseite mit Graph (Mermaid) und Tabelle, aus der Registry. Umgesetzt 8.11., nicht committet (E48) | E10, E30, E47, E48 |
-| AP22 | A: Kap. 6, Anhang B, C, D als Bausteine. Umgesetzt 8.11., nicht committet; IDs zur Durchsicht in [bausteine-kap6-anhaenge.md](bausteine-kap6-anhaenge.md) (E49) | E15, E47, E49 |
-| AP23 | B: 1.3.4, 1.3.9, 1.3.10 als Bausteine (IDs durch die Projektleitung prüfen) | E47 |
+| AP21 | Beziehungen sichtbar: aufklappbare Liste je Baustein, Übersichtsseite mit Graph (Mermaid) und Tabelle, aus der Registry. Umgesetzt 8.11., committet als `e90d169` (E48) | E10, E30, E47, E48 |
+| AP22 | A: Kap. 6, Anhang B, C, D als Bausteine. Umgesetzt 8.11., committet als `062b21a`; IDs freigegeben in [bausteine-kap6-anhaenge.md](bausteine-kap6-anhaenge.md) (E49) | E15, E47, E49 |
+| AP23 | B: 1.3.4, 1.3.9, 1.3.10 als Bausteine. Dazu Nachbesserungen zu AP21/AP22: Graph ohne Pfeile aus Anhängen (F56), Zielarten «Vorlagentext» und «Statustext». Umgesetzt 8.11., nicht committet; IDs zur Durchsicht in [bausteine-1-3.md](bausteine-1-3.md) (E50) | E29, E30, E47, E50 |
 | AP24 | Steckbrief eCH-0003 als Daten und Seite (Option A, `ausbau.md`) | E47, F47 |
 | AP25 | C: 1.3–1.4, falls Zeit (Abbildungen F10) | E47 |
 | AP26 | D: Kap. 2–5, falls Zeit (F26) | E47 |
