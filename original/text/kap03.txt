@@ -1,0 +1,74 @@
+--- Seite 18 ---
+3 Best Practice
+
+3.1 Einleitung
+
+Als «Best Practice» wird die jeweils erwiesenermassen beste praktische Lösung im Vergleich mit anderen Lösungen, Umsetzung oder Anwendung innerhalb bestimmter Anwendungsgebiete bezeichnet. Die Lösung wird als Ganzes beurteilt, d.h. unter den Aspekten Management, Anwendung und Governance, sowie unter Berücksichtigung der gewählten und umgesetzten Methoden, Verfahren, Prozesse, Services und Technologien. eCH empfiehlt den Entscheidungsträgern, sich bei der Umsetzung von E-Government-Vorhaben an den vorhandenen Best Practices zu orientieren.
+
+3.2 Antragstellende
+
+Als Antragstellende kommen Fachgruppen oder externe Personen und Organisationen in Frage.
+
+3.3 Prozess
+
+Abbildung 4 – Genehmigungsprozess Antrag auf Best Practice
+
+Je nach Behandlung des Antrags als Minor- oder Major-Change können Prozessschritte wie die öffentliche Konsultation und in der Folge die Qualitätssicherung 2 entfallen (Ausführungen vgl. Kapitel 7.8 und 7.9).
+
+3.3.1 Erarbeitung
+
+[MUSS] Vor Beginn der Arbeiten an einer Best Practice wird eine eCH-Nummer bei der Geschäftsstelle (info@ech.ch) beantragt.
+
+[MUSS] Ein Antrag auf eine Best Practice wird mittels der dafür vorgesehenen Vorlage bei der Geschäftsstelle eingereicht (info@ech.ch).
+
+[MUSS] Bei Best Practices muss bei Einreichen der Nachweis erbracht werden, dass die Lösung mindestens an drei Orten für mindestens je ein Jahr im Einsatz war.
+
+--- Seite 19 ---
+3.3.2 Formale Qualitätssicherung 1
+
+Die Geschäftsstelle prüft eingegangene Anträge auf Best Practice gemäss Kapitel 1.3.2. Eventuelle Unzulänglichkeiten werden den Antragstellenden direkt gemeldet und eine Korrektur verlangt.
+
+3.3.3 Inhaltliche Qualitätssicherung 1
+
+Ist der Antrag formgerecht eingereicht, wird er den Referentinnen und Referenten zur Freigabe für die öffentliche Konsultation zugestellt. Die Referentinnen und Referenten prüfen die Best Practice in Bezug auf die Publikationsfähigkeit gemäss Kapitel 1.3.3.
+
+[MUSS] Die Prüfung erfolgt innerhalb von zehn Arbeitstagen nach Zustellung der Unterlagen (in Ferienzeiten wird diese Frist auf maximal 20 Arbeitstage verlängert) und die Freigabe wird umgehend der Geschäftsstelle gemeldet.
+
+[MUSS] Wird eine Best Practice zur Bearbeitung zurückgewiesen, nehmen die Antragstellenden die geforderten Korrekturen vor und reichen sie vollständig wieder bei der Geschäftsstelle ein. Der Prozess beginnt wieder bei der «Formalen Qualitätssicherung 1».
+
+3.3.4 Öffentliche Konsultation und Einarbeitung Rückmeldungen
+
+Die öffentliche Konsultation findet gemäss Kapitel 1.3.4 und die Einarbeitung der Rückmeldungen gemäss Kapitel 1.3.5 statt.
+
+3.3.5 Formale Qualitätssicherung 2
+
+Das Best Practice Dokument wird durch die Geschäftsstelle gemäss Kapitel 1.3.6 geprüft.
+
+3.3.6 Inhaltliche Qualitätssicherung 2
+
+Die auf formale Aspekte geprüfte Best Practice wird den Referentinnen und Referenten zur Begutachtung gemäss Kapitel 1.3.7 zugestellt.
+
+[MUSS] Aufgrund dieser Angaben erarbeiten die Referentinnen und Referenten eine Empfehlung zuhanden des Expertenausschusses.
+
+[SOLLTE] Diese Empfehlung wird normalerweise bis spätestens zehn Arbeitstage vor der nächsten Sitzung bei der Geschäftsstelle gemeldet, um eine entsprechende Traktandierung zu ermöglichen.
+
+3.3.7 Genehmigung/Ablehnung
+
+[MUSS] Der Expertenausschuss beschliesst mittels Online-Abstimmung oder an einer ordentlichen Sitzung die Genehmigung oder Ablehnung einer Best Practice.
+
+Wird eine Best Practice durch den Expertenausschuss zwar für qualitativ gut, aber mit Korrekturbedarf befunden, kann diese vorbehaltlich der Behebung der festgestellten Mängel genehmigt werden.
+
+[MUSS] Die Genehmigung tritt dann in Kraft, sobald das überarbeitete Dokument von den zuständigen Referentinnen und Referenten als den Anforderungen entsprechend taxiert wird.
+
+Wird ein Antrag auf Best Practice abgelehnt, können die Antragstellenden auf die nächste Sitzung ein schriftliches Wiedererwägungsgesuch stellen und dieses auf Wunsch an der entsprechenden Sitzung als Gast mündlich vorbringen.
+
+--- Seite 20 ---
+[SOLLTE] Wurde ein Best Practice Dokument grundlegend überarbeitet, sind die zuständigen Referentinnen und Referenten ermächtigt, eine erneute öffentliche Konsultation zu verlangen.
+
+3.3.8 Publikation
+
+[MUSS] Nach erfolgter Genehmigung werden allfällige Korrekturen übersetzt und die Best Practice in der Originalsprache und in übersetzter Sprache auf der Webseite veröffentlicht.
+
+3.3.9 Überprüfung
+
+[MUSS] Best Practices mit dem Status «Genehmigt» werden drei Jahre nach deren Genehmigung oder letzten Überprüfung gemäss Kapitel 1.3.10 überprüft.

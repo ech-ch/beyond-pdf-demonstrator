@@ -68,6 +68,10 @@ KAPITEL = [
     ("kap01-1.3.9.txt", "1.3.9", "1.3.10"),
     ("kap01-1.3.10.txt", "1.3.10", "1.4"),
     ("kap01-1.4.txt", "1.4", "2"),
+    ("kap02.txt", "2", "3"),
+    ("kap03.txt", "3", "4"),
+    ("kap04.txt", "4", "5"),
+    ("kap05.txt", "5", "6"),
     ("kap06.txt", "6", "7"),
     ("kap07.txt", "7", "8"),
     ("kap08.txt", "8", "9"),
@@ -100,9 +104,10 @@ BESCHRIFTUNG = re.compile(r"^Abbildung \d+ – \S")
 # Zeilenumbrüche nach einem Satzende, die das Skript ohne diese Liste als
 # Absatzgrenze läse (kein Abstand im Modus -layout, volle Zeile): (Seite,
 # Anfang der Zeile danach). Die Zeilenlänge entscheidet das nicht, 7.3 hat echte
-# Absatzgrenzen nach vollen Zeilen. Gegen das Word-Original geprüft (AP25).
+# Absatzgrenzen nach vollen Zeilen. Gegen das Word-Original geprüft (AP25, AP26).
 KEIN_ABSATZ = {
     (13, "Die anschliessende Überarbeitung"),   # 1.4, ein Absatz im Word-Original
+    (18, "Die Lösung wird als Ganzes"),         # 3.1, ein Absatz im Word-Original (AP26)
 }
 
 protokoll: list[tuple[int, str]] = []

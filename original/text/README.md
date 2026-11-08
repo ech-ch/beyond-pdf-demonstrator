@@ -17,6 +17,10 @@ Text von eCH-0003 V11.1.0, aus [../eCH-0003_V11.1.0_d.pdf](../eCH-0003_V11.1.0_d
 | `kap01-1.3.9.txt` | 1.3.9 Publikation | 12 |
 | `kap01-1.3.10.txt` | 1.3.10 Überprüfung | 12 |
 | `kap01-1.4.txt` | 1.4 Fristen und Termine, mit der Bildunterschrift von Abbildung 2 | 13 |
+| `kap02.txt` | 2 Standard, 2.1–2.3.9, mit der Bildunterschrift von Abbildung 3 | 14–17 |
+| `kap03.txt` | 3 Best Practice, 3.1–3.3.9, mit der Bildunterschrift von Abbildung 4 | 18–20 |
+| `kap04.txt` | 4 Hilfsmittel, 4.1–4.3.6, mit der Bildunterschrift von Abbildung 5 | 21–22 |
+| `kap05.txt` | 5 White Paper, 5.1–5.3.9, mit der Bildunterschrift von Abbildung 6 | 23–25 |
 | `kap06.txt` | 6 Fachgruppendokument, 6.1–6.2 | 26 |
 | `kap07.txt` | 7 Formales, 7.1–7.10 | 27–32 |
 | `kap08.txt` | 8 Sicherheitsüberlegungen | 32 |
@@ -82,6 +86,13 @@ Fehler des Originals bleiben zeichengleich stehen, etwa «Die Nummer sind» (7.3
 - Drei neue Fälle im Skript: Zwischentitel stehen im PDF mit Aufzählungszeichen am linken Rand und werden eigene Absätze; der Text in den Abbildungen 1 und 2 fällt weg; auf Seite 13 ist «… dauert mindestens sechs Wochen.» / «Die anschliessende Überarbeitung …» ein Zeilenumbruch und keine Absatzgrenze (im Word-Original ein Absatz; Ausnahmeliste `KEIN_ABSATZ`, weil die Zeilenlänge es nicht entscheidet: 7.3 hat echte Absatzgrenzen nach vollen Zeilen).
 - Der Aufzählungspunkt «Deckblatt mit den Metadaten (vgl. 2. Teil von» / «Anhang C – Glossar)» in 1.3.2 ist im PDF und im Word-Original in zwei Punkte geteilt, weil das Feld REF eine Absatzmarke enthält. Der Rohtext folgt dem PDF.
 - Im Word-Original beginnt die erste Klausel von 1.3.2 mit einem Leerzeichen; der Rohtext lässt es weg wie jeden Leerraum am Absatzanfang.
+- Die schon vorhandenen Rohtexte sind nach dem erneuten Lauf unverändert.
+
+## Prüfung gegen das Word-Original (8.11.2026, AP26)
+
+- Kap. 2–5 stimmen Absatz für Absatz mit dem Word-Original überein (nur gelesen, nicht im Repo), die Überschriften ohne ihre Nummer.
+- Eine weitere Ausnahme `KEIN_ABSATZ`: Auf Seite 18 ist «… Anwendungsgebiete bezeichnet.» / «Die Lösung wird als Ganzes …» (3.1) ein Zeilenumbruch, im Word-Original ein Absatz. Die übrigen Stellen ohne Abstand im PDF (S. 16, 17: «Wird ein Standard …») sind auch im Word-Original eigene Absätze.
+- Fehler des Originals bleiben stehen, z.B. «Hierunter falls z.B.» (2.1.1), «mit dem dort verwenden Namensraum» (2.1.4), der fehlende Punkt nach «gemäss Kapitel 1.3.2» und «gemäss Kapitel 1.3.3» in 5.3.2 und 5.3.3.
 - Die schon vorhandenen Rohtexte sind nach dem erneuten Lauf unverändert.
 
 ## Werkzeug

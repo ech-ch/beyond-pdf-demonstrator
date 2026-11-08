@@ -85,11 +85,11 @@ Umfang gemäss E02 und E04:
 |---|---|---|
 | 1 | Gerüst aller Überschriften (Kap. 1–10, Anhänge A–F); Kap. 7 (7.1–7.10) vollständig als Bausteine; Website mit Feedback-Knopf; Word mit Deckblatt, Inhaltsverzeichnis und Querverweisen | fest zugesagt (Durchstich) |
 | 1 | 1.1 Status, 1.2 Anwendungsgebiet, 1.2.1 Beschreibungsterminologie; Kap. 8; Kap. 9 und 10 als Vorlagentexte (Fassung 2022); Anhang A; Anhang F | geplant |
-| 1+ | Kap. 6, Anhänge B, C, D (AP22); 1.3.4, 1.3.9, 1.3.10 (AP23); sichtbare Beziehungen (AP21); Steckbrief (AP24); Rest von 1.3 und 1.4 mit Abbildung 1 und 2 (AP25) | umgesetzt am Wochenende 7./8.11. (E47–E52) |
+| 1+ | Kap. 6, Anhänge B, C, D (AP22); 1.3.4, 1.3.9, 1.3.10 (AP23); sichtbare Beziehungen (AP21); Steckbrief (AP24); Rest von 1.3 und 1.4 mit Abbildung 1 und 2 (AP25); Kap. 2–5 als Text ohne Bausteine mit Abbildung 3–6, Anhang E erzeugt (AP26) | umgesetzt am Wochenende 7./8.11. (E47–E54) |
 | 2 | Vorlagentexte in der Fassung 2025 mit Umschalten über Metadaten; PDF | wenn Zeit bleibt |
 | 3 | Rückmeldungsliste aus Issues; Wechsel V11.1.0 → V12.0.0 bei gleicher ID; Französisch | nach MVP |
 
-**Nicht im MVP:** Kap. 2–5 und Anhang E. Sie sind Platzhalter. Anhang E wird künftig erzeugt (E15). Für Kap. 2–5 (Paket D) siehe E47; Kap. 1 ist mit AP25 vollständig überführt (E52).
+**Nicht im MVP:** Kap. 2–5 als Bausteine. Sie sind seit AP26 als Text überführt, aber noch nicht in Bausteine zerlegt (E54); der Umbau folgt im Ausbau ([ausbau.md](ausbau.md) J). Anhang E ist seit AP26 aus den Abbildungen erzeugt (E15). Kap. 1 ist mit AP25 vollständig überführt (E52). Damit ist der ganze Standard abgebildet; Platzhalter gibt es keine mehr.
 
 **Gerüst und Platzhalter (E05):**
 
@@ -98,6 +98,7 @@ Umfang gemäss E02 und E04:
   - Überschriften in Pilotkapiteln
   - Verweisziele aus überführtem Inhalt: 1.1 (aus Anhang D; Statustext, E50), 1.3.4 (aus 7.3, 7.8, 1.3.9 und Anhang D), 1.3.9 (aus Anhang C und D), 1.3.10 (aus Anhang C), 2.1.4 (aus Anhang D, `sec-standard-datenschemata`). 1.3.4, 1.3.9 und 1.3.10 sind seit AP23 Bausteine; ihre Anker sind geblieben.
   - Kapitel ohne eigenen Text vor überführten Unterkapiteln: 6 (`sec-fachgruppendokument`), 7 (`sec-formales`)
+  - Kap. 2–5 als Text ohne Bausteine (AP26, E54): die Kapitel (`sec-standard`, `sec-best-practice`, `sec-hilfsmittel`, `sec-white-paper`; Stelle des Feedbacks) und die Verweisziele 2.1.1–2.1.3 und 2.2 (`sec-standard-…`, aus 2.1 und 2.1.4); Anhang E (`sec-abbildungsverzeichnis`)
 
   Eine Baustein-ID (`bb`) tragen nur Bausteine (E08, R7).
 - Alle übrigen Überschriften erhalten einen provisorischen Anker. Sie haben keinen Feedback-Knopf.
@@ -106,7 +107,12 @@ Umfang gemäss E02 und E04:
   > *Dieser Abschnitt ist im Demonstrator nicht in Bausteine überführt. Massgebend ist das Original: eCH-0003 V11.1.0, Seite N.*
 
   Er verlinkt auf die PDF-Seite. Auf der Website erscheint er als grauer Hinweiskasten, im Word als kursiver Satz. Die Seitenzahlen stammen aus dem Inhaltsverzeichnis des Originals.
-- Die Startseite der Website nennt die überführten Teile und die Platzhalter (Stand AP23: Platzhalter sind 1.3–1.4 ausser 1.3.4, 1.3.9 und 1.3.10, dazu Kap. 2–5 und Anhang E).
+- Die Startseite der Website nennt den Stand der Überführung (Stand AP26: keine Platzhalter mehr; Kap. 2–5 als Text ohne Bausteine).
+- Kap. 2–5 sind seit AP26 als Text überführt, aber noch nicht in Bausteine zerlegt (E54). Unter jeder Kapitelüberschrift steht:
+
+  > *Text überführt, noch nicht in Bausteine zerlegt. Dieses Kapitel steht wörtlich wie im Original (eCH-0003 V11.1.0, ab Seite N), aber noch ohne Baustein-IDs.*
+
+  Auf der Website im selben grauen Kasten wie der Platzhalter, dazu: «Feedback gibt es vorerst für das ganze Kapitel; Vorschläge zum Zuschnitt in Bausteine sind willkommen.» Im Word kursiv, ohne diesen Satz.
 
 **Referenzbaustein 7.3 Versionierung:** Bis auf «Unterkapitel 1.3.4» führen alle Verweise aus 7.3 auf überführten Inhalt:
 
@@ -135,6 +141,7 @@ Umfang gemäss E02 und E04:
 | Feiner Baustein | `:::`-Block in der Datei des groben Bausteins, bei einem Satz mitten im Absatz eine Inline-Markierung `[…]{…}` (F34) |
 | Mehrfach verwendeter feiner Baustein (E27) | zeichengleiche Klausel an mehreren Stellen: einmal in `bausteine/mehrfach/<kurzname>.md`, an jeder Stelle eingebunden; mehrere Fundstellen |
 | Hauptkapitel ohne eigenen Text (z.B. «1 Einleitung», «7 Formales») | kein Baustein, nur im Gerüst, kein Feedback-Knopf |
+| Kapitel als Text ohne Bausteine (Kap. 2–5, E54) | eine Datei je Kapitel in `text/`, beginnt mit der Kapitelüberschrift (`.nur-text-kapitel`, `feedback-id`); alle Überschriften darunter `.nur-text`; kein `bb`; Kennzeichnungen im Text erlaubt |
 | YAML-Kopfzeile in Baustein-Dateien | verboten, die CI prüft das (Spike S2) |
 
 **Beispiel: Gerüst `ech-0003/v11.1.0/de/index.qmd` (Auszug, Stand aller Entscheide)**
@@ -267,7 +274,7 @@ Die Auslöser für eine Neubeurteilung stehen in ADR 0001.
 - **Beziehungen:** Typen sind `is_part_of`/`has_part`, `refers_to`/`is_referenced_by` und `depends_on`/`is_required_by`. Jede Beziehung hat ihre Umkehrung (W4). Selbstverweise und Verweise auf einen umschliessenden Baustein fehlen (W5).
 - **Ziele:** `target_kind` gibt an, was das Ziel ist:
   - `baustein`
-  - `noch_kein_baustein`: Anker einer Platzhalter-Überschrift, mit `title` (W2)
+  - `noch_kein_baustein`: Anker einer Platzhalter-Überschrift oder einer Überschrift mit Text ohne Bausteine (Kap. 2–5, E54), mit `title` (W2)
   - `vorlagentext`, `statustext`: Anker einer Überschrift, deren Inhalt aus der Vorlage-Fassung erzeugt wird (Kap. 9 und 10 bzw. 1.1), mit `title`. Dieser Inhalt wird nie ein Baustein (ADR 0005, E50).
   - `literatur`: Schlüssel in `referenzen.yml`
   - `standard`: z.B. `eCH-0150` (W3), mit `title` und `url` des Links im Text (AP21)
@@ -300,7 +307,7 @@ Beispiel-Eintrag aus der erzeugten Registry:
 - Typ, Granularität und Kennzeichnung wie in der Quelle
 - `depends_on` gleich `bezug`
 - je Fundstelle eine Seite
-- jedes Ziel vorhanden oder als `noch_kein_baustein` (nur Platzhalter), `vorlagentext`, `statustext` (Abschnitt mit Hinweis «Vorlagentext» bzw. Statustext), `literatur` oder `standard` markiert
+- jedes Ziel vorhanden oder als `noch_kein_baustein` (nur Platzhalter oder Text ohne Bausteine), `vorlagentext`, `statustext` (Abschnitt mit Hinweis «Vorlagentext» bzw. Statustext), `literatur` oder `standard` markiert
 - Umkehrungen vollständig, keine Selbstverweise
 
 **Ausgearbeitetes Beispiel: Baustein-Datei `bausteine/versionierung.md`** (grober Baustein 7.3 mit sieben feinen Bausteinen, darunter die Schema-Regel; Stand aller Entscheide E07–E15)
@@ -381,7 +388,7 @@ Dieselbe Erkennung liefert die Zählung für D4.
 | Regel | Inhalt |
 |---|---|
 | W1 | Jeder Querverweis ergibt eine Beziehung `refers_to`. Quelle ist der innerste umschliessende Baustein. |
-| W2 | Ziel ist die Baustein-ID der Überschrift mit `bb`. Bei einer Platzhalter-Überschrift ist es der Anker, markiert als «noch kein Baustein»; nach der Überführung wird daraus automatisch eine Baustein-Beziehung. Bei einer Überschrift mit Vorlagentext oder Statustext ist es der Anker, markiert als «Vorlagentext» bzw. «Statustext» (E50). Bei einem Zitat ist es der Literatureintrag. |
+| W2 | Ziel ist die Baustein-ID der Überschrift mit `bb`. Bei einer Platzhalter-Überschrift oder einer Überschrift mit Text ohne Bausteine (E54) ist es der Anker, markiert als «noch kein Baustein»; nach der Überführung wird daraus automatisch eine Baustein-Beziehung. Text ohne Bausteine ist selbst keine Quelle: Seine Querverweise ergeben noch keine Beziehungen. Bei einer Überschrift mit Vorlagentext oder Statustext ist es der Anker, markiert als «Vorlagentext» bzw. «Statustext» (E50). Bei einem Zitat ist es der Literatureintrag. |
 | W3 | Verweise auf andere eCH-Standards werden markiert, ohne den Text zu ändern: `[«eCH-0150: Change und Releasemanagement von eCH-Standards»]{standard="eCH-0150"}`. Daraus entsteht eine Beziehung zum Standard. |
 | W4 | Die Umkehrung «wird referenziert von» wird erzeugt. Die Einbettung `is_part_of` / `has_part` ergibt sich aus der Verschachtelung. |
 | W5 | Selbstverweise werden nicht erfasst. |
@@ -457,12 +464,12 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | Filter / Shortcode | Aufgabe | Ausgangspunkt | Entscheid |
 |---|---|---|---|
 | `ech_anhang.lua` | Buchstaben der Anhänge vergeben («Anhang F – …»), Verweise auf `.appendix`-Ziele auflösen, mit `-@` nur den Buchstaben | Spike S3; umstellen von ID-Präfix auf Klasse | E11, E15 |
-| `ech_titelref.lua` | Verweis «Nummer + Titel» (`.mit-titel`); auf einen Anhang «Anhang C – Glossar» (AP25) | Spike S3 | E11, E52 |
-| `ech_abbildungen.lua` | Bildunterschrift «Abbildung 1 – …» mit gewöhnlichen Leerzeichen; im DOCX Bild und Bildunterschrift ohne Tabelle, Formatvorlage «Beschriftung», Alternativtext, Bild mit der Unterschrift zusammengehalten (umgesetzt mit AP25) | neu | F10, E52 |
+| `ech_titelref.lua` | Verweis «Nummer + Titel» (`.mit-titel`); auf einen Anhang «Anhang C – Glossar» (AP25); nur der Titel (`.nur-titel`, AP26) | Spike S3 | E11, E52, E54 |
+| `ech_abbildungen.lua` | Bildunterschrift «Abbildung 1 – …» mit gewöhnlichen Leerzeichen; im DOCX Bild und Bildunterschrift ohne Tabelle, Formatvorlage «Beschriftung», Alternativtext, Bild mit der Unterschrift zusammengehalten (umgesetzt mit AP25); Abbildungsverzeichnis in Anhang E, im Word mit Feld PAGEREF (AP26) | neu | F10, E52, E54 |
 | `ech_docx_nummern.lua` | im DOCX: Word nummeriert, Quarto-Textnummern entfernen, unnummerierte Überschriften und Anhänge in eCH-Formatvorlagen | Spike S3 (Lösung A) | Block C |
 | `ech_anker.lua` | Anker = Baustein-ID, nur HTML; bei Mehrfachverwendung nur an der ersten Fundstelle (umgesetzt mit AP8) | neu | R6, E27, E35 |
 | `ech_feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML (umgesetzt mit AP9) | Spike S4; umgestellt von `.baustein` auf `bb` | E08, E09, E39, E41 |
-| `ech_registry.lua` | `bausteine.json`: Ebene 0, Metadaten, Fundstellen, Herkunft, Verbindlichkeit, Beziehungen mit Umkehrung; nur HTML (umgesetzt mit AP14). Setzt «Beziehungen (n)» je Baustein und füllt die Übersichtsseite (AP21); Gliederung, Steckbrief-Seite und `steckbrief.json` (AP24) | neu | E09, E10, E27, E30, E45, E48, E51 |
+| `ech_registry.lua` | `bausteine.json`: Ebene 0, Metadaten, Fundstellen, Herkunft, Verbindlichkeit, Beziehungen mit Umkehrung; nur HTML (umgesetzt mit AP14). Setzt «Beziehungen (n)» je Baustein und füllt die Übersichtsseite (AP21); Gliederung, Steckbrief-Seite und `steckbrief.json` (AP24); Gliederung mit den Arten `text` und `verzeichnis` (AP26) | neu | E09, E10, E27, E30, E45, E48, E51, E54 |
 | `ech_beziehungen.lua` | Modul, kein Filter: Darstellung der Beziehungen aus der Registry (Listen, Mermaid-Graph, Tabelle) (umgesetzt mit AP21) | neu | E47, E48 |
 | `ech_steckbrief.lua` | Modul, kein Filter: Steckbrief aus Raster, `steckbrief.yml`, Texten der Sprachfassung und Registry; prüft die Codes gegen das Raster (umgesetzt mit AP24) | neu | E51 |
 | `ech_referenzen.lua`, `{{< referenzen >}}` | Zitate `[@key]` aus `referenzen.yml` auf den Eintrag verlinken; Tabelle für Anhang A (umgesetzt mit AP13) | neu | E15, E32, E43 |
@@ -470,10 +477,10 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | `{{< vorlagentext … >}}` | Vorlagentext der gewählten Fassung einfügen, auf der Website mit Hinweis (umgesetzt mit AP12) | neu | E13, E43 |
 | `ech_docx_tabellen.lua` | im DOCX: Tabellenzellen in «Tabellentext» | neu | E43 |
 | `ech_docx_code.lua` | im DOCX: Codeblöcke in Consolas 9 pt, grau hinterlegt, ohne Änderung der eCH-Vorlage (umgesetzt mit AP15) | neu | E43, E46 |
-| Platzhalter | Platzhalter unter nicht überführten Überschriften | neu | E05 |
+| Platzhalter | Platzhalter unter nicht überführten Überschriften; Hinweis über Kapiteln, die nur als Text überführt sind (AP26) | neu | E05, E54 |
 | Deckblatt-Filter (DOCX) | Titel, Hinweis, Metadatentabelle (OpenXML im Format des Originals, AP15), Zusammenfassung, Inhaltsverzeichnis-Feld, Textmarken der Fusszeile | neu; Textmarken aus Spike S3 | E17, E46 |
 | `aktualisiere_felder_beim_oeffnen.py` | Word aktualisiert Felder beim Öffnen | neu (F40) | E17 |
-| CI-Prüfungen (`tools/pruefe.py`, `tools/pruefe.toml`) | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein höchstens eine Kennzeichnung (G4-Bausteine ohne, E29); `bezug`-Ziele; Zählung 36/11/8; Textvergleich mit dem Rohtext; unaufgelöste Verweise als Fehler; Feedback-Links (AP9); Registry (AP14); Beziehungen und Reihenfolge der render-Liste (AP21); jede Meldung «ERROR» im Log von `quarto render` (E48) | neu (umgesetzt mit AP7) | E07, E08, E11, E12, D4, E34, E41, E45, E48 |
+| CI-Prüfungen (`tools/pruefe.py`, `tools/pruefe.toml`) | keine YAML-Kopfzeile in Bausteinen; ID-Regeln (Eindeutigkeit, `sec-` = `bb`); keine Nummern von Hand; je feinem Baustein höchstens eine Kennzeichnung (G4-Bausteine ohne, E29); `bezug`-Ziele; Zählung 36/11/8; Textvergleich mit dem Rohtext; unaufgelöste Verweise als Fehler; Feedback-Links (AP9); Registry (AP14); Beziehungen und Reihenfolge der render-Liste (AP21); jede Meldung «ERROR» im Log von `quarto render` (E48); Text ohne Bausteine und Anhang E (AP26) | neu (umgesetzt mit AP7) | E07, E08, E11, E12, D4, E34, E41, E45, E48, E54 |
 
 ## 4. Verzeichnisstruktur und Build-Pipeline
 
@@ -634,7 +641,7 @@ Ein Status, für den die gewählte Fassung keinen Statustext hat, bricht den Bui
 | B Abkürzungen | Platzhalter | – |
 | C Glossar | Stufe 2 | grober Baustein `ech-0003-bb-glossar`, [MUSS]-Klausel in Teil 2 als feiner Baustein |
 | D Änderungen gegenüber Vorversion | Platzhalter | F13 |
-| E Abbildungsverzeichnis | Platzhalter | künftig erzeugt; Abb. 1 und 2 (1.3, 1.4) sind seit AP25 überführt, Abb. 3–6 liegen in Kap. 2–5 (E52) |
+| E Abbildungsverzeichnis | erzeugt (AP26) | aus den Bildunterschriften der sechs Abbildungen in Reihenfolge; Website als Liste mit Links ohne Seitenzahlen, Word in der Formatvorlage «Abbildungsverzeichnis» mit Seitenzahl als Feld PAGEREF (E54) |
 | F Formale Syntax für die Versionierung | Stufe 1 (geplant) | grober Baustein `ech-0003-bb-formale-syntax`, Typ `rule`, Anker `sec-formale-syntax`; EBNF als Codeblock einschliesslich «):» |
 
 ### 5.4 Erzeugter Inhalt (E14)
@@ -647,6 +654,8 @@ Ein Status, für den die gewählte Fassung keinen Statustext hat, bricht den Bui
 | Inhaltsverzeichnis, Nummerierung | Gerüst |
 | Kopf- und Fusszeile (Word) | Metadaten → Textmarken `eCHNummer`, `eCHName`, `Version`, `Status`, `Ausgabedatum` (S3) |
 | Platzhalter | Gerüst (E05) |
+| Hinweis «Text überführt, noch nicht in Bausteine zerlegt» | Gerüst (E54) |
+| Abbildungsverzeichnis (Anhang E) | Bildunterschriften (E54) |
 | Demonstrator-Hinweis | D5 |
 | Rückverweise, Registry | Bausteine (E10) |
 
@@ -697,7 +706,7 @@ Solange `vorschlag: true` steht, trägt jeder Abschnitt mit Texten oder Auswahle
 |---|---|---|
 | Hinweis oben | Text | siehe unten |
 | Standard | vorbefüllt | Standard-ID `ech-0003` (E38) |
-| Baustein-ID | vorbefüllt | z.B. `ech-0003-bb-schema-eigene-version`; `ech-0003-referenzen` bei Anhang A; leer beim Standard als Ganzes |
+| Baustein-ID | vorbefüllt | z.B. `ech-0003-bb-schema-eigene-version`; `ech-0003-referenzen` bei Anhang A; `ech-0003-kapitel-standard` usw. bei Kap. 2–5 (E54); leer beim Standard als Ganzes |
 | Stand | vorbefüllt | «eCH-0003 V11.1.0, Build 2026-11-09 (a05c2c3)» |
 | Link zur Stelle | vorbefüllt | `…/ech-0003/v11.1.0/de/index.html#<baustein-id>` |
 | Wortlaut | vorbefüllt, nur bei feinen Bausteinen | Text der Klausel; über 2 000 Zeichen gekürzt, mit «…» |
@@ -711,7 +720,7 @@ Titel: «Feedback zu <Name> (<Baustein-ID>)». Labels werden nie per URL gesetzt
 
 > **Dies ist ein Demonstrator, kein offizielles Verfahren von eCH.** Ihr Feedback ist keine Rückmeldung im Sinn einer öffentlichen Konsultation und fliesst nicht in die Überarbeitung von eCH-0003 ein. Es ist öffentlich sichtbar, bitte schreiben Sie nichts Vertrauliches hinein. Wir sammeln es und nutzen es für den Ausbau des Demonstrators. Eine Antwort können wir nicht zusagen.
 
-**Ohne Baustein:** Dasselbe Formular dient für «Feedback zum Standard als Ganzes» (`bb:gesamt`) und Anhang A (`bb:referenzen`).
+**Ohne Baustein:** Dasselbe Formular dient für «Feedback zum Standard als Ganzes» (`bb:gesamt`), Anhang A (`bb:referenzen`) und Kap. 2–5 als Text (`bb:kapitel-standard`, `bb:kapitel-best-practice`, `bb:kapitel-hilfsmittel`, `bb:kapitel-white-paper`; E54). Die Action liest die Kennungen ohne Baustein aus dem Attribut `feedback-id` der Quelle.
 
 **Action `.github/workflows/feedback-label.yml` (E38):**
 
@@ -831,7 +840,7 @@ Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
 | AP23 | B: 1.3.4, 1.3.9, 1.3.10 als Bausteine. Dazu Nachbesserungen zu AP21/AP22: Graph ohne Pfeile aus Anhängen (F56), Zielarten «Vorlagentext» und «Statustext». Umgesetzt 8.11., committet als `aa70f36`; IDs freigegeben in [bausteine-1-3.md](bausteine-1-3.md) (E50) | E29, E30, E47, E50 |
 | AP24 | Steckbrief eCH-0003 als Daten und Seite (Option A, `ausbau.md`). Umgesetzt 8.11., committet als `ad7291a`; Texte und Auswahlen freigegeben (E51, Abschnitt 5.5) | E47, E51, F46, F47 |
 | AP25 | C: Rest von 1.3 und 1.4 als 9 grobe und 45 feine Bausteine; Abbildung 1 und 2 als Bild aus dem Original-PDF (`tools/schneide_abbildungen.py`, F10 vorläufig). Umgesetzt 8.11.; IDs und Fälle 1–6 freigegeben in [bausteine-1-3-und-1-4.md](bausteine-1-3-und-1-4.md) (E52), als initialer Vorschlag (E53) | E29, E30, E47, E52, E53, F10 |
-| AP26 | D: Kap. 2–5, falls Zeit (F26) | E47 |
+| AP26 | D in der Variante «nur Text» (Entscheid der Projektleitung): Kap. 2–5 wörtlich als Text, ohne Bausteine; Querverweise erzeugt, Abbildung 3–6 aus dem Original-PDF, Hinweis über jedem Kapitel, Feedback je Kapitel (vier `feedback-id`, freigegeben); Anhang E erzeugt; zwei Links gegenüber dem Original korrigiert (F54). Umgesetzt 8.11. (E54) | E47, E53, E54, F10, F26 |
 
 **Stichzeit Mo 9.11. 12 Uhr:** Was dann live ist, gilt als Stand des MVP.
 

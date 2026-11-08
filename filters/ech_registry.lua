@@ -19,7 +19,8 @@
 --                      auf einen umschliessenden Baustein fehlen (W5).
 --
 -- Ziel eines Verweises (target_kind): baustein; noch_kein_baustein (Anker
--- einer Platzhalter-Überschrift, W2, mit `title`); vorlagentext oder
+-- einer Platzhalter-Überschrift, W2, oder einer Überschrift mit Text ohne
+-- Bausteine, Kap. 2–5, AP26, E54; mit `title`); vorlagentext oder
 -- statustext (Anker einer Überschrift mit erzeugtem Inhalt aus der
 -- Vorlage-Fassung, nie ein Baustein, ADR 0005, E50, mit `title`); literatur
 -- (Eintrag in Anhang A) oder standard (W3, mit `title` und `url` wie im
@@ -37,9 +38,14 @@
 --
 -- Gliederung (AP24, E51): `gliederung` nennt jede Überschrift des Gerüsts mit
 -- Nummer, Titel, Ebene, Anker und Inhalt: baustein (mit `baustein`),
--- platzhalter, vorlagentext, statustext, daten (Anhang A, `feedback-id`) oder
--- ohne_text (Kapitel ohne eigenen Text). Anker ohne Baustein können
--- provisorisch sein (E05). Der Titel des Standards steht unter `standard`.
+-- platzhalter, text (überführt, noch nicht in Bausteine zerlegt, `.nur-text`,
+-- AP26, E54), vorlagentext, statustext, daten (Anhang A, `feedback-id`),
+-- verzeichnis (Anhang E, aus den Abbildungen erzeugt, AP26) oder
+-- ohne_text (Kapitel ohne eigenen Text, auch `.nur-text-kapitel`, obwohl es
+-- eine `feedback-id` trägt). Anker ohne Baustein können provisorisch sein
+-- (E05). Der Titel des Standards steht unter `standard`. Text ohne Bausteine
+-- ist keine Quelle von Beziehungen: Seine Querverweise fehlen in der Registry,
+-- bis er in Bausteine zerlegt ist (E54).
 --
 -- Steckbrief (AP24, E51; filters/ech_steckbrief.lua): Die Seite mit dem
 -- Metadatum `steckbrief-aus` liest die Registry wie die Übersichtsseite, dazu
@@ -378,7 +384,9 @@ function Pandoc(doc)
           local f = fundstelle(h)
           local titel = (f.section and (f.section .. " ") or "") .. f.title
           local art = vorlage_inhalt[anker]
-          if not art and h.classes:includes("platzhalter") then art = "noch_kein_baustein" end
+          if not art and (h.classes:includes("platzhalter") or h.classes:includes("nur-text")) then
+            art = "noch_kein_baustein"
+          end
           if not art then
             common.abbruch(string.format("Registry: «%s» verweist auf «%s» (%s), eine Überschrift ohne Baustein, "
               .. "Platzhalter oder Vorlagentext. Die Zielart ist erst zu entscheiden (E50).", quelle, anker, titel))
@@ -536,7 +544,9 @@ function Pandoc(doc)
     local bb = h.attributes["bb"]
     local inhalt = bb and "baustein" or vorlage_inhalt[h.identifier]
       or (h.classes:includes("platzhalter") and "platzhalter")
-      or (h.attributes["feedback-id"] and "daten") or "ohne_text"
+      or (h.classes:includes("nur-text") and "text")
+      or (h.classes:includes("abbildungsverzeichnis") and "verzeichnis")
+      or (h.attributes["feedback-id"] and not h.classes:includes("nur-text-kapitel") and "daten") or "ohne_text"
     table.insert(gliederung, obj({ { "section", f.section or NULL }, { "title", f.title }, { "ebene", h.level },
       { "anker", h.identifier }, { "inhalt", inhalt }, { "baustein", bb } }))
     ::weiter::

@@ -92,9 +92,11 @@ local ERZEUGT = { standard = "ebene0", status = "ebene0", ["referenzen-ech"] = "
 M.STAND = {
   baustein = "Baustein",
   ["nicht-ueberfuehrt"] = "nicht überführt",
+  text = "Text überführt, noch nicht in Bausteine zerlegt",
   vorlagentext = "Vorlagentext",
   statustext = "Statustext",
   daten = "Daten (Anhang A), kein Baustein",
+  verzeichnis = "Verzeichnis, erzeugt",
   gliederung = "Kapitel ohne eigenen Text",
 }
 
@@ -355,16 +357,23 @@ function M.erzeuge(a)
         end
       end
     end
-    local ueberfuehrt = { baustein = true, vorlagentext = true, statustext = true, daten = true }
+    local ueberfuehrt = { baustein = true, vorlagentext = true, statustext = true, daten = true, text = true, verzeichnis = true }
     local zeilen, js, i = {}, {}, 1
     while i <= #liste do
       local g = liste[i]
       local ende = i + 1
       while ende <= #liste and liste[ende].ebene > g.ebene do ende = ende + 1 end
-      local etwas = false
-      for k = i, ende - 1 do etwas = etwas or ueberfuehrt[liste[k].inhalt] == true end
+      local etwas, nur_text, mit_text = false, true, false
+      for k = i, ende - 1 do
+        local inhalt = liste[k].inhalt
+        etwas = etwas or ueberfuehrt[inhalt] == true
+        nur_text = nur_text and (inhalt == "text" or inhalt == "ohne_text")
+        mit_text = mit_text or inhalt == "text"
+      end
       local stand, naechster = g.inhalt, i + 1
-      if not etwas then
+      if nur_text and mit_text then
+        stand, naechster = "text", ende   -- Kapitel nur als Text (AP26, E54) in einer Zeile
+      elseif not etwas then
         stand, naechster = "nicht-ueberfuehrt", ende   -- ganzer Teilbaum in einer Zeile
       elseif g.inhalt == "platzhalter" then
         stand = "nicht-ueberfuehrt"
@@ -455,7 +464,8 @@ function M.erzeuge(a)
         bloecke:insert(pandoc.Para(pandoc.Inlines("Das Raster nennt diesen Teil eine Hypothese, welche Kapitel bzw. "
           .. "Kernelemente im Sinn von «Building Blocks» geplant sind. Hier ist er aus den Bausteinen erzeugt: je grober "
           .. "Baustein eine Zeile mit Kapitel, Name, Baustein-ID und Zahl der feinen Bausteine. Teile, die noch nicht "
-          .. "in Bausteine überführt sind, stehen als «nicht überführt», ein ganz unüberführter Teil in einer Zeile.")))
+          .. "in Bausteine überführt sind, stehen als «nicht überführt», ein ganz unüberführter Teil in einer Zeile. "
+          .. "Kapitel, deren Text überführt, aber noch nicht in Bausteine zerlegt ist, stehen ebenfalls in einer Zeile.")))
         local html, js = gliederung_html()
         bloecke:insert(pandoc.RawBlock("html", html))
         table.insert(felder_json, J.obj({ { "code", "gliederung" }, { "name", feldname("gliederung") },

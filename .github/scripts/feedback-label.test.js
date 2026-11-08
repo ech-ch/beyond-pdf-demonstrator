@@ -48,6 +48,19 @@ test('Anhang A: ech-0003-referenzen ergibt bb:referenzen', () => {
   assert.ok(labels({ 'Baustein-ID': 'ech-0003-referenzen' }).includes('bb:referenzen'));
 });
 
+test('Kap. 2–5 als Text ohne Bausteine: feedback-id ergibt bb:kapitel-… (AP26)', () => {
+  for (const kapitel of ['standard', 'best-practice', 'hilfsmittel', 'white-paper']) {
+    assert.ok(labels({ 'Baustein-ID': `ech-0003-kapitel-${kapitel}` }).includes(`bb:kapitel-${kapitel}`), kapitel);
+  }
+});
+
+test('feedback-id, die nicht in der Quelle steht oder zu einem anderen Standard gehört: bb:unbekannt', () => {
+  assert.ok(labels({ 'Baustein-ID': 'ech-0003-kapitel-gibt-es-nicht' }).includes('bb:unbekannt'));
+  assert.ok(labels({ 'Baustein-ID': 'ech-0003-bb-kapitel-standard' }).includes('bb:unbekannt'));
+  assert.ok(labels({ 'Baustein-ID': 'ech-0004-kapitel-standard' }).includes('bb:unbekannt'));
+  assert.ok(labels({ Standard: 'ech-0004', 'Baustein-ID': 'ech-0003-kapitel-standard' }).includes('bb:unbekannt'));
+});
+
 test('Mehrfachbaustein', () => {
   assert.ok(labels({ 'Baustein-ID': 'ech-0003-bb-aenderungen-vorversion' }).includes('bb:aenderungen-vorversion'));
 });

@@ -614,8 +614,10 @@ $grid-margin-width: 375px;
 
 // Platzhalter unter nicht überführten Überschriften (E05,
 // filters/ech_platzhalter.lua): grauer Hinweiskasten. Die Klasse .platzhalter
-// selbst trägt Quarto auf das section-Element der Überschrift.
-#quarto-content div.platzhalter-hinweis {
+// selbst trägt Quarto auf das section-Element der Überschrift. Gleich der
+// Hinweis über Kap. 2–5, die nur als Text überführt sind (.nur-text-hinweis, AP26).
+#quarto-content div.platzhalter-hinweis,
+#quarto-content div.nur-text-hinweis {
   background: $ech-stripe;
   border-left: 3px solid $ech-muted;
   color: $ech-muted;
@@ -625,6 +627,13 @@ $grid-margin-width: 375px;
   p {
     margin: 0;
   }
+}
+
+// Abbildungsverzeichnis (Anhang E, AP26; filters/ech_abbildungen.lua): Liste
+// ohne Aufzählungszeichen, wie im Original
+#quarto-content div.abbildungsverzeichnis ul {
+  list-style: none;
+  padding-left: 0;
 }
 
 // Steckbrief (AP24, E51; filters/ech_steckbrief.lua). Felder als Tabelle mit

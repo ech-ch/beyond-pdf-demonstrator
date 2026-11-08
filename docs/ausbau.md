@@ -98,7 +98,8 @@ Die Aufwände sind Schätzungen.
 - **Befund (AP25):** Abbildung 1 (1.3) und Abbildung 2 (1.4) zeigen dieselben zwölf Schritte in derselben Anordnung. Abbildung 2 färbt drei Bereiche ein und nennt ihre Dauer (grün «4 Wochen», blau «6 Wochen», rot «5 Wochen»); ihr fehlt der gepunktete Pfeil von «Formale QS 1» zurück zu «Erarbeitung». Abbildungen 3–6 in Kap. 2–5 sind nach F10 Varianten mit einer Auswahl der Schritte. Im Word-Original sind es eingebettete Visio-Zeichnungen.
 - **Was:** Die Schritte und Übergänge einmal als Daten (z.B. `prozess.yml`: Schritte, Pfeile durchgezogen oder gepunktet, je Antragsform die Auswahl, je Schritt die Frist), daraus alle Abbildungen als Diagrammcode erzeugen (Mermaid oder Graphviz, wie der Graph der Beziehungen). Die Fristen in 1.4 und die Fristen in den Klauseln (z.B. «mindestens 6 Wochen» in 1.3.4) kämen dann aus derselben Quelle.
 - **Wert:** Abweichungen wie der fehlende Pfeil würden sichtbar oder verschwinden; Kap. 2–5 bekämen ihre Abbildungen ohne Zeichnen; Beschriftung, Farben und Alternativtext entstünden aus denselben Daten; übersetzt würden nur die Beschriftungen.
-- **Aufwand:** ca. ½ Tag für 1.3 und 1.4, mit Kap. 2–5 zusammen mit D (F26). Offen: ob die Darstellung dem Original nahe genug kommt (F10).
+- **Aufwand:** ca. ½ Tag für 1.3 und 1.4, mit Kap. 2–5 zusammen mit J (F26). Offen: ob die Darstellung dem Original nahe genug kommt (F10).
+- **Befund (AP26, E54):** Abbildung 4 ist pixelgleich mit Abbildung 1, Abbildung 3 inhaltlich gleich. Abbildung 5 zeigt die nicht durchlaufenen Schritte hellgrau. Abbildung 6 fehlen beide Schritte «Übersetzung», der gepunktete Pfeil von Formale QS 1 zurück zu Erarbeitung und die gepunktete Abkürzung von Inhaltliche QS 1 zu Genehmigung / Ablehnung. Aus Daten erzeugt, würden solche Abweichungen sichtbar.
 
 ### H. Abbildungen als Originaldatei einbetten (F10)
 
@@ -113,12 +114,21 @@ Die Aufwände sind Schätzungen.
 - **Wert:** Das Modell entwickelt sich aus der Diskussion weiter, statt durch den MVP festgeschrieben zu werden (E28, F41).
 - **Aufwand:** offen. Vorher klären, wie Änderungen mit eingefrorenen IDs zusammengehen (F59).
 
+### J. Kap. 2–5 in Bausteine umbauen (E54)
+
+- **Heute:** Kap. 2–5 sind seit AP26 als Text überführt, aber noch nicht in Bausteine zerlegt: Wortlaut, Kennzeichnungen im Text, erzeugte Querverweise, Abbildungen 3–6, Feedback je Kapitel (`ech-0003-kapitel-…`). Ihre Querverweise zählen noch nicht als Beziehungen.
+- **Erste Frage: F26.** Kap. 2–5 wiederholen fast wörtlich dieselben Klauseln, mit Unterschieden in Antragsform, Frist (fünf oder drei Jahre), Deklination und Verbindlichkeit ([SOLLTE] in 2.3.7, [MUSS] in 3.3.7, 4.3.4, 5.3.7). Parametrisierte Bausteine, Mehrfachverwendung (E27) oder getrennte Bausteine? Davon hängen Zuschnitt, Kurznamen und Beziehungen ab. Gleich danach F59: was mit den vier Kennungen und ihren Issues geschieht.
+- **Was dann:** ID-Liste wie in AP22 bis AP25 (Grenzregeln G1–G4, `bezug`), Durchsicht durch die Projektleitung, Umbau per Skript aus den Rohtexten, die schon da sind. Die Prüfungen gegen das Word-Original laufen bereits je Kapitel.
+- **Wert:** Feedback, Registry, Beziehungen und Steckbrief decken dann den ganzen Standard ab; die Wiederholungen aus 1.3.3 [DARF NICHT] werden sichtbar. Passt zu G (Abbildungen aus den Prozessschritten).
+- **Aufwand:** ca. 1 Tag nach dem Entscheid zu F26. E53 gilt: Auch dieser Zuschnitt ist ein initialer Vorschlag.
+
 ## Empfohlene Reihenfolge, wenn der MVP steht
 
-1. E (in Session 3 ohnehin dabei)
-2. sichtbare Beziehungen aus Stufe 2, weil B darauf aufbaut und sie für sich schon viel zeigen
-3. A
-4. B, falls freigegeben; sonst D
-5. C, sobald V12.0.0 publiziert oder freigegeben ist
+1. J (Kap. 2–5 in Bausteine), zuerst F26 klären; der MVP zeigt den ganzen Standard, aber Kap. 2–5 noch ohne Bausteine
+2. E (in Session 3 ohnehin dabei)
+3. sichtbare Beziehungen aus Stufe 2, weil B darauf aufbaut und sie für sich schon viel zeigen
+4. A
+5. B, falls freigegeben; sonst D
+6. C, sobald V12.0.0 publiziert oder freigegeben ist
 
 Anhang C, Vorlage-Fassung 2025 und PDF aus Stufe 2 fallen damit nach hinten.

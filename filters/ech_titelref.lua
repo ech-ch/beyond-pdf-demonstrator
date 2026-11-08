@@ -1,4 +1,5 @@
--- Querverweis «Nummer + Titel» («Kapitel 7.1 Zuteilung einer eCH-Nummer», E11).
+-- Querverweis «Nummer + Titel» («Kapitel 7.1 Zuteilung einer eCH-Nummer», E11)
+-- oder nur «Titel» (AP26).
 --
 -- Ausgangspunkt: Spike S3 (docs/spikes/s3-querverweise/filters/ech_titelref.lua),
 -- ohne den Schalter `spike-filter`.
@@ -15,6 +16,11 @@
 -- Anhänge (AP25): ech_anhang.lua hat «Anhang C – » vor den Titel gesetzt und
 -- den Verweis zu «Anhang C» aufgelöst. Der Filter hängt « – Glossar» an, wie
 -- das Word-Original im Feld REF («vgl. 2. Teil von Anhang C – Glossar», 1.3.2).
+--
+-- Nur der Titel (AP26): [-@sec-standard-verfahrensstandard]{.nur-titel} ergibt
+-- «Verfahrensstandard» (verlinkt), wie ein Feld REF ohne Schalter \r im
+-- Word-Original (2.1: «… Interoperabilitätsstandard, Verfahrensstandard und
+-- Referenzierter Fremdstandard»).
 
 local stringify = pandoc.utils.stringify
 
@@ -52,11 +58,15 @@ function Pandoc(doc)
   })
   return doc:walk({
     Span = function(span)
-      if not span.classes:includes("mit-titel") then return nil end
+      local nur = span.classes:includes("nur-titel")
+      if not (nur or span.classes:includes("mit-titel")) then return nil end
       local out = span.content:walk({
         Link = function(link)
           local id = link.target:match("^#(.+)$")
-          if id and titles[id] then
+          if id and titles[id] and nur then
+            link.content = titles[id]:clone()
+            return link
+          elseif id and titles[id] then
             link.content:insert(pandoc.Space())
             if anhang[id] then link.content:extend({ pandoc.Str("–"), pandoc.Space() }) end
             link.content:extend(titles[id])

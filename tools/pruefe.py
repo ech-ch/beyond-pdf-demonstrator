@@ -18,7 +18,7 @@ Quelle (Gerüst und Baustein-Dateien):
   5. keine Kapitel- oder Anhangsnummer als reiner Text (K1)
   6. je feinem Baustein höchstens eine Kennzeichnung, ohne Kennzeichnung nur
      mit Typ ausser `requirement`; jede Kennzeichnung in einem feinen
-     Baustein (E29)
+     Baustein (E29), ausser im Text ohne Bausteine (AP26, E54)
   7. Ziele von `bezug` existieren (E30)
   8. Hinweis bei zeichengleichen Klauseln ohne Mehrfachverwendung (E27)
   9. Label `bb:<kurzname>` höchstens 50 Zeichen (Grenze von GitHub, E38)
@@ -27,6 +27,11 @@ Quelle (Gerüst und Baustein-Dateien):
  11. Steckbrief (AP24, E51): Raster-Fassung vorhanden, jede Auswahl in
      steckbrief.yml nur mit Codes aus dem Vokabular des Rasters, jede Auswahl
      des Rasters belegt
+ 12. Text ohne Bausteine (AP26, E54): Dateien in text/ beginnen mit einer
+     Kapitelüberschrift `.nur-text-kapitel` mit `feedback-id`, alle übrigen
+     Überschriften dort tragen `.nur-text`, kein `bb`; beides nur dort;
+     feedback-id im Format <standard-id>-<kurzname>, eindeutig, Label
+     höchstens 50 Zeichen und nicht gleich dem Label eines Bausteins
 
 Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
   1. Zählung der Kennzeichnungen (D4)
@@ -47,6 +52,9 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
      als Ganzes, keine `labels=` in der URL, Wortlaut gleich wie der Rohtext;
      die Bedienelemente stehen im HTML und sind vom Textvergleich ausgenommen;
      im Word gibt es keine
+     Kapitel als Text ohne Bausteine (AP26, E54): Hinweis «Text überführt, noch
+     nicht in Bausteine zerlegt» genau einmal auf der Website und im Word,
+     vom Textvergleich ausgenommen; kein Baustein; Feedback-Knopf vorhanden
   7. Beziehungen (E47, AP21): «Beziehungen (n)» genau bei den Bausteinen mit
      Querverweis oder Rückbezug in der Registry, je Fundstelle einmal, n und
      Einträge stimmen, vom Textvergleich ausgenommen, nicht im Word; die
@@ -54,6 +62,10 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
      Legende genau für das, was im Graph vorkommt, je Vorwärtsbeziehung eine
      Tabellenzeile, die Prüfsumme der aktuellen Registry und nur auflösbare
      Links
+ 10. Abbildungsverzeichnis (Anhang E, AP26): Einträge wie im Original (ohne
+     Seitenzahlen), gleich den Bildunterschriften in Reihenfolge, je Eintrag ein
+     Link auf die Abbildung; im Word Formatvorlage «Abbildungsverzeichnis» und
+     je Eintrag ein Feld PAGEREF auf die Textmarke der Abbildung
   8. interne Links aller Seiten unter _site/: Zieldatei und Anker vorhanden,
      z. B. kein Link auf eine .qmd-Quelle (404 auf GitHub Pages)
   9. Steckbrief (AP24, E51): aus der aktuellen Registry erzeugt (Prüfsumme),
@@ -169,11 +181,16 @@ class Baustein:
     absaetze: list[str] = field(default_factory=list)   # nur feine Bausteine
 
 
-def zerlege(datei: Path, text: str, bausteine: list[Baustein], kennz: re.Pattern, b: Befunde) -> None:
-    """Liest Überschriften, :::-Blöcke und Absatzanfänge einer Datei."""
+NUR_TEXT = {"nur-text", "nur-text-kapitel"}   # Text ohne Bausteine (AP26, E54)
+
+
+def zerlege(datei: Path, text: str, bausteine: list[Baustein], kennz: re.Pattern, b: Befunde,
+            im_text_gezaehlt: dict[str, int] | None = None) -> None:
+    """Liest Überschriften, :::-Blöcke und Absatzanfänge einer Datei. Zählt die
+    Kennzeichnungen im Text ohne Bausteine in `im_text_gezaehlt`."""
     zeilen = KOMMENTAR.sub(lambda m: "\n" * m[0].count("\n"), text).split("\n")
     stapel: list[Baustein | None] = []
-    absatzanfang, im_code = True, False
+    absatzanfang, im_code, im_text = True, False, False
     for nr, zeile in enumerate(zeilen, 1):
         if zeile.lstrip().startswith("```"):
             im_code = not im_code
@@ -182,13 +199,18 @@ def zerlege(datei: Path, text: str, bausteine: list[Baustein], kennz: re.Pattern
             continue
         if m := TITEL.match(zeile):
             a = attribute(m[3])
+            im_text = bool(NUR_TEXT & set(a["klassen"]))
             if "bb" in a:
                 bausteine.append(Baustein(a["bb"], "grob", a, datei, nr))
+                if im_text:
+                    b.fehler_(f"«{a['bb']}»: Baustein an einer Überschrift mit Text ohne Bausteine (E54)", datei, nr)
             absatzanfang = True
             continue
         if m := DIV_AUF.match(zeile):
             a = attribute(m[2])
             neu = Baustein(a["bb"], "fein", a, datei, nr) if "bb" in a else None
+            if neu and im_text:
+                b.fehler_(f"«{a['bb']}»: Baustein im Text ohne Bausteine (E54)", datei, nr)
             if neu:
                 bausteine.append(neu)
             stapel.append(neu)
@@ -210,8 +232,12 @@ def zerlege(datei: Path, text: str, bausteine: list[Baustein], kennz: re.Pattern
                 innerster.absaetze.append(zeile.strip())
             else:
                 innerster.absaetze[-1] += " " + zeile.strip()
-        if absatzanfang and kennz.match(zeile.strip()) and innerster is None:
-            b.fehler_(f"Kennzeichnung ausserhalb eines feinen Bausteins: «{zeile.strip()[:60]}…» (E29)", datei, nr)
+        if absatzanfang and (k := kennz.match(zeile.strip())) and innerster is None:
+            if im_text:
+                if im_text_gezaehlt is not None:
+                    im_text_gezaehlt[k[1]] = im_text_gezaehlt.get(k[1], 0) + 1
+            else:
+                b.fehler_(f"Kennzeichnung ausserhalb eines feinen Bausteins: «{zeile.strip()[:60]}…» (E29)", datei, nr)
         for m in re.finditer(r"\]\{([^}]*\bbb=[^}]*)\}", zeile):
             a = attribute(m[1])
             bausteine.append(Baustein(a["bb"], "inline", a, datei, nr))
@@ -240,9 +266,14 @@ def pruefe_quelle(std: dict, b: Befunde) -> None:
     id_muster = re.compile("^" + re.escape(praefix) + r"[a-z0-9]+(?:-[a-z0-9]+)*$")
 
     dateien = sorted(ordner.rglob("*.md")) if ordner.exists() else []
+    text_ordner = quelle / "text"
+    text_dateien = sorted(text_ordner.glob("*.md")) if text_ordner.exists() else []
     bausteine: list[Baustein] = []
     includes: dict[Path, list[tuple[Path, int]]] = {}
-    for datei in [geruest] + dateien:
+    im_text_gezaehlt: dict[str, int] = {}
+    feedback_ids: dict[str, tuple[Path, int]] = {}
+    standard_id = praefix.removesuffix("bb-")   # «ech-0003-»
+    for datei in [geruest] + dateien + text_dateien:
         text = lies(datei)
         ohne_kommentare = KOMMENTAR.sub(lambda m: "\n" * m[0].count("\n"), text)
         for nr, zeile in enumerate(ohne_kommentare.split("\n"), 1):
@@ -267,9 +298,39 @@ def pruefe_quelle(std: dict, b: Befunde) -> None:
                 if not (m and "bb" in attribute(m[3])):
                     b.fehler_("Baustein-Datei beginnt nicht mit der Überschrift eines groben Bausteins (bb)", datei, 1)
         pruefe_k1(datei, text, b)
-        zerlege(datei, text, bausteine, kennz, b)
+        zerlege(datei, text, bausteine, kennz, b, im_text_gezaehlt)
+        # 12. Text ohne Bausteine: Klassen nur in text/, dort an jeder Überschrift
+        ohne = KOMMENTAR.sub(lambda m: "\n" * m[0].count("\n"), text).split("\n")
+        erste = True
+        for nr, zeile in enumerate(ohne, 1):
+            m = TITEL.match(zeile)
+            if not m:
+                continue
+            a, ebene = attribute(m[3]), len(m[1])
+            klassen = set(a["klassen"])
+            if "feedback-id" in a:
+                fid = a["feedback-id"]
+                if fid in feedback_ids:
+                    b.fehler_(f"feedback-id «{fid}» doppelt (zuerst {rel(feedback_ids[fid][0])}:{feedback_ids[fid][1]})", datei, nr)
+                feedback_ids.setdefault(fid, (datei, nr))
+            if datei.parent != text_ordner:
+                if klassen & NUR_TEXT:
+                    b.fehler_("`.nur-text` und `.nur-text-kapitel` nur in den Dateien unter text/ (E54)", datei, nr)
+                continue
+            if erste:
+                if not (ebene == 1 and "nur-text-kapitel" in klassen and "feedback-id" in a and "id" in a):
+                    b.fehler_("Datei in text/ beginnt nicht mit einer Kapitelüberschrift {#sec-… .nur-text-kapitel feedback-id=…} (E54)", datei, nr)
+            elif "nur-text" not in klassen or ebene == 1:
+                b.fehler_("Überschrift in text/ ohne `.nur-text` oder ein zweites Kapitel in derselben Datei (E54)", datei, nr)
+            if "original-seite" not in a:
+                b.fehler_("Überschrift in text/ ohne original-seite (E09)", datei, nr)
+            erste = False
 
     # 3. Einbindung
+    for datei in text_dateien:
+        n = len(includes.get(datei.resolve(), []))
+        if n != 1:
+            b.fehler_(f"Datei mit Text ohne Bausteine ist {n}× eingebunden, erwartet einmal (E54)", datei)
     for datei in dateien:
         n = len(includes.get(datei.resolve(), []))
         mehrfach = datei.parent.name == "mehrfach"
@@ -336,9 +397,25 @@ def pruefe_quelle(std: dict, b: Befunde) -> None:
             namen = ", ".join(f"{g.bb} ({rel(g.datei)}:{g.zeile})" for g in gleiche)
             b.hinweis(f"zeichengleiche Klauseln ohne Mehrfachverwendung: {namen} (E27)", gleiche[0].datei, gleiche[0].zeile)
 
+    # 12. feedback-id: Format, Label, nicht gleich dem Label eines Bausteins
+    fid_muster = re.compile("^" + re.escape(standard_id) + r"[a-z0-9]+(?:-[a-z0-9]+)*$")
+    bb_labels = {"bb:" + x.bb[len(praefix):] for x in bausteine}
+    for fid, (datei, nr) in sorted(feedback_ids.items()):
+        label = "bb:" + fid[len(standard_id):]
+        if not fid_muster.match(fid) or fid.startswith(praefix):
+            b.fehler_(f"feedback-id «{fid}»: erwartet {standard_id}<kurzname> ohne «bb-» (E38, E54)", datei, nr)
+        elif len(label) > LABEL_MAX:
+            b.fehler_(f"Label zu feedback-id «{fid}» wäre länger als {LABEL_MAX} Zeichen (E38)", datei, nr)
+        elif label in bb_labels:
+            b.fehler_(f"feedback-id «{fid}» ergäbe dasselbe Label {label} wie ein Baustein (E38)", datei, nr)
+
     grob = sum(1 for x in bausteine if x.art == "grob")
     fein = sum(1 for x in bausteine if x.art == "fein")
     print(f"{std['name']}: {len(dateien)} Baustein-Dateien, {grob} grobe und {fein} feine Bausteine in der Quelle")
+    if text_dateien:
+        zaehlung = ", ".join(f"{k} {im_text_gezaehlt.get(k, 0)}" for k in std["kennzeichnungen"])
+        print(f"{std['name']}: {len(text_dateien)} Dateien mit Text ohne Bausteine, Kennzeichnungen dort: {zaehlung}; "
+              f"{len(feedback_ids)} feedback-id ({', '.join(sorted(feedback_ids))})")
 
     # 10. Reihenfolge: Übersicht «Beziehungen» und Steckbrief nach der Standardseite
     for schluessel in ("beziehungen_quelle", "steckbrief_quelle"):
@@ -490,9 +567,10 @@ def pruefe_steckbrief(std: dict, registry_pfad: Path, b: Befunde) -> None:
     for bb, n in feine_ist.items():
         if int(n) != feine.get(bb, 0):
             b.fehler_(f"Steckbrief: «{bb}» mit {n} feinen Bausteinen, Registry {feine.get(bb, 0)}", seite)
-    ueberfuehrt = {"baustein", "vorlagentext", "statustext", "daten"}
+    ueberfuehrt = {"baustein", "vorlagentext", "statustext", "daten", "text", "verzeichnis"}
     stand_soll = {"baustein": "baustein", "vorlagentext": "vorlagentext", "statustext": "statustext",
-                  "daten": "daten", "platzhalter": "nicht-ueberfuehrt", "ohne_text": "gliederung"}
+                  "daten": "daten", "platzhalter": "nicht-ueberfuehrt", "ohne_text": "gliederung", "text": "text",
+                  "verzeichnis": "verzeichnis"}
     i, k = 0, 0
     while i < len(gliederung):
         g = gliederung[i]
@@ -504,8 +582,16 @@ def pruefe_steckbrief(std: dict, registry_pfad: Path, b: Befunde) -> None:
             break
         stand = reihen[k][1]
         teilbaum_leer = not any(x["inhalt"] in ueberfuehrt for x in gliederung[i:ende])
+        teilbaum_text = all(x["inhalt"] in ("text", "ohne_text") for x in gliederung[i:ende]) \
+            and any(x["inhalt"] == "text" for x in gliederung[i:ende])
         if stand == "nicht-ueberfuehrt" and teilbaum_leer:
             i = ende   # ganzer Teilbaum in einer Zeile
+        elif stand == "text" and teilbaum_text:
+            i = ende   # Kapitel nur als Text in einer Zeile (AP26, E54)
+        elif teilbaum_text and ende > i + 1:
+            b.fehler_(f"Steckbrief: «{g.get('section')} {g['title']}» ist nur als Text überführt, "
+                      f"steht aber nicht in einer Zeile «text» (E54)", seite)
+            i = ende
         elif stand != stand_soll.get(g["inhalt"]):
             b.fehler_(f"Steckbrief: «{g.get('section')} {g['title']}» als {stand}, Registry {g['inhalt']}", seite)
             i += 1
@@ -591,10 +677,17 @@ def docx_absaetze(pfad: Path) -> list[tuple[str, set[str]]]:
     return absaetze
 
 
-def docx_kapitel(absaetze, von: str, bis: str | None) -> str:
+def docx_bereich(absaetze, von: str, bis: str | None) -> list[str]:
+    """Absätze vom Absatz mit der Textmarke `von` bis vor den mit `bis`."""
     a = next(i for i, (_, m) in enumerate(absaetze) if von in m)
     e = next(i for i, (_, m) in enumerate(absaetze) if bis in m and i > a) if bis else len(absaetze)
-    return norm(" ".join(t for t, _ in absaetze[a:e]))
+    return [t for t, _ in absaetze[a:e]]
+
+
+def docx_kapitel(absaetze, von: str, bis: str | None, ignorieren: tuple[str, ...] = ()) -> str:
+    """Text des Bereichs ohne Absätze, die mit einem Text aus `ignorieren`
+    beginnen (Hinweise des Demonstrators, AP26)."""
+    return norm(" ".join(t for t in docx_bereich(absaetze, von, bis) if not (ignorieren and t.startswith(ignorieren))))
 
 
 def rohtext(pfad: Path, ueberschriften: dict[str, str] | None) -> str:
@@ -689,6 +782,15 @@ def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befu
         mit, ohne = html_klartext(ausschnitt, ignorieren), html_klartext(ausschnitt, set())
         if 'class="platzhalter-hinweis"' in ausschnitt:
             b.fehler_(f"{kap['name']}: überführt, enthält aber noch einen Platzhalter (E05)", html_pfad)
+        if kap.get("nur_text"):
+            if "data-bb=" in ausschnitt:
+                b.fehler_(f"{kap['name']}: Text ohne Bausteine enthält einen Baustein (E54)", html_pfad)
+            n = ausschnitt.count('class="nur-text-hinweis"')
+            if n != 1:
+                b.fehler_(f"{kap['name']}: Hinweis «Text überführt, noch nicht in Bausteine zerlegt» "
+                          f"{n}× auf der Website, erwartet einmal (E54)", html_pfad)
+            if 'data-feedback-id="' not in ausschnitt:
+                b.fehler_(f"{kap['name']}: Text ohne Bausteine ohne feedback-id am Kapitel (E54)", html_pfad)
         if kap.get("vorlagentext"):
             if "data-bb=" in ausschnitt or "baustein-feedback" in ausschnitt:
                 b.fehler_(f"{kap['name']}: Ein Vorlagentext ist kein Baustein und hat kein Feedback (E13)", html_pfad)
@@ -696,7 +798,8 @@ def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befu
                 b.fehler_(f"{kap['name']}: Hinweis «Vorlagentext, zentral gepflegt …» fehlt auf der Website (E13)", html_pfad)
         elif "baustein-feedback" not in ausschnitt:
             b.fehler_(f"{kap['name']}: keine Bedienelemente im HTML; die Ausnahme vom Textvergleich prüft nichts", html_pfad)
-        if std["id_praefix"] in mit or "Alle Rückmeldungen" in mit or "Vorlagentext, zentral" in mit:
+        if std["id_praefix"] in mit or "Alle Rückmeldungen" in mit or "Vorlagentext, zentral" in mit \
+                or "noch nicht in Bausteine zerlegt" in mit:
             b.fehler_(f"{kap['name']}: Bedienelemente stehen im Klartext (html_ignorieren)", html_pfad)
         soll = rohtext(WURZEL / kap["rohtext"], None)
         for art, wert, _, p in feedback_links(ausschnitt):
@@ -724,7 +827,7 @@ def lies_quelle(std: dict) -> list["Baustein"]:
     quelle = WURZEL / std["quelle"]
     kennz = re.compile(r"^\[(" + "|".join(re.escape(k) for k in std["kennzeichnungen"]) + r")\]")
     bausteine: list[Baustein] = []
-    for datei in [quelle / "index.qmd"] + sorted((quelle / "bausteine").rglob("*.md")):
+    for datei in [quelle / "index.qmd"] + sorted((quelle / "bausteine").rglob("*.md")) + sorted((quelle / "text").glob("*.md")):
         zerlege(datei, lies(datei), bausteine, kennz, Befunde(still=True))
     return bausteine
 
@@ -762,6 +865,7 @@ def pruefe_registry(std: dict, t: str, b: Befunde) -> None:
     ids_html = set(re.findall(r'\sid="([^"]+)"', t))
     bb_anker = set(re.findall(r'<section id="([^"]+)"[^>]*\sdata-bb="', t))
     platzhalter = set(re.findall(r'<section id="([^"]+)" class="[^"]*\bplatzhalter\b', t))
+    nur_text = set(re.findall(r'<section id="([^"]+)" class="[^"]*\bnur-text\b(?!-)', t))
 
     def abschnitt(anker: str) -> str:
         """HTML vom Abschnitt mit dem Anker bis zum nächsten Abschnitt."""
@@ -805,8 +909,9 @@ def pruefe_registry(std: dict, t: str, b: Befunde) -> None:
             elif art == "noch_kein_baustein":
                 if ziel not in ids_html or ziel in bb_anker:
                     b.fehler_(f"Registry: «{bb}» verweist auf «{ziel}», der kein Anker einer Überschrift ohne Baustein ist (W2)", pfad)
-                elif ziel not in platzhalter:
-                    b.fehler_(f"Registry: «{bb}» verweist auf «{ziel}» als «noch kein Baustein», aber dort steht kein Platzhalter (E50)", pfad)
+                elif ziel not in platzhalter | nur_text:
+                    b.fehler_(f"Registry: «{bb}» verweist auf «{ziel}» als «noch kein Baustein», aber dort steht "
+                              f"weder ein Platzhalter noch Text ohne Bausteine (E50, E54)", pfad)
             elif art in vorlage_merkmal:
                 if ziel not in ids_html or ziel in bb_anker or vorlage_merkmal[art] not in abschnitt(ziel):
                     b.fehler_(f"Registry: «{bb}» verweist auf «{ziel}» als {art}, aber der Abschnitt enthält keinen (E50)", pfad)
@@ -833,12 +938,18 @@ def pruefe_registry(std: dict, t: str, b: Befunde) -> None:
                       f"Inhaltsverzeichnis «{nr} {titel}» (Ebene {ebene})", pfad)
         if (g.get("inhalt") == "ohne_text") != (eigen == "nein"):
             b.fehler_(f"Registry: «{nr} {titel}» als {g.get('inhalt')}, eigener Text im Original: {eigen}", pfad)
+        if (g.get("inhalt") == "text") != (g.get("anker") in nur_text):
+            b.fehler_(f"Registry: Gliederung «{nr} {titel}» als {g.get('inhalt')}, Überschrift "
+                      f"{'mit' if g.get('anker') in nur_text else 'ohne'} `.nur-text` (E54)", pfad)
         if (g.get("inhalt") == "baustein") != bool(g.get("baustein")) or \
                 (g.get("baustein") and eintraege.get(g["baustein"], {}).get("granularitaet") != "grob"):
             b.fehler_(f"Registry: Gliederung «{nr} {titel}» mit Baustein «{g.get('baustein')}», kein grober Baustein", pfad)
+    arten: dict[str, int] = {}
+    for g in gliederung:
+        arten[g.get("inhalt")] = arten.get(g.get("inhalt"), 0) + 1
     print(f"Registry: {anzahl['grob']} grobe, {anzahl['fein']} feine Bausteine, "
           f"{sum(len(e.get('relationships', [])) for e in eintraege.values())} Beziehungen, "
-          f"Gliederung {len(gliederung)} Überschriften")
+          f"Gliederung {len(gliederung)} Überschriften ({', '.join(f'{k} {v}' for k, v in sorted(arten.items()))})")
 
 
 SICHTBAR = ("refers_to", "is_referenced_by", "depends_on", "is_required_by")   # ohne Einbettung
@@ -965,6 +1076,45 @@ def pruefe_beziehungen(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: B
           f"Legende {len(legende)} Einträge, {n_links} interne Links")
 
 
+def pruefe_abbildungsverzeichnis(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befunde) -> None:
+    soll = std["abbildungsverzeichnis"]
+    # Bildunterschriften der Website in Reihenfolge
+    unterschriften = [(m[1], norm(html_klartext(m[2], set())))
+                      for m in re.finditer(r'<div id="(fig-[^"]+)" class="quarto-float.*?<figcaption[^>]*>(.*?)</figcaption>', t, re.S)]
+    if [u for _, u in unterschriften] != soll:
+        b.fehler_(f"Abbildungen: Bildunterschriften {[u for _, u in unterschriften]}, Anhang E im Original {soll}", html_pfad)
+    # Website: Liste unter Anhang E
+    m = re.search(r'<section id="sec-abbildungsverzeichnis"[^>]*>(.*?)</section>', t, re.S)
+    liste = re.search(r'<div class="abbildungsverzeichnis">(.*?)</div>', m[1], re.S) if m else None
+    if not liste:
+        b.fehler_("Anhang E: Abbildungsverzeichnis fehlt auf der Website (AP26)", html_pfad)
+    else:
+        eintraege = [(a, norm(html_klartext(x, set()))) for a, x in re.findall(r'<li><a href="#([^"]+)"[^>]*>(.*?)</a></li>', liste[1], re.S)]
+        if eintraege != [(i, u) for i, u in unterschriften]:
+            b.fehler_(f"Anhang E: Einträge {eintraege} statt der Abbildungen {unterschriften}", html_pfad)
+    # Word: Formatvorlage und PAGEREF je Eintrag
+    with zipfile.ZipFile(docx_pfad) as z:
+        xml = z.read("word/document.xml").decode("utf-8")
+        stile = z.read("word/styles.xml").decode("utf-8")
+    stil = re.search(r'<w:style [^>]*w:styleId="([^"]+)"[^>]*>\s*<w:name w:val="table of figures"', stile)
+    absaetze = [p for p in re.findall(r"<w:p[ >].*?</w:p>", xml, re.S)
+                if stil and f'<w:pStyle w:val="{stil[1]}"' in p]
+    word = []
+    for p in absaetze:
+        vor_tab = p.split("<w:tab/>")[0]
+        text = html.unescape("".join(re.findall(r"<w:t(?: [^>]*)?>([^<]*)</w:t>", vor_tab)))
+        ziel = re.search(r"PAGEREF (\S+) \\h", p)
+        word.append((ziel[1] if ziel else None, norm(text)))
+    marken = set(re.findall(r'<w:bookmarkStart\b[^>]*w:name="([^"]+)"', xml))
+    if word != [(i, u) for i, u in unterschriften]:
+        b.fehler_(f"Anhang E, Word: Einträge {word} statt der Abbildungen {unterschriften}", docx_pfad)
+    for ziel, _ in word:
+        if ziel not in marken:
+            b.fehler_(f"Anhang E, Word: PAGEREF auf die fehlende Textmarke «{ziel}»", docx_pfad)
+    print(f"Anhang E: {len(unterschriften)} Abbildungen, Website {len(eintraege) if liste else 0} Einträge, "
+          f"Word {len(word)} Einträge mit PAGEREF")
+
+
 def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
     html_pfad, docx_pfad = WURZEL / std["html"], WURZEL / std["docx"]
     for pfad in (html_pfad, docx_pfad):
@@ -974,6 +1124,7 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
     html_roh = lies(html_pfad)
     absaetze = docx_absaetze(docx_pfad)
     ignorieren = set(std.get("html_ignorieren", []))
+    docx_ignorieren = tuple(std.get("docx_ignorieren", []))
     ueberschriften = {}
     for zeile in lies(WURZEL / std["inhaltsverzeichnis"]).split("\n")[1:]:
         if zeile.strip():
@@ -1010,6 +1161,8 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
         pruefe_beziehungen(std, html_roh, html_pfad, docx_pfad, b)
     if "steckbrief" in std:
         pruefe_steckbrief(std, WURZEL / std["registry"], b)
+    if "abbildungsverzeichnis" in std:
+        pruefe_abbildungsverzeichnis(std, html_roh, html_pfad, docx_pfad, b)
 
     # 8. interne Links aller Seiten der Website
     seiten = sorted((WURZEL / "_site").rglob("*.html"))
@@ -1025,7 +1178,13 @@ def pruefe_ausgabe(std: dict, log: Path | None, b: Befunde) -> None:
             b.fehler_(f"{kap['name']}: Abschnitt #{kap['von']} … #{kap.get('bis')} im HTML nicht gefunden", html_pfad)
             continue
         try:
-            d = docx_kapitel(absaetze, kap["von"], kap.get("bis"))
+            d = docx_kapitel(absaetze, kap["von"], kap.get("bis"), docx_ignorieren)
+            if kap.get("nur_text"):
+                n = sum(1 for t in docx_bereich(absaetze, kap["von"], kap.get("bis"))
+                        if docx_ignorieren and t.startswith(docx_ignorieren))
+                if n != 1:
+                    b.fehler_(f"{kap['name']}, Word: Hinweis «Text überführt, noch nicht in Bausteine zerlegt» {n}×, "
+                              f"erwartet einmal (E54)", docx_pfad)
         except StopIteration:
             b.fehler_(f"{kap['name']}: Textmarken {kap['von']} … {kap.get('bis')} im Word nicht gefunden", docx_pfad)
             continue

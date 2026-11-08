@@ -54,33 +54,43 @@ function leseFormular(text) {
   return formular;
 }
 
-// Alle Baustein-IDs eines Standards aus der Quelle (Attribut bb="…"). Die
-// Standard-ID ist an dieser Stelle bereits gegen STANDARD_ID geprüft.
+// Alle Baustein-IDs eines Standards aus der Quelle (Attribut bb="…"), dazu
+// die Kennungen für Feedback ohne Baustein (Attribut feedback-id="…": Anhang A,
+// Kap. 2–5 als Text, AP26). Die Standard-ID ist an dieser Stelle bereits gegen
+// STANDARD_ID geprüft.
 function leseBausteinIds(wurzel, standard) {
   const ordner = path.join(wurzel, standard);
   if (!fs.existsSync(ordner)) return null;
   const ids = new Set();
+  const ohneBaustein = new Set();
   const durchsuche = (pfad) => {
     for (const eintrag of fs.readdirSync(pfad, { withFileTypes: true })) {
       const ziel = path.join(pfad, eintrag.name);
       if (eintrag.isDirectory()) {
         durchsuche(ziel);
       } else if (/\.(md|qmd)$/.test(eintrag.name)) {
-        for (const m of fs.readFileSync(ziel, 'utf8').matchAll(/\bbb="([a-z0-9-]+)"/g)) ids.add(m[1]);
+        const text = fs.readFileSync(ziel, 'utf8');
+        for (const m of text.matchAll(/\bbb="([a-z0-9-]+)"/g)) ids.add(m[1]);
+        for (const m of text.matchAll(/\bfeedback-id="([a-z0-9-]+)"/g)) ohneBaustein.add(m[1]);
       }
     }
   };
   durchsuche(ordner);
-  return ids;
+  return { ids, ohneBaustein };
 }
 
-function bausteinLabel(id, standard, ids) {
+function bausteinLabel(id, standard, quelle) {
   if (id === '') return 'bb:gesamt';
-  if (standard === null || ids === null || id.length > ID_MAX) return UNBEKANNT;
-  if (id === `${standard}-referenzen`) return 'bb:referenzen'; // Anhang A (E15), ohne bb
-  const praefix = `${standard}-bb-`;
-  if (!id.startsWith(praefix) || !ids.has(id)) return UNBEKANNT;
-  const label = `bb:${id.slice(praefix.length)}`;
+  if (standard === null || quelle === null || id.length > ID_MAX) return UNBEKANNT;
+  let label;
+  if (quelle.ohneBaustein.has(id) && id.startsWith(`${standard}-`)) {
+    // ohne Baustein: Anhang A ergibt bb:referenzen (E15), Kap. 2 bb:kapitel-standard (AP26)
+    label = `bb:${id.slice(standard.length + 1)}`;
+  } else {
+    const praefix = `${standard}-bb-`;
+    if (!id.startsWith(praefix) || !quelle.ids.has(id)) return UNBEKANNT;
+    label = `bb:${id.slice(praefix.length)}`;
+  }
   return label.length <= LABEL_MAX ? label : UNBEKANNT;
 }
 

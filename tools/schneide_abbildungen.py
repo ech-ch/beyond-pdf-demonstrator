@@ -14,7 +14,7 @@ erzeugt der Build (Nummer aus der Reihenfolge, E11).
 Wie beim Rohtext liefert ein Skript das Bild, von Hand wird nichts geändert
 (E19). Die Bereiche unten sind in Pixeln bei 300 dpi angegeben, mit etwa 15 px
 Rand um die dunklen Pixel der Abbildung; sie wurden einmal am gerenderten PDF
-bestimmt (AP25). Das Skript prüft, dass der Rand weiss ist, also nichts
+bestimmt (AP25, Abbildungen 3–6 AP26). Das Skript prüft, dass der Rand weiss ist, also nichts
 abgeschnitten wird.
 
 Werkzeug: pdftoppm (Poppler, z.B. aus MiKTeX), Pillow für die Prüfung. Die
@@ -37,6 +37,10 @@ DPI = 300
 ABBILDUNGEN = [
     ("genehmigungsprozess.png", 7, (205, 542, 2116, 563)),     # Abbildung 1, 1.3
     ("fristen-und-termine.png", 13, (205, 473, 2144, 623)),    # Abbildung 2, 1.4
+    ("genehmigungsprozess-standard.png", 15, (205, 1940, 2144, 571)),       # Abbildung 3, 2.3 (AP26)
+    ("genehmigungsprozess-best-practice.png", 18, (204, 1506, 2119, 566)),  # Abbildung 4, 3.3
+    ("genehmigungsprozess-hilfsmittel.png", 21, (236, 1381, 2160, 576)),    # Abbildung 5, 4.3
+    ("genehmigungsprozess-white-paper.png", 23, (217, 1352, 2096, 579)),    # Abbildung 6, 5.3
 ]
 
 WEISS = 245   # hellster Grauwert, der noch als Inhalt gilt

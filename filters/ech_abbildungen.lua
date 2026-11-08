@@ -1,5 +1,5 @@
 -- Abbildungen (AP25, F10 vorläufig E52): Bildunterschrift wie im Original und
--- im Word die Form des Originals.
+-- im Word die Form des Originals; Abbildungsverzeichnis (Anhang E, AP26).
 --
 -- Quelle (Baustein-Datei, Bild aus tools/schneide_abbildungen.py):
 --   ![Genehmigungsprozess](abbildungen/genehmigungsprozess.png){#fig-genehmigungsprozess fig-alt="…"}
@@ -19,6 +19,15 @@
 -- Pandoc nur aus dem Inhalt des Bildes ins Word (descr), nicht aus dem
 -- Attribut `alt`; der Filter überträgt ihn.
 --
+-- Abbildungsverzeichnis (AP26): Unter der Überschrift mit der Klasse
+-- `.abbildungsverzeichnis` (Anhang E) steht je Abbildung ihre Bildunterschrift
+-- in Reihenfolge. Website: Liste ohne Seitenzahlen, verlinkt auf die
+-- Abbildung. Word: Absätze in der Formatvorlage «Abbildungsverzeichnis» der
+-- eCH-Vorlage (Tabulator mit Punkten), Seitenzahl als Feld PAGEREF auf die
+-- Textmarke der Abbildung, verlinkt (\h); Word füllt sie beim Öffnen
+-- (tools/aktualisiere_felder_beim_oeffnen.py), wie das Inhaltsverzeichnis.
+-- Fehlt die Überschrift oder eine Abbildung, bricht der Build ab.
+--
 -- Läuft NACH `quarto` (dann ist die Abbildung nummeriert) und vor
 -- ech_docx_tabellen.lua. Erkennt er eine Abbildung nicht, bricht der Build ab
 -- (common.abbruch, E48).
@@ -26,6 +35,13 @@
 local common = dofile(quarto.utils.resolve_path("ech_common.lua"))
 
 local DELIM = "–"
+
+-- Abbildungen in Reihenfolge: { id = "fig-…", unterschrift = Inlines }
+local abbildungen = {}
+local function merke(id, inlines)
+  local ohne = inlines:filter(function(el) return not (el.t == "RawInline") end)
+  table.insert(abbildungen, { id = id, unterschrift = ohne })
+end
 
 -- «Abbildung», U+00A0, «1», «–» -> «Abbildung», Leerzeichen, «1», Leerzeichen, «–»
 local function unterschrift(inlines)
@@ -49,6 +65,7 @@ local function html(div)
       if ok then
         gefunden = true
         p.content = neu
+        merke(div.identifier, neu:clone())
         return p
       end
     end,
@@ -90,6 +107,7 @@ local function docx(tabelle)
   -- schreibt davor ein eigenes w:pPr. Stattdessen die Formatvorlage über
   -- custom-style (Name «caption» = «Beschriftung» der eCH-Vorlage).
   neu = neu:filter(function(el) return not (el.t == "RawInline" and el.format == "openxml") end)
+  merke(div.identifier, neu:clone())
   local beschriftung = pandoc.Div({ pandoc.Para(neu) }, pandoc.Attr("", {}, { ["custom-style"] = "caption" }))
   -- Bild und Bildunterschrift auf derselben Seite (keepNext). Die eCH-Vorlage
   -- hat keine Formatvorlage für Bilder, und eine über custom-style neu
@@ -101,11 +119,56 @@ local function docx(tabelle)
   return pandoc.Div({ bildabsatz, beschriftung }, pandoc.Attr(div.identifier))
 end
 
+-- Abbildungsverzeichnis -------------------------------------------------
+
+local function seitenzahl(id)
+  return pandoc.RawInline("openxml", table.concat({
+    "<w:r><w:tab/></w:r>",
+    '<w:r><w:fldChar w:fldCharType="begin" w:dirty="true"/></w:r>',
+    '<w:r><w:instrText xml:space="preserve"> PAGEREF ', id, ' \\h </w:instrText></w:r>',
+    '<w:r><w:fldChar w:fldCharType="separate"/></w:r>',
+    "<w:r><w:t>?</w:t></w:r>",
+    '<w:r><w:fldChar w:fldCharType="end"/></w:r>',
+  }))
+end
+
+local function verzeichnis(doc)
+  local docx = quarto.doc.is_format("docx")
+  local bloecke, gefunden = pandoc.Blocks({}), false
+  for _, b in ipairs(doc.blocks) do
+    bloecke:insert(b)
+    if b.t == "Header" and b.classes:includes("abbildungsverzeichnis") then
+      if #abbildungen == 0 then common.abbruch("ech_abbildungen.lua: Abbildungsverzeichnis ohne Abbildungen") end
+      gefunden = true
+      if docx then
+        for _, a in ipairs(abbildungen) do
+          -- ohne Link-Formatierung wie im Original; die Seitenzahl verlinkt (PAGEREF \h)
+          local inhalt = a.unterschrift:clone()
+          inhalt:insert(seitenzahl(a.id))
+          local p = pandoc.Para(inhalt)
+          bloecke:insert(pandoc.Div({ p }, pandoc.Attr("", {}, { ["custom-style"] = "table of figures" })))
+        end
+      else
+        local punkte = {}
+        for _, a in ipairs(abbildungen) do
+          table.insert(punkte, { pandoc.Plain({ pandoc.Link(a.unterschrift, "#" .. a.id) }) })
+        end
+        bloecke:insert(pandoc.Div({ pandoc.BulletList(punkte) }, pandoc.Attr("", { "abbildungsverzeichnis" })))
+      end
+    end
+  end
+  if #abbildungen > 0 and not gefunden then
+    common.abbruch("ech_abbildungen.lua: Abbildungen, aber keine Überschrift .abbildungsverzeichnis (Anhang E)")
+  end
+  doc.blocks = bloecke
+  return doc
+end
+
 if quarto.doc.is_format("html") then
   return { { Div = function(div)
     if div.classes:includes("quarto-float") and div.identifier:match("^fig%-") then return html(div) end
-  end } }
+  end }, { Pandoc = verzeichnis } }
 elseif quarto.doc.is_format("docx") then
-  return { { Table = docx } }
+  return { { Table = docx }, { Pandoc = verzeichnis } }
 end
 return {}
