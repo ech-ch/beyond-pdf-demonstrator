@@ -1,0 +1,6 @@
+--- Seite 11 ---
+1.3.6 Formale Qualitätssicherung 2
+
+Bei dieser formalen Qualitätssicherung wird der Antrag wie bei 1.3.2 durch die Geschäftsstelle geprüft.
+
+[MUSS] Zusätzlich wird festgestellt, ob sämtliche Rückmeldungen aus der Konsultation beantwortet wurden.

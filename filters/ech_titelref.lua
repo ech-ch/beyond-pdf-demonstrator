@@ -11,11 +11,24 @@
 -- Filter hängt den Titel der Zielüberschrift an. Quarto hat zu diesem Zeitpunkt
 -- die Abschnittsnummer schon in den Überschrifteninhalt geschrieben (HTML: Span
 -- .header-section-number, sonst Text «7.1 » bzw. «7. »); sie wird entfernt.
+--
+-- Anhänge (AP25): ech_anhang.lua hat «Anhang C – » vor den Titel gesetzt und
+-- den Verweis zu «Anhang C» aufgelöst. Der Filter hängt « – Glossar» an, wie
+-- das Word-Original im Feld REF («vgl. 2. Teil von Anhang C – Glossar», 1.3.2).
 
 local stringify = pandoc.utils.stringify
 
 local function title_of(header)
   local inl = header.content:clone()
+  if header.classes:includes("ech-anhang") then
+    -- «Anhang C – Glossar»: alles bis und mit dem Leerzeichen nach «–» weg
+    for i, el in ipairs(inl) do
+      if el.t == "Str" and el.text == "–" then
+        for _ = 1, i + 1 do inl:remove(1) end
+        return inl, true
+      end
+    end
+  end
   -- HTML: <span class="header-section-number">7.1</span> + Space
   if inl[1] and inl[1].t == "Span" and inl[1].classes:includes("header-section-number") then
     inl:remove(1)
@@ -31,10 +44,10 @@ local function title_of(header)
 end
 
 function Pandoc(doc)
-  local titles = {}
+  local titles, anhang = {}, {}
   doc:walk({
     Header = function(h)
-      if h.identifier ~= "" then titles[h.identifier] = title_of(h) end
+      if h.identifier ~= "" then titles[h.identifier], anhang[h.identifier] = title_of(h) end
     end,
   })
   return doc:walk({
@@ -45,6 +58,7 @@ function Pandoc(doc)
           local id = link.target:match("^#(.+)$")
           if id and titles[id] then
             link.content:insert(pandoc.Space())
+            if anhang[id] then link.content:extend({ pandoc.Str("–"), pandoc.Space() }) end
             link.content:extend(titles[id])
             return link
           end

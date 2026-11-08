@@ -1,0 +1,7 @@
+--- Seite 6 ---
+1.3 Prozessmodule
+
+Alle Antragsformen werden über dieselben Genehmigungs- und Freigabeprozesse – oder über eine Teilmenge davon – gesteuert. Kontextspezifisches zu den Prozessen der einzelnen Antragsformen finden sich in den entsprechenden Kapiteln. Dort festgehaltene spezifische Regeln gehen den hier erwähnten vor.
+
+--- Seite 7 ---
+Abbildung 1 – Genehmigungsprozess

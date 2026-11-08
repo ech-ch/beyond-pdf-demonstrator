@@ -93,6 +93,26 @@ Die Aufwände sind Schätzungen.
 - **Wert:** näher am Original. Die Tabelle gehört zum Feinschliff (AP15), der Rest ist optional (F23).
 - **Aufwand:** ca. 1 Stunde.
 
+### G. Abbildungen aus den Prozessschritten erzeugen (F10)
+
+- **Befund (AP25):** Abbildung 1 (1.3) und Abbildung 2 (1.4) zeigen dieselben zwölf Schritte in derselben Anordnung. Abbildung 2 färbt drei Bereiche ein und nennt ihre Dauer (grün «4 Wochen», blau «6 Wochen», rot «5 Wochen»); ihr fehlt der gepunktete Pfeil von «Formale QS 1» zurück zu «Erarbeitung». Abbildungen 3–6 in Kap. 2–5 sind nach F10 Varianten mit einer Auswahl der Schritte. Im Word-Original sind es eingebettete Visio-Zeichnungen.
+- **Was:** Die Schritte und Übergänge einmal als Daten (z.B. `prozess.yml`: Schritte, Pfeile durchgezogen oder gepunktet, je Antragsform die Auswahl, je Schritt die Frist), daraus alle Abbildungen als Diagrammcode erzeugen (Mermaid oder Graphviz, wie der Graph der Beziehungen). Die Fristen in 1.4 und die Fristen in den Klauseln (z.B. «mindestens 6 Wochen» in 1.3.4) kämen dann aus derselben Quelle.
+- **Wert:** Abweichungen wie der fehlende Pfeil würden sichtbar oder verschwinden; Kap. 2–5 bekämen ihre Abbildungen ohne Zeichnen; Beschriftung, Farben und Alternativtext entstünden aus denselben Daten; übersetzt würden nur die Beschriftungen.
+- **Aufwand:** ca. ½ Tag für 1.3 und 1.4, mit Kap. 2–5 zusammen mit D (F26). Offen: ob die Darstellung dem Original nahe genug kommt (F10).
+
+### H. Abbildungen als Originaldatei einbetten (F10)
+
+- **Was:** Liegt eine Abbildung als Visio-Datei oder in einem anderen Format vor, sie so ins Dokument einbetten, statt sie als Bild aus dem PDF zu schneiden: im Word als eingebettetes Objekt wie im Original, auf der Website als daraus erzeugte Grafik (z.B. SVG).
+- **Heute:** Abbildung 1 und 2 sind Bilddateien aus dem Original-PDF (E52); das passt für den MVP. Im Word-Original sind beide eingebettete Visio-Zeichnungen. Das Word-Original kommt nicht ins Repo; die Quelldateien müsste die Geschäftsstelle liefern.
+- **Wert:** Die Abbildung bleibt bearbeitbar und entspricht dem Original, ohne Umweg über das PDF.
+- **Aufwand:** offen. Zuerst prüfen, ob Quarto und Pandoc solche Objekte ins Word übernehmen können und wie die Website sie zeigt. Alternative oder Ergänzung zu G.
+
+### I. Aufbau, Darstellung und Namen der Bausteine überarbeiten (E53)
+
+- **Was:** Wie die Bausteine und die allgemeinen Texte aufgebaut, dargestellt und benannt sind, gesamthaft überprüfen, etwa mit Fachleuten und den Gremien des Vereins eCH. Für den MVP ist das ein initialer Vorschlag, freigegeben, aber nicht fixiert; das gilt für alle Bausteine und Kapitel. Beispiele für Gestaltungsfragen sind die Fälle 1–6 aus AP25 in [bausteine-1-3-und-1-4.md](bausteine-1-3-und-1-4.md): Zwischentitel, ein Satz mit zwei Kennzeichnungen, Absätze ohne Kennzeichnung, Verweise.
+- **Wert:** Das Modell entwickelt sich aus der Diskussion weiter, statt durch den MVP festgeschrieben zu werden (E28, F41).
+- **Aufwand:** offen. Vorher klären, wie Änderungen mit eingefrorenen IDs zusammengehen (F59).
+
 ## Empfohlene Reihenfolge, wenn der MVP steht
 
 1. E (in Session 3 ohnehin dabei)

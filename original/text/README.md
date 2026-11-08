@@ -5,9 +5,18 @@ Text von eCH-0003 V11.1.0, aus [../eCH-0003_V11.1.0_d.pdf](../eCH-0003_V11.1.0_d
 | Datei | Inhalt | Seiten |
 |---|---|---|
 | `kap01-1.1-bis-1.2.1.txt` | 1 Einleitung, 1.1 Status, 1.2 Anwendungsgebiet, 1.2.1 Beschreibungsterminologie | 6 |
+| `kap01-1.3.txt` | 1.3 Prozessmodule, mit der Bildunterschrift von Abbildung 1 | 6–7 |
+| `kap01-1.3.1.txt` | 1.3.1 Erarbeitung | 7 |
+| `kap01-1.3.2.txt` | 1.3.2 Formale Qualitätssicherung 1 | 7–8 |
+| `kap01-1.3.3.txt` | 1.3.3 Inhaltliche Qualitätssicherung 1 | 8–9 |
 | `kap01-1.3.4.txt` | 1.3.4 Öffentliche Konsultation | 10 |
+| `kap01-1.3.5.txt` | 1.3.5 Einarbeitung Rückmeldungen | 10–11 |
+| `kap01-1.3.6.txt` | 1.3.6 Formale Qualitätssicherung 2 | 11 |
+| `kap01-1.3.7.txt` | 1.3.7 Inhaltliche Qualitätssicherung 2 | 11 |
+| `kap01-1.3.8.txt` | 1.3.8 Genehmigung/Ablehnung | 11 |
 | `kap01-1.3.9.txt` | 1.3.9 Publikation | 12 |
 | `kap01-1.3.10.txt` | 1.3.10 Überprüfung | 12 |
+| `kap01-1.4.txt` | 1.4 Fristen und Termine, mit der Bildunterschrift von Abbildung 2 | 13 |
 | `kap06.txt` | 6 Fachgruppendokument, 6.1–6.2 | 26 |
 | `kap07.txt` | 7 Formales, 7.1–7.10 | 27–32 |
 | `kap08.txt` | 8 Sicherheitsüberlegungen | 32 |
@@ -28,6 +37,8 @@ Text von eCH-0003 V11.1.0, aus [../eCH-0003_V11.1.0_d.pdf](../eCH-0003_V11.1.0_d
 - Eine Tabelle ergibt eine Zeile je Tabellenzeile; die Zellen trennt ein Tabulator, eine leere Zelle bleibt leer (Anhang D, «Beilage»).
 - Eine Kopfzeile, die sich nach einem Seitenwechsel wiederholt, steht nur einmal (Anhang D, Seite 36).
 - Codeblöcke (EBNF in Anhang F) bleiben zeilengenau erhalten, mit dem Einzug aus dem PDF.
+- Ein Zwischentitel (1.3.2, 1.3.3; Formatvorlage «Untertitel» im Word-Original) steht als eigener Absatz, ohne Aufzählungszeichen.
+- Von einer Abbildung steht nur die Bildunterschrift da («Abbildung 1 – Genehmigungsprozess»); der Text in der Abbildung fällt weg. Das Bild schneidet [tools/schneide_abbildungen.py](../../tools/schneide_abbildungen.py) aus dem PDF.
 - `--- Seite N ---` steht vor dem ersten Absatz, der auf Seite N beginnt. Ein Absatz gehört also zur Seite der letzten Marke davor (Herkunft, `original-seite`).
 
 ## Was das Skript bereinigt, und was nicht
@@ -63,6 +74,14 @@ Fehler des Originals bleiben zeichengleich stehen, etwa «Die Nummer sind» (7.3
 
 - 1.3.4, 1.3.9 und 1.3.10 stimmen Absatz für Absatz mit dem Word-Original überein (12, 5 und 3 Absätze; nur gelesen, nicht im Repo). Das bestätigt auch die Absatzgrenzen der beiden Absätze ohne Kennzeichnung.
 - Die Verweise auf 7.8, 7.9 und 1.3.4 sind im Word-Original Felder (REF). Verlinkt sind «Webseite» und «Newsübersicht» in 1.3.4 (`https://www.ech.ch/`) und «Webseite» in 1.3.9 (`http://www.ech.ch`).
+- Die schon vorhandenen Rohtexte sind nach dem erneuten Lauf unverändert.
+
+## Prüfung gegen das Word-Original (8.11.2026, AP25)
+
+- Alle zwölf Unterkapitel von 1.3 und 1.4 stimmen Absatz für Absatz mit dem Word-Original überein (nur gelesen, nicht im Repo).
+- Drei neue Fälle im Skript: Zwischentitel stehen im PDF mit Aufzählungszeichen am linken Rand und werden eigene Absätze; der Text in den Abbildungen 1 und 2 fällt weg; auf Seite 13 ist «… dauert mindestens sechs Wochen.» / «Die anschliessende Überarbeitung …» ein Zeilenumbruch und keine Absatzgrenze (im Word-Original ein Absatz; Ausnahmeliste `KEIN_ABSATZ`, weil die Zeilenlänge es nicht entscheidet: 7.3 hat echte Absatzgrenzen nach vollen Zeilen).
+- Der Aufzählungspunkt «Deckblatt mit den Metadaten (vgl. 2. Teil von» / «Anhang C – Glossar)» in 1.3.2 ist im PDF und im Word-Original in zwei Punkte geteilt, weil das Feld REF eine Absatzmarke enthält. Der Rohtext folgt dem PDF.
+- Im Word-Original beginnt die erste Klausel von 1.3.2 mit einem Leerzeichen; der Rohtext lässt es weg wie jeden Leerraum am Absatzanfang.
 - Die schon vorhandenen Rohtexte sind nach dem erneuten Lauf unverändert.
 
 ## Werkzeug

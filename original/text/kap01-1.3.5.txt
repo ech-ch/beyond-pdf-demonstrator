@@ -1,0 +1,15 @@
+--- Seite 10 ---
+1.3.5 Einarbeitung Rückmeldungen
+
+[MUSS] Nach Ablauf der Frist werden die bei der Geschäftsstelle eingegangenen Rückmeldungen zusammengefasst und an die Antragstellenden zurückgemeldet.
+
+[MUSS] Die Antragstellenden
+
+- berücksichtigen die Rückmeldungen und nehmen die entsprechenden Änderungen vor;
+- nehmen, wenn die Einarbeitung zu komplex wäre, einen «Request for Change» (RFC) gemäss «eCH-0150: Change und Releasemanagement von eCH-Standards» für eine Anpassung in einer späteren Version auf, oder
+- begründen die Ablehnung des Änderungsvorschlags konkret und nachvollziehbar.
+
+--- Seite 11 ---
+[DARF NICHT] Allgemeine Begründungen werden nicht akzeptiert und führen zur Rückweisung aus formalen Gründen.
+
+[MUSS] Das geänderte Dokument wird mit den Antworten zu den Rückmeldungen aus der öffentlichen Konsultation wieder bei der Geschäftsstelle eingereicht.

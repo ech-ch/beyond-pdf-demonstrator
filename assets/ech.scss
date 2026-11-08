@@ -588,6 +588,30 @@ $grid-margin-width: 375px;
   }
 }
 
+// Zwischentitel in 1.3.2 und 1.3.3 (AP25, E52): im Word-Original Formatvorlage
+// «Untertitel», fett; gehören zum groben Baustein, nicht ins Inhaltsverzeichnis
+#quarto-content div.zwischentitel p {
+  font-weight: 700;
+  margin: 1.4rem 0 0.6rem;
+}
+
+// Abbildungen aus dem Original-PDF (AP25, F10): volle Textbreite. Auf dem
+// Handy scrollt das Bild quer wie der Graph der Beziehungen (E49): bei 327 px
+// Breite wäre die Schrift in den Kästchen etwa 4 px, mit 720 px etwa 9 px
+// (gemessen AP25). Die Bildunterschrift bleibt stehen.
+#quarto-content .quarto-figure img {
+  width: 100%;
+  height: auto;
+}
+@media (max-width: 767.98px) {
+  #quarto-content .quarto-figure figure > div {
+    overflow-x: auto;
+  }
+  #quarto-content .quarto-figure img {
+    min-width: 720px;
+  }
+}
+
 // Platzhalter unter nicht überführten Überschriften (E05,
 // filters/ech_platzhalter.lua): grauer Hinweiskasten. Die Klasse .platzhalter
 // selbst trägt Quarto auf das section-Element der Überschrift.

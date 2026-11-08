@@ -1,6 +1,6 @@
 # MVP-Spezifikation Demonstrator «Beyond PDF»
 
-Stand: 2.11.2026 (Grilling-Session 1, laufend nachgeführt). Alle Festlegungen gelten vorläufig (MVP) und werden nach dem 12.11.2026 überprüft. Die Regeln zu Bausteinen, IDs und Beziehungen sind ein Vorschlag und eine Diskussionsgrundlage für eCH, keine verbindliche Regel. Wie IDs künftig verwaltet werden, entscheiden die zuständigen Gremien des Vereins eCH (E28, F41). Begriffe gemäss [CONTEXT.md](../CONTEXT.md), Entscheide im [Fragenlog](fragenlog.md).
+Stand: 2.11.2026 (Grilling-Session 1, laufend nachgeführt). Alle Festlegungen gelten vorläufig (MVP) und werden nach dem 12.11.2026 überprüft. Die Regeln zu Bausteinen, IDs und Beziehungen sind ein Vorschlag und eine Diskussionsgrundlage für eCH, keine verbindliche Regel. Wie IDs künftig verwaltet werden, entscheiden die zuständigen Gremien des Vereins eCH (E28, F41). Auch wie die einzelnen Bausteine und die allgemeinen Texte aufgebaut, dargestellt und benannt sind, ist ein initialer Vorschlag: für den MVP freigegeben, bei Ausbau oder Überarbeitung änderbar (E53). Begriffe gemäss [CONTEXT.md](../CONTEXT.md), Entscheide im [Fragenlog](fragenlog.md).
 
 ## 1. Zielbild und Präsentation
 
@@ -85,11 +85,11 @@ Umfang gemäss E02 und E04:
 |---|---|---|
 | 1 | Gerüst aller Überschriften (Kap. 1–10, Anhänge A–F); Kap. 7 (7.1–7.10) vollständig als Bausteine; Website mit Feedback-Knopf; Word mit Deckblatt, Inhaltsverzeichnis und Querverweisen | fest zugesagt (Durchstich) |
 | 1 | 1.1 Status, 1.2 Anwendungsgebiet, 1.2.1 Beschreibungsterminologie; Kap. 8; Kap. 9 und 10 als Vorlagentexte (Fassung 2022); Anhang A; Anhang F | geplant |
-| 1+ | Kap. 6, Anhänge B, C, D (AP22); 1.3.4, 1.3.9, 1.3.10 (AP23); sichtbare Beziehungen (AP21) | umgesetzt am Wochenende 7./8.11. (E47–E50) |
+| 1+ | Kap. 6, Anhänge B, C, D (AP22); 1.3.4, 1.3.9, 1.3.10 (AP23); sichtbare Beziehungen (AP21); Steckbrief (AP24); Rest von 1.3 und 1.4 mit Abbildung 1 und 2 (AP25) | umgesetzt am Wochenende 7./8.11. (E47–E52) |
 | 2 | Vorlagentexte in der Fassung 2025 mit Umschalten über Metadaten; PDF | wenn Zeit bleibt |
 | 3 | Rückmeldungsliste aus Issues; Wechsel V11.1.0 → V12.0.0 bei gleicher ID; Französisch | nach MVP |
 
-**Nicht im MVP:** 1.3–1.4 ausser 1.3.4, 1.3.9 und 1.3.10, dazu Kap. 2–5 und Anhang E. Sie sind Platzhalter. Anhang E wird künftig erzeugt (E15). Für 1.3–1.4 und Kap. 2–5 (Pakete C, D) siehe E47.
+**Nicht im MVP:** Kap. 2–5 und Anhang E. Sie sind Platzhalter. Anhang E wird künftig erzeugt (E15). Für Kap. 2–5 (Paket D) siehe E47; Kap. 1 ist mit AP25 vollständig überführt (E52).
 
 **Gerüst und Platzhalter (E05):**
 
@@ -457,7 +457,8 @@ In Kap. 7 beziehen sich alle fünf ungekennzeichneten Absätze auf die vorangehe
 | Filter / Shortcode | Aufgabe | Ausgangspunkt | Entscheid |
 |---|---|---|---|
 | `ech_anhang.lua` | Buchstaben der Anhänge vergeben («Anhang F – …»), Verweise auf `.appendix`-Ziele auflösen, mit `-@` nur den Buchstaben | Spike S3; umstellen von ID-Präfix auf Klasse | E11, E15 |
-| `ech_titelref.lua` | Verweis «Nummer + Titel» (`.mit-titel`) | Spike S3 | E11 |
+| `ech_titelref.lua` | Verweis «Nummer + Titel» (`.mit-titel`); auf einen Anhang «Anhang C – Glossar» (AP25) | Spike S3 | E11, E52 |
+| `ech_abbildungen.lua` | Bildunterschrift «Abbildung 1 – …» mit gewöhnlichen Leerzeichen; im DOCX Bild und Bildunterschrift ohne Tabelle, Formatvorlage «Beschriftung», Alternativtext, Bild mit der Unterschrift zusammengehalten (umgesetzt mit AP25) | neu | F10, E52 |
 | `ech_docx_nummern.lua` | im DOCX: Word nummeriert, Quarto-Textnummern entfernen, unnummerierte Überschriften und Anhänge in eCH-Formatvorlagen | Spike S3 (Lösung A) | Block C |
 | `ech_anker.lua` | Anker = Baustein-ID, nur HTML; bei Mehrfachverwendung nur an der ersten Fundstelle (umgesetzt mit AP8) | neu | R6, E27, E35 |
 | `ech_feedback.lua` | Feedback-Link je Baustein (Element mit `bb`), nur HTML (umgesetzt mit AP9) | Spike S4; umgestellt von `.baustein` auf `bb` | E08, E09, E39, E41 |
@@ -633,7 +634,7 @@ Ein Status, für den die gewählte Fassung keinen Statustext hat, bricht den Bui
 | B Abkürzungen | Platzhalter | – |
 | C Glossar | Stufe 2 | grober Baustein `ech-0003-bb-glossar`, [MUSS]-Klausel in Teil 2 als feiner Baustein |
 | D Änderungen gegenüber Vorversion | Platzhalter | F13 |
-| E Abbildungsverzeichnis | Platzhalter | künftig erzeugt; heute leer, weil Abb. 1–6 in nicht überführten Kapiteln liegen |
+| E Abbildungsverzeichnis | Platzhalter | künftig erzeugt; Abb. 1 und 2 (1.3, 1.4) sind seit AP25 überführt, Abb. 3–6 liegen in Kap. 2–5 (E52) |
 | F Formale Syntax für die Versionierung | Stufe 1 (geplant) | grober Baustein `ech-0003-bb-formale-syntax`, Typ `rule`, Anker `sec-formale-syntax`; EBNF als Codeblock einschliesslich «):» |
 
 ### 5.4 Erzeugter Inhalt (E14)
@@ -827,9 +828,9 @@ Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
 |---|---|---|
 | AP21 | Beziehungen sichtbar: aufklappbare Liste je Baustein, Übersichtsseite mit Graph (Mermaid) und Tabelle, aus der Registry. Umgesetzt 8.11., committet als `e90d169` (E48) | E10, E30, E47, E48 |
 | AP22 | A: Kap. 6, Anhang B, C, D als Bausteine. Umgesetzt 8.11., committet als `062b21a`; IDs freigegeben in [bausteine-kap6-anhaenge.md](bausteine-kap6-anhaenge.md) (E49) | E15, E47, E49 |
-| AP23 | B: 1.3.4, 1.3.9, 1.3.10 als Bausteine. Dazu Nachbesserungen zu AP21/AP22: Graph ohne Pfeile aus Anhängen (F56), Zielarten «Vorlagentext» und «Statustext». Umgesetzt 8.11., nicht committet; IDs zur Durchsicht in [bausteine-1-3.md](bausteine-1-3.md) (E50) | E29, E30, E47, E50 |
-| AP24 | Steckbrief eCH-0003 als Daten und Seite (Option A, `ausbau.md`). Umgesetzt 8.11., nicht committet; Texte und Auswahlen als Vorschlag zur Durchsicht (E51, Abschnitt 5.5) | E47, E51, F46, F47 |
-| AP25 | C: 1.3–1.4, falls Zeit (Abbildungen F10) | E47 |
+| AP23 | B: 1.3.4, 1.3.9, 1.3.10 als Bausteine. Dazu Nachbesserungen zu AP21/AP22: Graph ohne Pfeile aus Anhängen (F56), Zielarten «Vorlagentext» und «Statustext». Umgesetzt 8.11., committet als `aa70f36`; IDs freigegeben in [bausteine-1-3.md](bausteine-1-3.md) (E50) | E29, E30, E47, E50 |
+| AP24 | Steckbrief eCH-0003 als Daten und Seite (Option A, `ausbau.md`). Umgesetzt 8.11., committet als `ad7291a`; Texte und Auswahlen freigegeben (E51, Abschnitt 5.5) | E47, E51, F46, F47 |
+| AP25 | C: Rest von 1.3 und 1.4 als 9 grobe und 45 feine Bausteine; Abbildung 1 und 2 als Bild aus dem Original-PDF (`tools/schneide_abbildungen.py`, F10 vorläufig). Umgesetzt 8.11.; IDs und Fälle 1–6 freigegeben in [bausteine-1-3-und-1-4.md](bausteine-1-3-und-1-4.md) (E52), als initialer Vorschlag (E53) | E29, E30, E47, E52, E53, F10 |
 | AP26 | D: Kap. 2–5, falls Zeit (F26) | E47 |
 
 **Stichzeit Mo 9.11. 12 Uhr:** Was dann live ist, gilt als Stand des MVP.

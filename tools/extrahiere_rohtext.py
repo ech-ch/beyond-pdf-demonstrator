@@ -23,6 +23,13 @@ Originals stehen (E06):
   mehr Spalten (Anhang D) werden über die Spaltenpositionen gelesen. Eine nach
   einem Seitenwechsel wiederholte Kopfzeile fällt weg, wie Kopf- und Fusszeile.
 - Codeblöcke (EBNF in Anhang F) bleiben zeilengenau erhalten.
+- Ein Zwischentitel (Formatvorlage «Untertitel» im Word-Original, im PDF fett
+  mit Aufzählungszeichen am linken Rand, 1.3.2 und 1.3.3) wird ein eigener
+  Absatz ohne Aufzählungszeichen. Aufzählungspunkte sind eingerückt.
+- Text in Abbildungen (die Beschriftung der Kästchen, eingerückte Zeilen mit
+  mindestens drei Zellen) fällt weg; die Bildunterschrift «Abbildung N – …»
+  bleibt als Absatz. Die Abbildung selbst schneidet
+  tools/schneide_abbildungen.py aus dem PDF.
 
 Daneben entsteht `inhaltsverzeichnis.tsv` mit allen Überschriften des
 Inhaltsverzeichnisses, ihrer Seite und der Angabe, ob unter der Überschrift
@@ -49,9 +56,18 @@ ZIEL = Path("original/text")
 # Rohtext-Dateien: (Datei, erste Überschrift, Überschrift danach (exklusiv)).
 KAPITEL = [
     ("kap01-1.1-bis-1.2.1.txt", "1", "1.3"),
+    ("kap01-1.3.txt", "1.3", "1.3.1"),
+    ("kap01-1.3.1.txt", "1.3.1", "1.3.2"),
+    ("kap01-1.3.2.txt", "1.3.2", "1.3.3"),
+    ("kap01-1.3.3.txt", "1.3.3", "1.3.4"),
     ("kap01-1.3.4.txt", "1.3.4", "1.3.5"),
+    ("kap01-1.3.5.txt", "1.3.5", "1.3.6"),
+    ("kap01-1.3.6.txt", "1.3.6", "1.3.7"),
+    ("kap01-1.3.7.txt", "1.3.7", "1.3.8"),
+    ("kap01-1.3.8.txt", "1.3.8", "1.3.9"),
     ("kap01-1.3.9.txt", "1.3.9", "1.3.10"),
     ("kap01-1.3.10.txt", "1.3.10", "1.4"),
+    ("kap01-1.4.txt", "1.4", "2"),
     ("kap06.txt", "6", "7"),
     ("kap07.txt", "7", "8"),
     ("kap08.txt", "8", "9"),
@@ -80,6 +96,14 @@ ZELLE = re.compile(r"\S+(?: \S+)*")    # Zellen sind durch mindestens zwei Leerz
 EBNF_START = re.compile(r"^<[^>]+> ::=")
 ERGAENZUNG = {"und", "oder", "bzw.", "sowie", "bis"}
 SATZENDE = re.compile(r"[.:!?»)]$")
+BESCHRIFTUNG = re.compile(r"^Abbildung \d+ – \S")
+# Zeilenumbrüche nach einem Satzende, die das Skript ohne diese Liste als
+# Absatzgrenze läse (kein Abstand im Modus -layout, volle Zeile): (Seite,
+# Anfang der Zeile danach). Die Zeilenlänge entscheidet das nicht, 7.3 hat echte
+# Absatzgrenzen nach vollen Zeilen. Gegen das Word-Original geprüft (AP25).
+KEIN_ABSATZ = {
+    (13, "Die anschliessende Überarbeitung"),   # 1.4, ein Absatz im Word-Original
+}
 
 protokoll: list[tuple[int, str]] = []
 
@@ -221,7 +245,7 @@ def verbinde(vorne: str, hinten: str, seite: int) -> str:
 
 @dataclass
 class Block:
-    art: str                  # titel, absatz, punkt, tabelle, code
+    art: str                  # titel, zwischentitel, absatz, punkt, tabelle, code, abbildung
     seite: int
     zeilen: list[str] = field(default_factory=list)   # absatz/punkt/code
     zellen: list[list[str]] = field(default_factory=lambda: [[], []])  # tabelle
@@ -234,6 +258,8 @@ class Block:
             return "\t".join(self._fuege(z) for z in self.zellen)
         if self.art == "punkt":
             return "- " + self._fuege(self.zeilen)
+        if self.art == "abbildung":
+            return ""
         return self._fuege(self.zeilen)
 
     def _fuege(self, teile: list[str]) -> str:
@@ -275,8 +301,21 @@ def baue_bloecke(zeilen: list[Zeile], toc: list[Eintrag]) -> list[Block]:
             in_liste = in_tabelle = in_code = False
             mehr = None
             continue
-        # Tabelle mit drei und mehr Spalten (Anhang D)
         teile = [(m.start(), m[0]) for m in ZELLE.finditer(z.text)]
+        # Zwischentitel: Aufzählungszeichen am linken Rand (Aufzählungspunkte
+        # sind eingerückt)
+        if z.einzug == 0 and s.startswith(BULLET) and mehr is None:
+            neu("zwischentitel", z).zeilen.append(s[1:].strip())
+            log("Zwischentitel", z.seite, s[1:].strip())
+            in_liste = in_tabelle = in_code = False
+            continue
+        # Text in einer Abbildung: eingerückt, mindestens drei Zellen
+        if z.einzug > 0 and len(teile) >= 3 and mehr is None and not in_liste:
+            neu("abbildung", z).zeilen.append(s)
+            log("Abbildung", z.seite, f"Text der Abbildung übergangen: {norm(s)[:60]}…")
+            in_tabelle = in_code = False
+            continue
+        # Tabelle mit drei und mehr Spalten (Anhang D)
         if z.einzug == 0 and len(teile) >= 3 and not KENNZEICHNUNG.match(s):
             zellen = [text for _, text in teile]
             if mehr is not None and zellen == mehr["kopf"]:
@@ -351,11 +390,22 @@ def baue_bloecke(zeilen: list[Zeile], toc: list[Eintrag]) -> list[Block]:
             elif satzende and not s[0].islower():
                 # Kleine Absatzabstände zeigt -layout nicht als Leerzeile
                 # (7.3: «… z.B. «3.7.1»» / «Die Nummer sind …»).
-                neuer_absatz = True
-                log("Absatz?", z.seite, f"ohne Leerzeile: «…{vorher[-30:]}» / «{s[:30]}…» getrennt")
+                if any(z.seite == seite and s.startswith(anfang) for seite, anfang in KEIN_ABSATZ):
+                    log("Absatz?", z.seite, f"ohne Leerzeile: «…{vorher[-30:]}» / «{s[:30]}…» verbunden (KEIN_ABSATZ)")
+                else:
+                    neuer_absatz = True
+                    log("Absatz?", z.seite, f"ohne Leerzeile: «…{vorher[-30:]}» / «{s[:30]}…» getrennt")
         if neuer_absatz:
             neu("absatz", z)
         aktuell.zeilen.append(s)
+    # Text einer Abbildung steht unmittelbar vor ihrer Bildunterschrift
+    for i, b in enumerate(bloecke):
+        if b.art == "abbildung":
+            j = i
+            while bloecke[j].art == "abbildung":
+                j += 1
+            n = bloecke[j]
+            assert n.art == "absatz" and BESCHRIFTUNG.match(n.text()),                 f"S.{b.seite}: Text einer Abbildung ohne Bildunterschrift danach: {b.zeilen[0][:60]}"
     return bloecke
 
 
@@ -382,6 +432,8 @@ def schreibe_kapitel(bloecke: list[Block], toc: list[Eintrag], ziel: Path) -> se
             ende = next(i for i, b in enumerate(bloecke) if b.art == "titel" and b.zeilen[0] == titel_von[bis])
         teile, seite, vorher = [], None, None
         for b in bloecke[start:ende]:
+            if b.art == "abbildung":
+                continue
             if b.seite != seite:
                 seite = b.seite
                 teile.append(f"\n--- Seite {seite} ---\n")

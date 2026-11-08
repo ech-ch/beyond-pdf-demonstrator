@@ -64,6 +64,7 @@ filters:
   - filters/ech_referenzen.lua    # Zitate auf Anhang A, z.B. [@SemVer] (E15)
   - filters/ech_platzhalter.lua   # Platzhalter unter nicht überführten Überschriften (E05)
   - quarto
+  - filters/ech_abbildungen.lua   # «Abbildung 1 – …», im Word ohne Tabelle (AP25)
   - filters/ech_titelref.lua      # [-@sec-x]{.mit-titel} (E11)
   - filters/ech_anker.lua         # nur HTML: Anker = Baustein-ID (R6)
   - filters/ech_feedback.lua      # nur HTML: Feedback je Baustein (E37, E39)
@@ -76,6 +77,12 @@ shortcodes:
   - filters/ech_shortcodes.lua    # statustext (E14), vorlagentext (E13), referenzen (E15)
 
 number-sections: true
+
+# Abbildungen (AP25): Bildunterschrift «Abbildung 1 – Genehmigungsprozess» wie im
+# Original; die Nummer erzeugt Quarto aus der Reihenfolge (E11)
+crossref:
+  fig-prefix: Abbildung
+  title-delim: "–"   # Leerzeichen davor setzt filters/ech_abbildungen.lua
 
 format:
   html:

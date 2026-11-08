@@ -8,7 +8,7 @@ Der Demonstrator zerlegt einen textbasierten eCH-Standard in **Bausteine** mit s
 
 Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/mvp-spezifikation.md](docs/mvp-spezifikation.md) und [docs/fragenlog.md](docs/fragenlog.md).
 
-**Stellenwert der Regeln:** Wie der Demonstrator Bausteine bildet, IDs vergibt und Beziehungen ableitet, ist ein **Vorschlag und eine Diskussionsgrundlage**. Es ist keine verbindliche Regel. Wie Bausteine und IDs künftig geregelt werden, entscheiden die Fachgruppen, Fachleute und zuständigen Gremien des Vereins eCH, voraussichtlich in einem eigenen Standard oder einem Zusatz zu einem bestehenden.
+**Stellenwert der Regeln:** Wie der Demonstrator Bausteine bildet, IDs vergibt und Beziehungen ableitet, ist ein **Vorschlag und eine Diskussionsgrundlage**. Es ist keine verbindliche Regel. Wie Bausteine und IDs künftig geregelt werden, entscheiden die Fachgruppen, Fachleute und zuständigen Gremien des Vereins eCH, voraussichtlich in einem eigenen Standard oder einem Zusatz zu einem bestehenden. Dasselbe gilt dafür, wie die einzelnen Bausteine und die allgemeinen Texte in allen Kapiteln aufgebaut, dargestellt und benannt sind: Das ist ein initialer Vorschlag, für den MVP freigegeben, aber nicht fixiert. Ein Ausbau oder eine Überarbeitung kann es ändern (E53 im [Fragenlog](docs/fragenlog.md)).
 
 ## Stand
 
@@ -17,7 +17,7 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Gerüst: alle 92 Überschriften des Originals, Nummerierung und Inhaltsverzeichnis wie im Original | vorhanden |
 | Platzhalter mit Link auf die Seite im Original-PDF | vorhanden |
 | 1.1 Status, erzeugt aus Status und Vorlage-Fassung 2022 | vorhanden |
-| Rohtext aus dem PDF für 1.1–1.2.1, 1.3.4, 1.3.9, 1.3.10, Kap. 6–10, Anhänge A–D und F | vorhanden ([original/text/](original/text/README.md)) |
+| Rohtext aus dem PDF für Kap. 1 (1.1–1.4), Kap. 6–10, Anhänge A–D und F | vorhanden ([original/text/](original/text/README.md)) |
 | Kap. 7 als 10 grobe und 54 feine Bausteine (55 Klauseln), Querverweise erzeugt | vorhanden |
 | Word mit Deckblatt im Format des Word-Originals, Demonstrator-Hinweis, Inhaltsverzeichnis und Fusszeile | vorhanden |
 | CI-Prüfungen für Quelle und Ausgabe (`tools/pruefe.py`) | vorhanden |
@@ -28,7 +28,8 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Registry [`bausteine.json`](#registry): alle Bausteine mit Fundstellen, Herkunft, Verbindlichkeit und Beziehungen | vorhanden |
 | Beziehungen auf der Website: «Beziehungen (n)» je Baustein, [Übersichtsseite](ech-0003/v11.1.0/de/beziehungen.qmd) mit Graph und Tabelle | vorhanden |
 | Kap. 6 als 2 grobe und 4 feine Bausteine; Anhänge B, C, D als grobe Bausteine, Anhang C mit einer Klausel (IDs freigegeben: [docs/bausteine-kap6-anhaenge.md](docs/bausteine-kap6-anhaenge.md)) | vorhanden |
-| 1.3.4, 1.3.9, 1.3.10 als 3 grobe und 18 feine Bausteine (IDs zur Durchsicht: [docs/bausteine-1-3.md](docs/bausteine-1-3.md)) | vorhanden |
+| 1.3.4, 1.3.9, 1.3.10 als 3 grobe und 18 feine Bausteine (IDs freigegeben: [docs/bausteine-1-3.md](docs/bausteine-1-3.md)) | vorhanden |
+| Rest von 1.3 und 1.4 als 9 grobe und 45 feine Bausteine, Abbildung 1 und 2 als Bild aus dem Original-PDF mit Alternativtext; Kap. 1 damit vollständig (IDs zur Durchsicht: [docs/bausteine-1-3-und-1-4.md](docs/bausteine-1-3-und-1-4.md)) | vorhanden |
 | [Steckbrief](ech-0003/v11.1.0/de/steckbrief.qmd) nach dem Raster «eCH Steckbrief Standardisierungsinhalte» (V0.9): Angaben in `steckbrief.yml`, Raster als Vokabular in `vorlage/steckbrief/`, Bezüge und Strukturierung erzeugt; Texte und Auswahlen als Vorschlag | vorhanden |
 
 Das Original-PDF liegt unter [original/eCH-0003_V11.1.0_d.pdf](original/eCH-0003_V11.1.0_d.pdf). Kap. 10 des Standards erlaubt die Weiterverbreitung.
@@ -44,6 +45,7 @@ ech-0003/v11.1.0/
   steckbrief.yml            Steckbrief, sprachneutral (Raster-Fassung, Auswahlen, offene Felder)
   de/index.qmd              Gerüst; Kopfzeile mit sprachabhängiger Ebene 0
   de/bausteine/             eine Datei je grobem Baustein; mehrfach/ für Mehrfachbausteine
+  de/abbildungen/           Abbildungen aus dem Original-PDF (tools/schneide_abbildungen.py)
   de/beziehungen.qmd        Übersichtsseite «Beziehungen»; Graph und Tabelle aus bausteine.json
   de/steckbrief.qmd         Steckbrief; Texte in der Kopfzeile, Rest aus Daten und bausteine.json
 vorlage/
@@ -55,7 +57,7 @@ original/
   text/                     Rohtext je Kapitel und Inhaltsverzeichnis (aus dem PDF extrahiert)
 filters/                    Lua-Filter und Shortcodes
 assets/                     SCSS, Logos, HTML-Partial
-tools/                      Extraktion, Nachbearbeitung Word, CI-Prüfungen
+tools/                      Extraktion (Text, Abbildungen), Nachbearbeitung Word, CI-Prüfungen
 .github/workflows/build.yml Prüfen -> Rendern -> Word nachbearbeiten -> Artefakt (Pages vorbereitet)
 .github/workflows/feedback-label.yml, .github/scripts/  Labels für Feedback-Issues, mit Tests
 .github/ISSUE_TEMPLATE/    Feedback-Formular
@@ -94,6 +96,12 @@ Den Rohtext erneut aus dem PDF ziehen (nur nötig, wenn sich das Skript ändert)
 
 ```bash
 py -3.11 tools/extrahiere_rohtext.py
+```
+
+Die Abbildungen erneut aus dem PDF schneiden (braucht `pdftoppm` aus Poppler und Pillow; die Ergebnisse sind committet):
+
+```bash
+py -3.11 tools/schneide_abbildungen.py
 ```
 
 ## Registry

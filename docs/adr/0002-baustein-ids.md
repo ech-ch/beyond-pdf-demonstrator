@@ -14,7 +14,7 @@ Grund: Nach ADR 0001 bestimmt allein die ID die Identität eines Bausteins. Posi
 
 Die ID steht bei jedem Baustein im Attribut `bb`. Querverweise in Quarto verlangen bei Überschriften einen Anker mit Präfix `sec-` (Spike S2). Grobe Bausteine tragen deshalb zusätzlich `#sec-<kurzname>` mit demselben Kurznamen. Die CI prüft Eindeutigkeit und Übereinstimmung.
 
-**Stellenwert (E28):** Diese Regeln sind ein Vorschlag und eine Diskussionsgrundlage. Wie IDs künftig gebildet und verwaltet werden, regelt voraussichtlich ein eigener eCH-Standard oder ein Zusatz zu einem bestehenden. Darüber entscheiden die zuständigen Gremien des Vereins eCH (F41).
+**Stellenwert (E28):** Diese Regeln sind ein Vorschlag und eine Diskussionsgrundlage. Wie IDs künftig gebildet und verwaltet werden, regelt voraussichtlich ein eigener eCH-Standard oder ein Zusatz zu einem bestehenden. Darüber entscheiden die zuständigen Gremien des Vereins eCH (F41). Auch die vergebenen IDs und der Zuschnitt der Bausteine sind ein initialer Vorschlag, für den MVP freigegeben, nicht für die Zukunft fixiert (E53). Wie eine spätere Überarbeitung mit veröffentlichten, eingefrorenen IDs umgeht, ist offen (F59).
 
 ## Considered Options
 

@@ -31,23 +31,81 @@ feedback_repo = "https://github.com/ech-ch/beyond-pdf-demonstrator"
 
 # Überführte Kapitel: gerenderter Klartext = Rohtext (E19), Zählung (D4).
 # Ein Kapitel reicht vom Anker `von` bis vor den Anker `bis`, ohne `bis` bis zum
-# Ende des Dokuments. «einleitung» und «prozessmodule» sind provisorische Anker
-# (E05); der Rohtext dieses Teils umfasst auch die Überschrift «1 Einleitung».
+# Ende des Dokuments. «einleitung» und «standard» (Kap. 1 und 2) sind
+# provisorische Anker (E05); der Rohtext des ersten Teils umfasst auch die
+# Überschrift «1 Einleitung». Abschnitte mit Unterabschnitten (1.3) reichen nur
+# bis zum ersten Unterabschnitt.
 # `vorlagentext = true`: kein Baustein, kein Feedback, Hinweis auf der Website.
 [[standard.kapitel]]
 name = "1 Einleitung bis 1.2.1"
 von = "einleitung"
-bis = "prozessmodule"
+bis = "sec-prozessmodule"
 rohtext = "original/text/kap01-1.1-bis-1.2.1.txt"
 
-# «einarbeitung-rückmeldungen» und «fristen-und-termine» sind provisorische
-# Anker (1.3.5 und 1.4 sind noch Platzhalter).
+# 1.3 und 1.4 (AP25, E52): mit Abbildung 1 und 2; der Rohtext enthält die
+# Bildunterschrift, nicht den Text in der Abbildung
+[[standard.kapitel]]
+name = "1.3 Prozessmodule"
+von = "sec-prozessmodule"
+bis = "sec-erarbeitung"
+rohtext = "original/text/kap01-1.3.txt"
+zaehlung = { "MUSS" = 0, "SOLLTE" = 0, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "1.3.1 Erarbeitung"
+von = "sec-erarbeitung"
+bis = "sec-formale-qualitaetssicherung-1"
+rohtext = "original/text/kap01-1.3.1.txt"
+zaehlung = { "MUSS" = 0, "SOLLTE" = 0, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "1.3.2 Formale Qualitätssicherung 1"
+von = "sec-formale-qualitaetssicherung-1"
+bis = "sec-inhaltliche-qualitaetssicherung-1"
+rohtext = "original/text/kap01-1.3.2.txt"
+zaehlung = { "MUSS" = 6, "SOLLTE" = 0, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "1.3.3 Inhaltliche Qualitätssicherung 1"
+von = "sec-inhaltliche-qualitaetssicherung-1"
+bis = "sec-oeffentliche-konsultation"
+rohtext = "original/text/kap01-1.3.3.txt"
+zaehlung = { "MUSS" = 12, "SOLLTE" = 7, "DARF NICHT" = 3 }
+
 [[standard.kapitel]]
 name = "1.3.4 Öffentliche Konsultation"
 von = "sec-oeffentliche-konsultation"
-bis = "einarbeitung-rückmeldungen"
+bis = "sec-einarbeitung-rueckmeldungen"
 rohtext = "original/text/kap01-1.3.4.txt"
 zaehlung = { "MUSS" = 8, "SOLLTE" = 2, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "1.3.5 Einarbeitung Rückmeldungen"
+von = "sec-einarbeitung-rueckmeldungen"
+bis = "sec-formale-qualitaetssicherung-2"
+rohtext = "original/text/kap01-1.3.5.txt"
+zaehlung = { "MUSS" = 3, "SOLLTE" = 0, "DARF NICHT" = 1 }
+
+[[standard.kapitel]]
+name = "1.3.6 Formale Qualitätssicherung 2"
+von = "sec-formale-qualitaetssicherung-2"
+bis = "sec-inhaltliche-qualitaetssicherung-2"
+rohtext = "original/text/kap01-1.3.6.txt"
+zaehlung = { "MUSS" = 1, "SOLLTE" = 0, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "1.3.7 Inhaltliche Qualitätssicherung 2"
+von = "sec-inhaltliche-qualitaetssicherung-2"
+bis = "sec-genehmigung-ablehnung"
+rohtext = "original/text/kap01-1.3.7.txt"
+zaehlung = { "MUSS" = 3, "SOLLTE" = 1, "DARF NICHT" = 1 }
+
+[[standard.kapitel]]
+name = "1.3.8 Genehmigung/Ablehnung"
+von = "sec-genehmigung-ablehnung"
+bis = "sec-publikation"
+rohtext = "original/text/kap01-1.3.8.txt"
+zaehlung = { "MUSS" = 3, "SOLLTE" = 2, "DARF NICHT" = 0 }
 
 [[standard.kapitel]]
 name = "1.3.9 Publikation"
@@ -59,9 +117,16 @@ zaehlung = { "MUSS" = 3, "SOLLTE" = 1, "DARF NICHT" = 0 }
 [[standard.kapitel]]
 name = "1.3.10 Überprüfung"
 von = "sec-ueberpruefung"
-bis = "fristen-und-termine"
+bis = "sec-fristen-und-termine"
 rohtext = "original/text/kap01-1.3.10.txt"
 zaehlung = { "MUSS" = 2, "SOLLTE" = 1, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "1.4 Fristen und Termine"
+von = "sec-fristen-und-termine"
+bis = "standard"   # provisorischer Anker von «2 Standard»
+rohtext = "original/text/kap01-1.4.txt"
+zaehlung = { "MUSS" = 0, "SOLLTE" = 0, "DARF NICHT" = 1 }
 
 [[standard.kapitel]]
 name = "6 Fachgruppendokument"

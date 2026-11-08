@@ -1,0 +1,12 @@
+--- Seite 11 ---
+1.3.8 Genehmigung/Ablehnung
+
+[MUSS] Das zuständige Gremium (Vorstand oder Expertenausschuss) beschliesst über Annahme oder Ablehnung des Antrags.
+
+[MUSS] Die Abstimmung erfolgt offen, es genügt das einfache Mehr und der Entscheid wird protokolliert.
+
+[SOLLTE] Auf Antrag der Hauptreferentin resp. des Hauptreferenten an die Geschäftsstelle kann die Abstimmung online erfolgen (d.h. nicht erst an der nächsten regulären Sitzung), es sei denn Mitglieder des zuständigen Gremiums melden bei der Geschäftsstelle Diskussionsbedarf an.
+
+[MUSS] Wird keine Diskussion verlangt und ist das einfache Mehr zugunsten des Antrags der Hauptreferentin resp. des Hauptreferenten erreicht, wird der Beschluss gefasst und anlässlich der nächsten regulären Sitzung protokolliert.
+
+[SOLLTE] Um unnötige Prozessschritte zu vermeiden, kann ein Dokument unter Vorbehalt genehmigt werden, das heisst, dass eine Genehmigung erfolgt, sobald die geforderten Anpassungen durchgeführt sind.

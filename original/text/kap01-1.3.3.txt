@@ -1,0 +1,74 @@
+--- Seite 8 ---
+1.3.3 Inhaltliche Qualitätssicherung 1
+
+Diese inhaltliche Qualitätssicherung wird durch die Referentinnen und Referenten beziehungsweise den Expertenausschuss vorgenommen. Sie prüfen die inhaltlichen Kriterien zur Genehmigung von Anträgen.
+
+Materielle Eignung
+
+[MUSS] Der Antrag ist geeignet, die Standardisierung für E-Government in der Schweiz zu unterstützen und qualitative sowie quantitative Verbesserungen zu erzielen.
+
+[MUSS] Die Kategorie des Dokuments (vgl. Kapitel 1.2) stimmt mit seinem Inhalt überein.
+
+Verständlichkeit
+
+[SOLLTE] Der Antrag ist nach Einschätzung der Referentinnen und Referenten beziehungsweise des Expertenausschusses verständlich und nachvollziehbar.
+
+[MUSS] Aus einem Standard geht klar hervor, was normativen Charakter hat.
+
+[MUSS] Aus einem Hilfsmittel geht klar hervor, wozu es Hilfe bietet.
+
+[MUSS] Aus einem White Paper geht klar hervor, wohin die Entwicklung gehen kann, und welches breite Interesse daran besteht.
+
+[SOLLTE] Treffen diese Kriterien nicht zu, können die Antragstellenden eingeladen werden, ihren Antrag mündlich an einer regulären Sitzung des Expertenausschusses zu präsentieren.
+
+[MUSS] Alle verwendeten Abkürzungen sind im Anhang für die Abkürzungen aufgeführt und erläutert.
+
+[MUSS] Wiederholt verwendete, nicht selbstsprechende Begriffe sind im Anhang für das Glossar definiert.
+
+[MUSS] Begriffe sind innerhalb des Antrags konsistent verwendet.
+
+[DARF NICHT] Der Antrag enthält keine der folgenden Elemente:
+
+- Aussagen zum Werdegang des Antrags
+- Aussagen zur vorgesehenen Weiterentwicklung des Antrags
+- Wiederholung von Aussagen, Richtlinien und Empfehlungen innerhalb des Antrags
+
+--- Seite 9 ---
+- Beschreibende oder erläuternde Aussagen, soweit diese nicht zur korrekten Interpretation des Antrags notwendig sind.
+
+Überschneidungsfreiheit und Konsistenz mit anderen eCH-Dokumenten
+
+[DARF NICHT] Es ist keine Fachgruppe und kein bestehendes gültiges eCH-Dokument im Einsatz, die sich bereits mit derselben Thematik befassen.
+
+[SOLLTE] Ist dieses Kriterium nicht erfüllt, macht der Expertenausschuss Vorschläge für das weitere Vorgehen, z.B.
+
+- Aufforderung, sich einer bestehenden Fachgruppe anzuschliessen;
+- Neudefinition des Antrags in Abstimmung mit den betroffenen Fachgruppen, so dass die Überschneidungen beseitigt werden.
+
+[SOLLTE] Das Ziel des Antrags steht nicht im Widerspruch zu bereits bestehenden gültigen eCH- oder zweckmässigen internationalen Standards.
+
+In Ausnahmefällen können Standards genehmigt werden, welche dieses Kriterium nicht erfüllen, z.B.
+
+- wenn eine Reduktion der Anzahl der Lösungen und damit eine Verbesserung erreicht wird;
+- wenn es sich um eine innovative Lösung handelt, welche später bereits bestehende Standards ablösen soll;
+- wenn eine gegenseitige Abstimmung der Standards unverhältnismässige Verzögerungen zur Folge hätte.
+
+[SOLLTE] Begriffe sind im Antrag gleicherweise wie in bestehenden gültigen eCH-Dokumenten verwendet.
+
+[DARF NICHT] Der Antrag enthält keine Aussagen, Richtlinien und Empfehlungen, die in anderen gültigen eCH-Dokumenten bereits vorhanden sind, ausser sie präzisieren diese.
+
+[MUSS] Verwendete Referenzen folgen den Richtlinien und Empfehlungen gemäss Kapitel 7.10.
+
+Inhalt
+
+[MUSS] Bei Anträgen ohne öffentliche Konsultation (z. B. Antragsform «Hilfsmittel» oder Abwicklung als Minor Change gemäss Kapitel 7.8) sind die Referentinnen und Referenten auch inhaltlich für das Dokument verantwortlich und prüfen dies zusätzlich bezüglich Aspekte, welche sonst im Rahmen einer öffentlichen Konsultation erwartet werden könnten.
+
+Genügende Spezifikationstiefe von Interoperabilitätsstandards
+
+[MUSS] Der Standard ist formal genügend spezifiziert, um seine Aufgabe erfüllen zu können.
+
+[SOLLTE] Die Art und Weise des Tests ist dokumentiert und eventuell maschinell unterstützt.
+
+[MUSS] Die Semantik der verwendeten Informationsobjekte, Beziehungen und Daten sind definiert.
+
+[SOLLTE] Zur Dokumentation der Semantik wird ein Datenmodell in UML-Notation verwendet.

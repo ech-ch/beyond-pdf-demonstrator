@@ -46,9 +46,8 @@ format:
 Gerüst von eCH-0003 V11.1.0 (E05): alle Überschriften des Originals in
 dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
-- Feste Anker (#sec-…) nur für Pilotkapitel und Verweisziele (1.3.4, 1.3.9,
-  1.3.10, 2.1.4); alle übrigen Überschriften erhalten einen provisorischen
-  Anker. Gleichlautende Überschriften in Kap. 2–6 tragen die Antragsform im
+- Feste Anker (#sec-…) nur für überführte Kapitel und Verweisziele (Kap. 1,
+  2.1.4); alle übrigen Überschriften erhalten einen provisorischen Anker. Gleichlautende Überschriften in Kap. 2–6 tragen die Antragsform im
   Anker (z.B. sec-standard-datenschemata, sec-fachgruppendokument-einleitung).
 - `.platzhalter`: Inhalt nicht überführt; filters/ech_platzhalter.lua setzt
   den Hinweis mit Link auf die Seite im Original. Hauptkapitel ohne eigenen
@@ -69,29 +68,29 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
 {{< include bausteine/beschreibungsterminologie.md >}}
 
-## Prozessmodule {.platzhalter original-seite="6"}
+{{< include bausteine/prozessmodule.md >}}
 
-### Erarbeitung {.platzhalter original-seite="7"}
+{{< include bausteine/erarbeitung.md >}}
 
-### Formale Qualitätssicherung 1 {.platzhalter original-seite="7"}
+{{< include bausteine/formale-qualitaetssicherung-1.md >}}
 
-### Inhaltliche Qualitätssicherung 1 {.platzhalter original-seite="8"}
+{{< include bausteine/inhaltliche-qualitaetssicherung-1.md >}}
 
 {{< include bausteine/oeffentliche-konsultation.md >}}
 
-### Einarbeitung Rückmeldungen {.platzhalter original-seite="10"}
+{{< include bausteine/einarbeitung-rueckmeldungen.md >}}
 
-### Formale Qualitätssicherung 2 {.platzhalter original-seite="11"}
+{{< include bausteine/formale-qualitaetssicherung-2.md >}}
 
-### Inhaltliche Qualitätssicherung 2 {.platzhalter original-seite="11"}
+{{< include bausteine/inhaltliche-qualitaetssicherung-2.md >}}
 
-### Genehmigung/Ablehnung {.platzhalter original-seite="11"}
+{{< include bausteine/genehmigung-ablehnung.md >}}
 
 {{< include bausteine/publikation.md >}}
 
 {{< include bausteine/ueberpruefung.md >}}
 
-## Fristen und Termine {.platzhalter original-seite="13"}
+{{< include bausteine/fristen-und-termine.md >}}
 
 # Standard {original-seite="14"}
 

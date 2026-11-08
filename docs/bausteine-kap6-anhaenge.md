@@ -1,7 +1,7 @@
 # Entwurf: Baustein-IDs für Kap. 6 und die Anhänge B, C, D (eCH-0003 V11.1.0)
 
 Quelle: Original-PDF eCH-0003 V11.1.0, Seiten 26 und 34–36, Rohtext in `original/text/kap06.txt`, `anhang-b.txt`, `anhang-c.txt`, `anhang-d.txt`. Aufbau der Tabellen nach dem Word-Original geprüft. Regeln: [MVP-Spezifikation 3.2 und 3.6](mvp-spezifikation.md), ADR 0002 und ADR 0004, E15, E29, E30.
-Status: **Freigegebene Liste** (Projektleitung, 8.11.2026; Umsetzung AP22, E49). IDs werden mit der Veröffentlichung eingefroren (ADR 0002). Die `#`-Nummern (z.B. 6.2-1) sind nur Arbeitsnummern und nicht Teil der ID.
+Status: **Freigegebene Liste** (Projektleitung, 8.11.2026; Umsetzung AP22, E49). IDs werden mit der Veröffentlichung eingefroren (ADR 0002). Die `#`-Nummern (z.B. 6.2-1) sind nur Arbeitsnummern und nicht Teil der ID. Wie alle Bausteine ein initialer Vorschlag: für den MVP freigegeben, nicht fixiert (E53).
 
 ## Liste
 
