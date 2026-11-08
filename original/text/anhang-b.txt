@@ -1,0 +1,11 @@
+--- Seite 34 ---
+Anhang B – Abkürzungen
+
+IKT	Informations- und Kommunikationstechnik
+IPR	Intellectual Property Rights
+ISO	International Standardization Organization
+RFC	Request for Change
+UML	Unified Modeling Language
+QS	Qualitätssicherung
+XML	Extensible Markup Language
+JSON	JavaScript Object Notation

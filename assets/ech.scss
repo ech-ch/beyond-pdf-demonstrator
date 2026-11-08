@@ -444,6 +444,13 @@ $grid-margin-width: 375px;
   }
 }
 
+// Querverweise: Quarto setzt sie auf nowrap. Mit Titel («7.10 Darstellung von
+// Voraussetzungen und Abhängigkeiten», E11) sprengt das schmale Spalten und das
+// Handy; Nummern allein enthalten kein Leerzeichen und bleiben zusammen (E49).
+#quarto-content a.quarto-xref {
+  white-space: normal;
+}
+
 // Beziehungen (E47, AP21; filters/ech_beziehungen.lua). Je Baustein ein
 // aufklappbares «Beziehungen (n)» ohne JavaScript: grob in der Zeile unter der
 // Überschrift, fein am Ende des Bausteins. IDs brechen um, damit die Seite
@@ -512,8 +519,10 @@ $grid-margin-width: 375px;
   margin-bottom: 1rem;
 }
 @media (max-width: 767.98px) {
+  // Mermaid verkleinert den Graph auf die Spaltenbreite; mit 960 px bleibt die
+  // Schrift beim heutigen Graph (natürliche Breite rund 1150 px) bei etwa 13 px.
   #quarto-content .beziehungen-graph svg {
-    min-width: 640px;
+    min-width: 960px;
   }
 }
 #quarto-content table.beziehungen-tabelle {

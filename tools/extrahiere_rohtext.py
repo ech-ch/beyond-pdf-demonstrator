@@ -18,8 +18,10 @@ Originals stehen (E06):
 - Das Aufzählungszeichen (U+F0B7) wird zu «- ».
 - Zeilen werden zu Absätzen zusammengefügt. Absätze sind durch eine Leerzeile
   getrennt, die Punkte einer Aufzählung stehen ohne Leerzeile untereinander.
-- Eine zweispaltige Tabelle ergibt eine Zeile je Tabellenzeile, die beiden
-  Zellen sind durch einen Tabulator getrennt.
+- Eine Tabelle ergibt eine Zeile je Tabellenzeile, die Zellen sind durch
+  einen Tabulator getrennt; eine leere Zelle bleibt leer. Tabellen mit drei und
+  mehr Spalten (Anhang D) werden über die Spaltenpositionen gelesen. Eine nach
+  einem Seitenwechsel wiederholte Kopfzeile fällt weg, wie Kopf- und Fusszeile.
 - Codeblöcke (EBNF in Anhang F) bleiben zeilengenau erhalten.
 
 Daneben entsteht `inhaltsverzeichnis.tsv` mit allen Überschriften des
@@ -47,12 +49,15 @@ ZIEL = Path("original/text")
 # Rohtext-Dateien: (Datei, erste Überschrift, Überschrift danach (exklusiv)).
 KAPITEL = [
     ("kap01-1.1-bis-1.2.1.txt", "1", "1.3"),
+    ("kap06.txt", "6", "7"),
     ("kap07.txt", "7", "8"),
     ("kap08.txt", "8", "9"),
     ("kap09.txt", "9", "10"),
     ("kap10.txt", "10", "Anhang A"),
     ("anhang-a.txt", "Anhang A", "Anhang B"),
+    ("anhang-b.txt", "Anhang B", "Anhang C"),
     ("anhang-c.txt", "Anhang C", "Anhang D"),
+    ("anhang-d.txt", "Anhang D", "Anhang E"),
     ("anhang-f.txt", "Anhang F", None),
 ]
 
@@ -68,6 +73,7 @@ TOC_ZEILE = re.compile(r"^(?P<nr>\d+(?:\.\d+)*|Anhang [A-Z])\s+(?:–\s+)?(?P<ti
 KENNZEICHNUNG = re.compile(r"^\[(MUSS|SOLLTE|DARF NICHT|KANN)\]")
 BULLET = ""
 ZWEISPALTIG = re.compile(r"^(\S.*?)\s{2,}(\S.*)$")
+ZELLE = re.compile(r"\S+(?: \S+)*")    # Zellen sind durch mindestens zwei Leerzeichen getrennt
 EBNF_START = re.compile(r"^<[^>]+> ::=")
 ERGAENZUNG = {"und", "oder", "bzw.", "sowie", "bis"}
 SATZENDE = re.compile(r"[.:!?»)]$")
@@ -200,6 +206,10 @@ def verbinde(vorne: str, hinten: str, seite: int) -> str:
             return vorne[:-1] + hinten
         log("Bindestrich", seite, f"{wort_vorne}{wort_hinten} (bleibt)")
         return vorne + hinten
+    if vorne.endswith(" /"):
+        # «1.3.4 /» + «1.3.9» (Anhang D): Leerzeichen vor dem Schrägstrich, also auch danach
+        log("Schrägstrich", seite, f"{vorne.split()[-2]} / {hinten.split()[0]} (mit Leerzeichen)")
+        return vorne + " " + hinten
     if vorne.endswith("/"):
         log("Schrägstrich", seite, f"{vorne.split()[-1]}{hinten.split()[0]} (ohne Leerzeichen)")
         return vorne + hinten
@@ -237,6 +247,16 @@ def baue_bloecke(zeilen: list[Zeile], toc: list[Eintrag]) -> list[Block]:
     aktuell: Block | None = None
     in_liste = in_tabelle = in_code = False
     spalte = 0
+    mehr: dict | None = None   # Tabelle mit drei und mehr Spalten: Kopfzeile, Spaltenanfänge
+
+    def spalte_von(pos: int) -> int:
+        return max(i for i, anfang in enumerate(mehr["spalten"]) if anfang <= pos + 2)
+
+    def zeile_mehrspaltig(z: Zeile, teile: list[tuple[int, str]]) -> None:
+        b = neu("tabelle", z)
+        b.zellen = [[] for _ in mehr["spalten"]]
+        for pos, text in teile:
+            b.zellen[spalte_von(pos)].append(text)
 
     def neu(art: str, z: Zeile) -> Block:
         nonlocal aktuell
@@ -250,7 +270,30 @@ def baue_bloecke(zeilen: list[Zeile], toc: list[Eintrag]) -> list[Block]:
         if z.einzug == 0 and norm(s) in ueberschriften:
             neu("titel", z).zeilen.append(norm(s))
             in_liste = in_tabelle = in_code = False
+            mehr = None
             continue
+        # Tabelle mit drei und mehr Spalten (Anhang D)
+        teile = [(m.start(), m[0]) for m in ZELLE.finditer(z.text)]
+        if z.einzug == 0 and len(teile) >= 3 and not KENNZEICHNUNG.match(s):
+            zellen = [text for _, text in teile]
+            if mehr is not None and zellen == mehr["kopf"]:
+                mehr["spalten"] = [pos for pos, _ in teile]
+                log("Kopfzeile", z.seite, f"wiederholte Kopfzeile der Tabelle übergangen: {' | '.join(zellen)}")
+                continue
+            if mehr is None:
+                mehr = {"kopf": zellen, "spalten": [pos for pos, _ in teile]}
+            zeile_mehrspaltig(z, teile)
+            in_tabelle, in_liste = True, False
+            continue
+        if mehr is not None:
+            if z.einzug == 0 and len(teile) == 2 and not KENNZEICHNUNG.match(s):
+                zeile_mehrspaltig(z, teile)   # Zeile mit leerer Zelle («Beilage»)
+                continue
+            if z.einzug > 0 or (len(teile) == 1 and len(s) < mehr["spalten"][1]):
+                for pos, text in teile:
+                    aktuell.zellen[spalte_von(pos)].append(text)
+                continue
+            mehr = None
         # Codeblock (EBNF)
         if EBNF_START.match(s) or (in_code and (s.startswith("|") or s == "):")):
             if not in_code:

@@ -5,12 +5,15 @@ Text von eCH-0003 V11.1.0, aus [../eCH-0003_V11.1.0_d.pdf](../eCH-0003_V11.1.0_d
 | Datei | Inhalt | Seiten |
 |---|---|---|
 | `kap01-1.1-bis-1.2.1.txt` | 1 Einleitung, 1.1 Status, 1.2 Anwendungsgebiet, 1.2.1 Beschreibungsterminologie | 6 |
+| `kap06.txt` | 6 Fachgruppendokument, 6.1–6.2 | 26 |
 | `kap07.txt` | 7 Formales, 7.1–7.10 | 27–32 |
 | `kap08.txt` | 8 Sicherheitsüberlegungen | 32 |
 | `kap09.txt` | 9 Haftungsausschluss/Hinweise auf Rechte Dritter (Vorlagentext 2022) | 33 |
 | `kap10.txt` | 10 Urheberrechte (Vorlagentext 2022) | 33 |
 | `anhang-a.txt` | Anhang A – Referenzen & Bibliographie | 34 |
+| `anhang-b.txt` | Anhang B – Abkürzungen | 34 |
 | `anhang-c.txt` | Anhang C – Glossar | 34–35 |
+| `anhang-d.txt` | Anhang D – Änderungen gegenüber Vorversion | 35–36 |
 | `anhang-f.txt` | Anhang F – Formale Syntax für die Versionierung | 36 |
 | `inhaltsverzeichnis.tsv` | alle 92 Überschriften des Inhaltsverzeichnisses: Ebene, Nummer, Titel, Seite, ob eigener Text darunter steht | 2–4 |
 
@@ -19,7 +22,8 @@ Text von eCH-0003 V11.1.0, aus [../eCH-0003_V11.1.0_d.pdf](../eCH-0003_V11.1.0_d
 - Jede Überschrift steht als eigener Absatz mit ihrer Nummer wie im Original («7.3 Versionierung», «Anhang F – Formale Syntax …»).
 - Absätze sind durch eine Leerzeile getrennt.
 - Aufzählungspunkte beginnen mit `- ` und stehen ohne Leerzeile untereinander.
-- Eine zweispaltige Tabelle ergibt eine Zeile je Tabellenzeile; die Zellen trennt ein Tabulator.
+- Eine Tabelle ergibt eine Zeile je Tabellenzeile; die Zellen trennt ein Tabulator, eine leere Zelle bleibt leer (Anhang D, «Beilage»).
+- Eine Kopfzeile, die sich nach einem Seitenwechsel wiederholt, steht nur einmal (Anhang D, Seite 36).
 - Codeblöcke (EBNF in Anhang F) bleiben zeilengenau erhalten, mit dem Einzug aus dem PDF.
 - `--- Seite N ---` steht vor dem ersten Absatz, der auf Seite N beginnt. Ein Absatz gehört also zur Seite der letzten Marke davor (Herkunft, `original-seite`).
 
@@ -44,6 +48,13 @@ Fehler des Originals bleiben zeichengleich stehen, etwa «Die Nummer sind» (7.3
   - S. 28: «lük-kenlose» → «lückenlose» ist die einzige alte Trennung «k-k» in diesen Kapiteln.
 - Anhang C: Die Tabelle wurde zellenweise gelesen. «Referentinnen und Referenten» (Begriff) und «Referentinnen und Referenten des Expertenausschusses» (Bezeichnung) stehen in zwei Zellen. Die Lesart «Referentinnen und Referentinnen und Referenten» entsteht nur beim zeilenweisen Lesen über beide Zellen und ist kein Fehler des Originals (F39).
 - Seite 27 (unterer Teil) und Seite 34 wurden zusätzlich als Bild mit dem Rohtext verglichen; Seite 6 (Tabelle 1.2.1) über die drei Lesemodi von pdftotext, die zellenweise übereinstimmen.
+
+## Prüfung gegen das Word-Original (8.11.2026, AP22)
+
+- Kap. 6, Anhang B und D wurden mit dem Word-Original von V11.1.0 verglichen (nur gelesen, nicht im Repo).
+- Anhang D hat drei Spalten und keine zusammengefassten Zellen. «1.3.4 / 1.3.9» steht im Original mit Leerzeichen; das Skript verbindet «1.3.4 /» und «1.3.9» deshalb mit Leerzeichen. Bei «Beilage» ist die Seite leer. Die Kopfzeile wiederholt sich im Original auf Seite 36 (Tabellenkopf auf jeder Seite).
+- Anhang B: Die Reihenfolge ist wie im Original nicht ganz alphabetisch (QS nach UML).
+- Die schon vorhandenen Rohtexte sind nach dem erneuten Lauf unverändert.
 
 ## Werkzeug
 

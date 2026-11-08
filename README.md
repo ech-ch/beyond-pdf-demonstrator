@@ -17,7 +17,7 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Gerüst: alle 92 Überschriften des Originals, Nummerierung und Inhaltsverzeichnis wie im Original | vorhanden |
 | Platzhalter mit Link auf die Seite im Original-PDF | vorhanden |
 | 1.1 Status, erzeugt aus Status und Vorlage-Fassung 2022 | vorhanden |
-| Rohtext aus dem PDF für 1.1–1.2.1, Kap. 7–10, Anhang A, C, F | vorhanden ([original/text/](original/text/README.md)) |
+| Rohtext aus dem PDF für 1.1–1.2.1, Kap. 6–10, Anhänge A–D und F | vorhanden ([original/text/](original/text/README.md)) |
 | Kap. 7 als 10 grobe und 54 feine Bausteine (55 Klauseln), Querverweise erzeugt | vorhanden |
 | Word mit Deckblatt im Format des Word-Originals, Demonstrator-Hinweis, Inhaltsverzeichnis und Fusszeile | vorhanden |
 | CI-Prüfungen für Quelle und Ausgabe (`tools/pruefe.py`) | vorhanden |
@@ -27,7 +27,8 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Links aus dem Word-Original in den überführten Teilen (E-Mail, Website, Statuten, Kontaktangaben) | vorhanden |
 | Registry [`bausteine.json`](#registry): alle Bausteine mit Fundstellen, Herkunft, Verbindlichkeit und Beziehungen | vorhanden |
 | Beziehungen auf der Website: «Beziehungen (n)» je Baustein, [Übersichtsseite](ech-0003/v11.1.0/de/beziehungen.qmd) mit Graph und Tabelle | vorhanden |
-| Anhang C | folgt (Paket A, AP22) |
+| Kap. 6 als 2 grobe und 4 feine Bausteine; Anhänge B, C, D als grobe Bausteine, Anhang C mit einer Klausel (IDs zur Durchsicht: [docs/bausteine-kap6-anhaenge.md](docs/bausteine-kap6-anhaenge.md)) | vorhanden |
+| 1.3.4, 1.3.9, 1.3.10 (Paket B), Steckbrief | folgt (AP23, AP24) |
 
 Das Original-PDF liegt unter [original/eCH-0003_V11.1.0_d.pdf](original/eCH-0003_V11.1.0_d.pdf). Kap. 10 des Standards erlaubt die Weiterverbreitung.
 

@@ -34,6 +34,13 @@ bis = "prozessmodule"
 rohtext = "original/text/kap01-1.1-bis-1.2.1.txt"
 
 [[standard.kapitel]]
+name = "6 Fachgruppendokument"
+von = "sec-fachgruppendokument"
+bis = "sec-formales"
+rohtext = "original/text/kap06.txt"
+zaehlung = { "MUSS" = 2, "SOLLTE" = 0, "DARF NICHT" = 2 }
+
+[[standard.kapitel]]
 name = "7 Formales"
 von = "sec-formales"
 bis = "sec-sicherheitsueberlegungen"
@@ -63,8 +70,29 @@ vorlagentext = true
 [[standard.kapitel]]
 name = "Anhang A"
 von = "sec-referenzen"
-bis = "abkürzungen"
+bis = "sec-abkuerzungen"
 rohtext = "original/text/anhang-a.txt"
+
+[[standard.kapitel]]
+name = "Anhang B"
+von = "sec-abkuerzungen"
+bis = "sec-glossar"
+rohtext = "original/text/anhang-b.txt"
+zaehlung = { "MUSS" = 0, "SOLLTE" = 0, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "Anhang C"
+von = "sec-glossar"
+bis = "sec-aenderungsuebersicht"
+rohtext = "original/text/anhang-c.txt"
+zaehlung = { "MUSS" = 1, "SOLLTE" = 0, "DARF NICHT" = 0 }
+
+[[standard.kapitel]]
+name = "Anhang D"
+von = "sec-aenderungsuebersicht"
+bis = "abbildungsverzeichnis"   # provisorischer Anker von Anhang E (Platzhalter, E05)
+rohtext = "original/text/anhang-d.txt"
+zaehlung = { "MUSS" = 0, "SOLLTE" = 0, "DARF NICHT" = 0 }
 
 [[standard.kapitel]]
 name = "Anhang F"

@@ -85,17 +85,19 @@ Umfang gemäss E02 und E04:
 |---|---|---|
 | 1 | Gerüst aller Überschriften (Kap. 1–10, Anhänge A–F); Kap. 7 (7.1–7.10) vollständig als Bausteine; Website mit Feedback-Knopf; Word mit Deckblatt, Inhaltsverzeichnis und Querverweisen | fest zugesagt (Durchstich) |
 | 1 | 1.1 Status, 1.2 Anwendungsgebiet, 1.2.1 Beschreibungsterminologie; Kap. 8; Kap. 9 und 10 als Vorlagentexte (Fassung 2022); Anhang A; Anhang F | geplant |
-| 2 | Anhang C; Vorlagentexte in der Fassung 2025 mit Umschalten über Metadaten; sichtbare Beziehungen; PDF | wenn Zeit bleibt |
+| 1+ | Kap. 6, Anhänge B, C, D (AP22); sichtbare Beziehungen (AP21) | umgesetzt am Wochenende 7./8.11. (E47–E49) |
+| 2 | Vorlagentexte in der Fassung 2025 mit Umschalten über Metadaten; PDF | wenn Zeit bleibt |
 | 3 | Rückmeldungsliste aus Issues; Wechsel V11.1.0 → V12.0.0 bei gleicher ID; Französisch | nach MVP |
 
-**Nicht im MVP:** 1.3–1.4, Kap. 2–6, Anhänge B, D und E. Sie sind Platzhalter. Anhang E wird künftig erzeugt (E15).
+**Nicht im MVP:** 1.3–1.4, Kap. 2–5 und Anhang E. Sie sind Platzhalter. Anhang E wird künftig erzeugt (E15). Für 1.3.4, 1.3.9, 1.3.10 (Paket B) und 1.3–1.4, Kap. 2–5 (Pakete C, D) siehe E47.
 
 **Gerüst und Platzhalter (E05):**
 
 - Alle rund 92 Überschriften von V11.1.0 stehen im Gerüst. Nummerierung und Inhaltsverzeichnis entsprechen damit dem Original.
 - Einen festen Anker (`sec-…`) tragen nur:
   - Überschriften in Pilotkapiteln
-  - Verweisziele aus überführtem Inhalt: 1.3.4 (aus 7.3 und 7.8), 1.3.9 und 1.3.10 (aus Anhang C)
+  - Verweisziele aus überführtem Inhalt: 1.1 (aus Anhang D), 1.3.4 (aus 7.3, 7.8 und Anhang D), 1.3.9 (aus Anhang C und D), 1.3.10 (aus Anhang C), 2.1.4 (aus Anhang D, `sec-standard-datenschemata`)
+  - Kapitel ohne eigenen Text vor überführten Unterkapiteln: 6 (`sec-fachgruppendokument`), 7 (`sec-formales`)
 
   Eine Baustein-ID (`bb`) tragen nur Bausteine (E08, R7).
 - Alle übrigen Überschriften erhalten einen provisorischen Anker. Sie haben keinen Feedback-Knopf.
@@ -104,7 +106,7 @@ Umfang gemäss E02 und E04:
   > *Dieser Abschnitt ist im Demonstrator nicht in Bausteine überführt. Massgebend ist das Original: eCH-0003 V11.1.0, Seite N.*
 
   Er verlinkt auf die PDF-Seite. Auf der Website erscheint er als grauer Hinweiskasten, im Word als kursiver Satz. Die Seitenzahlen stammen aus dem Inhaltsverzeichnis des Originals.
-- Die Startseite der Website weist darauf hin, dass Kap. 2–6, 1.3–1.4 und die Anhänge B–E Platzhalter sind (Anhang C bis Stufe 2).
+- Die Startseite der Website nennt die überführten Teile und die Platzhalter (Stand AP22: Platzhalter sind 1.3–1.4, Kap. 2–5 und Anhang E).
 
 **Referenzbaustein 7.3 Versionierung:** Bis auf «Unterkapitel 1.3.4» führen alle Verweise aus 7.3 auf überführten Inhalt:
 
@@ -804,7 +806,7 @@ Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
 | # | Paket | Grundlage |
 |---|---|---|
 | AP21 | Beziehungen sichtbar: aufklappbare Liste je Baustein, Übersichtsseite mit Graph (Mermaid) und Tabelle, aus der Registry. Umgesetzt 8.11., nicht committet (E48) | E10, E30, E47, E48 |
-| AP22 | A: Kap. 6, Anhang B, C, D als Bausteine | E15, E47 |
+| AP22 | A: Kap. 6, Anhang B, C, D als Bausteine. Umgesetzt 8.11., nicht committet; IDs zur Durchsicht in [bausteine-kap6-anhaenge.md](bausteine-kap6-anhaenge.md) (E49) | E15, E47, E49 |
 | AP23 | B: 1.3.4, 1.3.9, 1.3.10 als Bausteine (IDs durch die Projektleitung prüfen) | E47 |
 | AP24 | Steckbrief eCH-0003 als Daten und Seite (Option A, `ausbau.md`) | E47, F47 |
 | AP25 | C: 1.3–1.4, falls Zeit (Abbildungen F10) | E47 |

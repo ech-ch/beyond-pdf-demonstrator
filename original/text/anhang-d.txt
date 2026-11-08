@@ -1,0 +1,13 @@
+--- Seite 35 ---
+Anhang D – Änderungen gegenüber Vorversion
+
+Dieser Anhang bezieht sich auf die Änderungen von der Version 11.0.0 zur Version 11.1.0
+
+Kapitel	Seite	Anpassung
+1.3.4	10	Sprachliche Anpassungen zu Rückmeldungen in der öffentlichen Konsultation.
+1.3.4 / 1.3.9	10 / 12	Ergänzungen zum Verfahren bei abhängigen Dokumenten.
+2.1.4	15	Verweis auf XML angepasst und erweitert (insbesondere JSON) und Formulierung zur Kompatibilität bzw. Konvertierung ergänzt.
+
+--- Seite 36 ---
+Div.	Div.	Sprachliche Änderung von «XML» zu «Datenschemata», «Datenschema» bzw. «Datenformat» im gesamten Dokument.
+Beilage		Im Titelblatt und Kapitel 1.1 Status wurden die Texte in Dropdown Felder eingepflegt.
