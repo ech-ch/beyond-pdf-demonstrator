@@ -1,9 +1,0 @@
-references:
-- id: SemVer
-  citation-label: SemVer
-  type: webpage
-  author:
-  - literal: Tom Preston-Werner
-  title: Semantic Versioning 2.0.0
-  URL: https://semver.org/spec/v2.0.0.html
-  accessed: 2022-07-01

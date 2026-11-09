@@ -6,9 +6,9 @@
 
 Der Demonstrator zerlegt einen textbasierten eCH-Standard in **Bausteine** mit stabiler ID. Pilot ist eCH-0003 V11.1.0 «Leitfaden zur Genehmigung von Anträgen». Aus den Bausteinen entstehen wieder ein Word-Dokument (mit Deckblatt, Inhaltsverzeichnis und Querverweisen) und eine Website mit einem Feedback-Knopf je Baustein. Rückmeldungen landen so an einer festen Baustein-Adresse statt bei «Kapitel X, Seite Y».
 
-Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/mvp-spezifikation.md](docs/mvp-spezifikation.md) und [docs/fragenlog.md](docs/fragenlog.md).
+Begriffe: [CONTEXT.md](CONTEXT.md). Begründungen für das Modell: [docs/adr/](docs/adr/). Wie die Baustein-IDs hergeleitet sind: die ID-Listen in [docs/](docs/). Umfang, Arbeitspakete, Fragen (F…) und Entscheide (E…) stehen in der internen Projektdoku; die Nummern E… und F… in diesem Repo verweisen darauf.
 
-**Stellenwert der Regeln:** Wie der Demonstrator Bausteine bildet, IDs vergibt und Beziehungen ableitet, ist ein **Vorschlag und eine Diskussionsgrundlage**. Es ist keine verbindliche Regel. Wie Bausteine und IDs künftig geregelt werden, entscheiden die Fachgruppen, Fachleute und zuständigen Gremien des Vereins eCH, voraussichtlich in einem eigenen Standard oder einem Zusatz zu einem bestehenden. Dasselbe gilt dafür, wie die einzelnen Bausteine und die allgemeinen Texte in allen Kapiteln aufgebaut, dargestellt und benannt sind: Das ist ein initialer Vorschlag, für den MVP freigegeben, aber nicht fixiert. Ein Ausbau oder eine Überarbeitung kann es ändern (E53 im [Fragenlog](docs/fragenlog.md)).
+**Stellenwert der Regeln:** Wie der Demonstrator Bausteine bildet, IDs vergibt und Beziehungen ableitet, ist ein **Vorschlag und eine Diskussionsgrundlage**. Es ist keine verbindliche Regel. Wie Bausteine und IDs künftig geregelt werden, entscheiden die Fachgruppen, Fachleute und zuständigen Gremien des Vereins eCH, voraussichtlich in einem eigenen Standard oder einem Zusatz zu einem bestehenden. Dasselbe gilt dafür, wie die einzelnen Bausteine und die allgemeinen Texte in allen Kapiteln aufgebaut, dargestellt und benannt sind: Das ist ein initialer Vorschlag, für den MVP freigegeben, aber nicht fixiert. Ein Ausbau oder eine Überarbeitung kann es ändern (E53).
 
 ## Stand
 
@@ -64,7 +64,7 @@ tools/                      Extraktion (Text, Abbildungen), Nachbearbeitung Word
 .github/workflows/build.yml Prüfen -> Rendern -> Word nachbearbeiten -> Artefakt (Pages vorbereitet)
 .github/workflows/feedback-label.yml, .github/scripts/  Labels für Feedback-Issues, mit Tests
 .github/ISSUE_TEMPLATE/    Feedback-Formular
-docs/                       Projektdokumentation (wird nicht gerendert)
+docs/                       ADRs und ID-Listen (wird nicht gerendert)
 ```
 
 ## Lokal bauen
@@ -118,7 +118,7 @@ py -3.11 tools/schneide_abbildungen.py
 
 Dazu die Gliederung: jede Überschrift des Gerüsts mit ihrem Stand (Baustein, Platzhalter, Vorlagentext, Statustext, Daten, Verzeichnis, ohne eigenen Text). Die groben Bausteine von Kap. 2–5 und ihre Kapitel tragen `klauseln_im_text`: Ihre Klauseln stehen im Text und sind noch keine feinen Bausteine; die Verbindlichkeit zählt sie trotzdem (E56). Daneben schreibt der Build `steckbrief.json`, den Steckbrief als Daten.
 
-Aufbau und Beispiel: [Spezifikation 3.3](docs/mvp-spezifikation.md#33-metadaten-e09-adr-0003). Die Registry ist von der Startseite und der Standardseite aus verlinkt. Wie bei den IDs gilt: Felder und Beziehungstypen sind ein Vorschlag.
+Aufbau: [ADR 0003](docs/adr/0003-metadaten-am-baustein.md). Die Registry ist von der Startseite und der Standardseite aus verlinkt. Wie bei den IDs gilt: Felder und Beziehungstypen sind ein Vorschlag.
 
 Auf der Website zeigt «Beziehungen (n)» unter einem Baustein seine Querverweise und Rückbezüge; die Seite «Beziehungen» zeigt alle als Graph und Tabelle. Beides entsteht aus `bausteine.json`. Die Übersichtsseite liest die Datei der Standardseite aus demselben Lauf und steht deshalb in der render-Liste von `_quarto.yml` nach ihr; `tools/pruefe.py` prüft das.
 
@@ -155,7 +155,7 @@ GitHub Pages ist vorbereitet, aber ausgeschaltet, bis die Freigabe zum Veröffen
 
 **Weitere Quellen:**
 
-- `filters/ech_anhang.lua`, `ech_titelref.lua`, `ech_docx_nummern.lua`: aus den eigenen Spikes ([docs/spikes/](docs/spikes/README.md)), angepasst.
+- `filters/ech_anhang.lua`, `ech_titelref.lua`, `ech_docx_nummern.lua`: aus den eigenen Spikes (interne Projektdoku), angepasst.
 - `vorlage/word/ech-vorlage-d-2025-11-28.docx`: eCH-Vorlage (Beilage zu eCH-0003, Stand 28.11.2025), unverändert.
 - `original/eCH-0003_V11.1.0_d.pdf`: eCH-0003 V11.1.0, Verein eCH, unverändert.
 

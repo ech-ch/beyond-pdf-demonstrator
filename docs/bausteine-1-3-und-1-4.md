@@ -1,6 +1,6 @@
 # Entwurf: Baustein-IDs für 1.3 (Rest) und 1.4 (eCH-0003 V11.1.0)
 
-Quelle: Original-PDF eCH-0003 V11.1.0, Seiten 6–13. Rohtext in `original/text/kap01-1.3.txt`, `kap01-1.3.1.txt`, `kap01-1.3.2.txt`, `kap01-1.3.3.txt`, `kap01-1.3.5.txt` bis `kap01-1.3.8.txt` und `kap01-1.4.txt`. Absatzgrenzen, Formatvorlagen, Querverweise (REF-Felder) und Links sind nach dem Word-Original geprüft. Regeln: [MVP-Spezifikation 3.2 und 3.6](mvp-spezifikation.md), ADR 0002 und ADR 0004, E11, E29, E30.
+Quelle: Original-PDF eCH-0003 V11.1.0, Seiten 6–13. Rohtext in `original/text/kap01-1.3.txt`, `kap01-1.3.1.txt`, `kap01-1.3.2.txt`, `kap01-1.3.3.txt`, `kap01-1.3.5.txt` bis `kap01-1.3.8.txt` und `kap01-1.4.txt`. Absatzgrenzen, Formatvorlagen, Querverweise (REF-Felder) und Links sind nach dem Word-Original geprüft. Regeln: MVP-Spezifikation 3.2 und 3.6, ADR 0002 und ADR 0004, E11, E29, E30.
 
 Status: **Freigegebene Liste** (Projektleitung, 8.11.2026; Umsetzung AP25, Paket C, E52), für den MVP und als initialer Vorschlag, nicht fixiert (E53). Die IDs werden mit der Veröffentlichung eingefroren (ADR 0002). Die `#`-Nummern (z.B. 1.3.3-7) sind nur Arbeitsnummern und nicht Teil der ID. 1.3.4, 1.3.9 und 1.3.10 stehen in der freigegebenen Liste [bausteine-1-3.md](bausteine-1-3.md).
 

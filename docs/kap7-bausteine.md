@@ -1,6 +1,6 @@
 # Entwurf: Baustein-IDs für die normativen Klauseln in Kapitel 7 (eCH-0003 V11.1.0)
 
-Quelle: Original-PDF eCH-0003 V11.1.0, Kap. 7, Seiten 27–32 (Text mit pdftotext extrahiert). Regeln: [MVP-Spezifikation 3.2 und 3.6](mvp-spezifikation.md), ADR 0002 und ADR 0004.
+Quelle: Original-PDF eCH-0003 V11.1.0, Kap. 7, Seiten 27–32 (Text mit pdftotext extrahiert). Regeln: MVP-Spezifikation 3.2 und 3.6, ADR 0002 und ADR 0004.
 Status: **freigegeben** (Durchsicht der Projektleitung 3.11.2026, AP0d erledigt). Die `#`-Nummern (z.B. 7.3-2) sind nur Arbeitsnummern und nicht Teil der ID. Wie alle Bausteine ein initialer Vorschlag: für den MVP freigegeben, nicht fixiert (E53).
 
 ## Freigegebene Liste (Grundlage für AP5)

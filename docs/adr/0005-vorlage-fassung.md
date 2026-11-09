@@ -22,6 +22,6 @@ Auslöser war F20. In V11.1.0 lautet 1.1 «Das Dokument wurde vom **Vorstand** g
 
 - Die Fassung 2022 stützt sich auf das Original. Heute ist nur der Statustext für «Genehmigt» eingetragen; die übrigen sechs kommen aus dem Dropdown des Word-Originals (AP12). Ein Status ohne Eintrag bricht den Build ab, statt einen Text zu erfinden.
 - Die Fassung 2025 wird aus der heutigen Word-Vorlage übernommen (Beilagen vom 28.11.2025, Stufe 2).
-- Das Layout (Word-Referenzdokument) stammt aus der aktuellen Vorlage vom 28.11.2025 (E20). Seit dem 4.11.2026 liegt mit dem Word-Original von V11.1.0 eine Datei auf Basis der Vorlage von 2022 vor. Sie liegt nicht im Repo und ist eine Option für später ([ausbau.md](../ausbau.md), F).
+- Das Layout (Word-Referenzdokument) stammt aus der aktuellen Vorlage vom 28.11.2025 (E20). Seit dem 4.11.2026 liegt mit dem Word-Original von V11.1.0 eine Datei auf Basis der Vorlage von 2022 vor. Sie liegt nicht im Repo und ist eine Option für später (Ausbau F).
 - Die Vokabulare für das Deckblatt kommen aus der Vorlage-Fassung, nicht aus `ech_vocabulary.yml` des FOAG-Templates.
 - Wer später «Vorstand» zu «Expertenausschuss» korrigieren will, ändert nicht den Standard, sondern stellt ihn auf eine neuere Vorlage-Fassung um.
