@@ -1,0 +1,3 @@
+## Einleitung {#sec-best-practice-einleitung .klauseln-im-text bb="ech-0003-bb-best-practice-einleitung" typ="descriptive" original-seite="18"}
+
+Als «Best Practice» wird die jeweils erwiesenermassen beste praktische Lösung im Vergleich mit anderen Lösungen, Umsetzung oder Anwendung innerhalb bestimmter Anwendungsgebiete bezeichnet. Die Lösung wird als Ganzes beurteilt, d.h. unter den Aspekten Management, Anwendung und Governance, sowie unter Berücksichtigung der gewählten und umgesetzten Methoden, Verfahren, Prozesse, Services und Technologien. eCH empfiehlt den Entscheidungsträgern, sich bei der Umsetzung von E-Government-Vorhaben an den vorhandenen Best Practices zu orientieren.

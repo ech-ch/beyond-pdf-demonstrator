@@ -12,6 +12,11 @@
 --   herkunft           dokument, seite: eine Seite je Fundstelle (E09, F43)
 --   kennzeichnung      feiner Baustein: MUSS, SOLLTE, DARF NICHT oder null
 --   verbindlichkeit    Anzahl je Stufe; beim groben inkl. eingebetteter (V2)
+--                      und, bei `klauseln_im_text`, der Kennzeichnungen im
+--                      eigenen Text
+--   klauseln_im_text   nur beim groben Baustein mit `.klauseln-im-text`
+--                      (Kap. 2–5, AP27, E56): Seine Klauseln stehen in seinem
+--                      Text und sind noch keine feinen Bausteine
 --   relationships      is_part_of/has_part aus der Verschachtelung (E07),
 --                      refers_to aus Querverweisen (W1–W3), depends_on aus
 --                      `bezug` (E30), dazu die Umkehrungen is_referenced_by
@@ -19,8 +24,7 @@
 --                      auf einen umschliessenden Baustein fehlen (W5).
 --
 -- Ziel eines Verweises (target_kind): baustein; noch_kein_baustein (Anker
--- einer Platzhalter-Überschrift, W2, oder einer Überschrift mit Text ohne
--- Bausteine, Kap. 2–5, AP26, E54; mit `title`); vorlagentext oder
+-- einer Platzhalter-Überschrift, W2, mit `title`); vorlagentext oder
 -- statustext (Anker einer Überschrift mit erzeugtem Inhalt aus der
 -- Vorlage-Fassung, nie ein Baustein, ADR 0005, E50, mit `title`); literatur
 -- (Eintrag in Anhang A) oder standard (W3, mit `title` und `url` wie im
@@ -38,14 +42,12 @@
 --
 -- Gliederung (AP24, E51): `gliederung` nennt jede Überschrift des Gerüsts mit
 -- Nummer, Titel, Ebene, Anker und Inhalt: baustein (mit `baustein`),
--- platzhalter, text (überführt, noch nicht in Bausteine zerlegt, `.nur-text`,
--- AP26, E54), vorlagentext, statustext, daten (Anhang A, `feedback-id`),
--- verzeichnis (Anhang E, aus den Abbildungen erzeugt, AP26) oder
--- ohne_text (Kapitel ohne eigenen Text, auch `.nur-text-kapitel`, obwohl es
--- eine `feedback-id` trägt). Anker ohne Baustein können provisorisch sein
--- (E05). Der Titel des Standards steht unter `standard`. Text ohne Bausteine
--- ist keine Quelle von Beziehungen: Seine Querverweise fehlen in der Registry,
--- bis er in Bausteine zerlegt ist (E54).
+-- platzhalter, vorlagentext, statustext, daten (Anhang A, `feedback-id`),
+-- verzeichnis (Anhang E, aus den Abbildungen erzeugt, AP26) oder ohne_text
+-- (Kapitel ohne eigenen Text). Überschriften mit `.klauseln-im-text` (Kap. 2–5
+-- und ihre groben Bausteine) tragen `klauseln_im_text` (AP27, E56). Anker ohne
+-- Baustein können provisorisch sein (E05). Der Titel des Standards steht unter
+-- `standard`.
 --
 -- Steckbrief (AP24, E51; filters/ech_steckbrief.lua): Die Seite mit dem
 -- Metadatum `steckbrief-aus` liest die Registry wie die Übersichtsseite, dazu
@@ -331,6 +333,7 @@ function Pandoc(doc)
         status = element.attributes["status"] or "draft",
         seiten = seiten(element.attributes["original-seite"]),
         fundstellen = {}, teil_von = {}, verweise = {}, bezug = {},
+        klauseln_im_text = art == "grob" and element.classes:includes("klauseln-im-text") or nil, eigene = {},
       }
       for z in (element.attributes["bezug"] or ""):gmatch("[a-z0-9-]+") do table.insert(e.bezug, z) end
       eintraege[bb] = e
@@ -384,9 +387,7 @@ function Pandoc(doc)
           local f = fundstelle(h)
           local titel = (f.section and (f.section .. " ") or "") .. f.title
           local art = vorlage_inhalt[anker]
-          if not art and (h.classes:includes("platzhalter") or h.classes:includes("nur-text")) then
-            art = "noch_kein_baustein"
-          end
+          if not art and h.classes:includes("platzhalter") then art = "noch_kein_baustein" end
           if not art then
             common.abbruch(string.format("Registry: «%s» verweist auf «%s» (%s), eine Überschrift ohne Baustein, "
               .. "Platzhalter oder Vorlagentext. Die Zielart ist erst zu entscheiden (E50).", quelle, anker, titel))
@@ -455,6 +456,13 @@ function Pandoc(doc)
         verarbeite(b.content, besitzer)
       elseif b.t ~= "RawBlock" and besitzer then
         sammle_verweise(b, besitzer)
+        local e = eintraege[besitzer]
+        if e.klauseln_im_text and (b.t == "Para" or b.t == "Plain") then
+          local k = stringify(b):match("^%[([A-Z ]+)%]")
+          for _, stufe in ipairs(stufen) do
+            if k == stufe then e.eigene[stufe] = (e.eigene[stufe] or 0) + 1 end
+          end
+        end
       end
     end
   end
@@ -484,6 +492,7 @@ function Pandoc(doc)
     gesehen[bb] = true
     local e = eintraege[bb]
     if e.art == "fein" and e.kennzeichnung then zaehlung[e.kennzeichnung] = zaehlung[e.kennzeichnung] + 1 end
+    for stufe, n in pairs(e.eigene) do zaehlung[stufe] = zaehlung[stufe] + n end
     for _, kind in ipairs(teile[bb] or {}) do zaehle(kind, zaehlung, gesehen) end
   end
 
@@ -531,6 +540,7 @@ function Pandoc(doc)
       { "herkunft", original and obj({ { "dokument", original }, { "seite", liste(e.seiten) } }) or nil },
       { "kennzeichnung", e.art == "fein" and (e.kennzeichnung or NULL) or nil },
       { "verbindlichkeit", obj(verbindlichkeit) },
+      { "klauseln_im_text", e.klauseln_im_text or nil },
       { "relationships", liste(beziehungen_) },
     }))
   end
@@ -544,11 +554,11 @@ function Pandoc(doc)
     local bb = h.attributes["bb"]
     local inhalt = bb and "baustein" or vorlage_inhalt[h.identifier]
       or (h.classes:includes("platzhalter") and "platzhalter")
-      or (h.classes:includes("nur-text") and "text")
       or (h.classes:includes("abbildungsverzeichnis") and "verzeichnis")
-      or (h.attributes["feedback-id"] and not h.classes:includes("nur-text-kapitel") and "daten") or "ohne_text"
+      or (h.attributes["feedback-id"] and "daten") or "ohne_text"
     table.insert(gliederung, obj({ { "section", f.section or NULL }, { "title", f.title }, { "ebene", h.level },
-      { "anker", h.identifier }, { "inhalt", inhalt }, { "baustein", bb } }))
+      { "anker", h.identifier }, { "inhalt", inhalt }, { "baustein", bb },
+      { "klauseln_im_text", h.classes:includes("klauseln-im-text") or nil } }))
     ::weiter::
   end
 

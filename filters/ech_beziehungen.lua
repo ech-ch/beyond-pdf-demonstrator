@@ -160,6 +160,13 @@ function M.im_anhang(e)
   return nr ~= nil and nr:match("^Anhang ") ~= nil
 end
 
+-- Pfeile aus diesem groben Baustein stehen nur in der Tabelle: Anhänge (F56)
+-- und grobe Bausteine, deren Klauseln noch keine feinen Bausteine sind (Kap.
+-- 2–5, `klauseln_im_text`, AP27, E56); der Graph bleibt so lesbar.
+function M.nur_tabelle(e)
+  return M.im_anhang(e) or e.klauseln_im_text == true
+end
+
 -- Legende: nur, was im Graph vorkommt (Schlüssel wie `verwendet` in M.graph)
 M.LEGENDE = {
   { "baustein", "Rechteck: grober Baustein" },
@@ -188,7 +195,8 @@ end
 -- Vorwärtsbeziehungen der Bausteine je grobem Quell- und Zielbaustein zusammen;
 -- Beziehungen innerhalb desselben groben Bausteins und die Einbettung fehlen,
 -- ebenso Pfeile, die in einem Anhang beginnen (F56, Variante a): Glossar und
--- Änderungsübersicht sind Nachschlagestellen. Sie stehen in der Tabelle.
+-- Änderungsübersicht sind Nachschlagestellen. Sie stehen in der Tabelle, wie
+-- die Pfeile aus Kap. 2–5 (M.nur_tabelle, AP27).
 -- Pfeile in einen Anhang hinein bleiben (7.3 -> Anhang F).
 -- Gibt den Mermaid-Text und `verwendet` zurück (Knotenklassen und Pfeilarten
 -- im Bild, für die Legende).
@@ -228,7 +236,7 @@ function M.graph(registry, index)
         local ziele = r.target_kind == "baustein" and grobe(index[r.target]) or { false }
         for _, q in ipairs(grobe(e)) do
           for _, z in ipairs(ziele) do
-            if z ~= q and not M.im_anhang(index[q]) then
+            if z ~= q and not M.nur_tabelle(index[q]) then
               local von = grob_knoten(q)
               local nach = z and grob_knoten(z) or ziel_knoten(r)
               local schluessel = von .. ">" .. nach .. ">" .. r.type

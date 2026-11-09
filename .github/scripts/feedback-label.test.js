@@ -48,17 +48,24 @@ test('Anhang A: ech-0003-referenzen ergibt bb:referenzen', () => {
   assert.ok(labels({ 'Baustein-ID': 'ech-0003-referenzen' }).includes('bb:referenzen'));
 });
 
-test('Kap. 2–5 als Text ohne Bausteine: feedback-id ergibt bb:kapitel-… (AP26)', () => {
+test('Kap. 2–5: grobe Bausteine je Unterkapitel ergeben bb:<kurzname> (AP27)', () => {
+  for (const kurzname of ['standard-erarbeitung', 'best-practice-einleitung', 'hilfsmittel-ueberpruefung',
+    'white-paper-konsultation-und-einarbeitung', 'best-practice-inhaltliche-qualitaetssicherung-2']) {
+    assert.ok(labels({ 'Baustein-ID': `ech-0003-bb-${kurzname}` }).includes(`bb:${kurzname}`), kurzname);
+  }
+});
+
+test('Kennungen der Kapitel 2–5 aus AP26 sind entfallen: bb:unbekannt (AP27)', () => {
   for (const kapitel of ['standard', 'best-practice', 'hilfsmittel', 'white-paper']) {
-    assert.ok(labels({ 'Baustein-ID': `ech-0003-kapitel-${kapitel}` }).includes(`bb:kapitel-${kapitel}`), kapitel);
+    assert.ok(labels({ 'Baustein-ID': `ech-0003-kapitel-${kapitel}` }).includes('bb:unbekannt'), kapitel);
   }
 });
 
 test('feedback-id, die nicht in der Quelle steht oder zu einem anderen Standard gehört: bb:unbekannt', () => {
   assert.ok(labels({ 'Baustein-ID': 'ech-0003-kapitel-gibt-es-nicht' }).includes('bb:unbekannt'));
   assert.ok(labels({ 'Baustein-ID': 'ech-0003-bb-kapitel-standard' }).includes('bb:unbekannt'));
-  assert.ok(labels({ 'Baustein-ID': 'ech-0004-kapitel-standard' }).includes('bb:unbekannt'));
-  assert.ok(labels({ Standard: 'ech-0004', 'Baustein-ID': 'ech-0003-kapitel-standard' }).includes('bb:unbekannt'));
+  assert.ok(labels({ 'Baustein-ID': 'ech-0004-referenzen' }).includes('bb:unbekannt'));
+  assert.ok(labels({ Standard: 'ech-0004', 'Baustein-ID': 'ech-0003-referenzen' }).includes('bb:unbekannt'));
 });
 
 test('Mehrfachbaustein', () => {

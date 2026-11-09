@@ -11,10 +11,10 @@ html = "_site/ech-0003/v11.1.0/de/index.html"
 docx = "_site/ech-0003/v11.1.0/de/DEMO_eCH-0003_V11.1.0_de.docx"
 # Elemente der Website, die nicht zum Text gehören (Platzhalter, Bedienelemente
 # des Feedbacks, Hinweis über Kap. 2–5). pruefe.py prüft, dass die Ausnahme wirkt.
-html_ignorieren = ["platzhalter-hinweis", "baustein-bedienung", "vorlagentext-hinweis", "nur-text-hinweis"]
+html_ignorieren = ["platzhalter-hinweis", "baustein-bedienung", "vorlagentext-hinweis", "klauseln-hinweis"]
 # Absätze im Word, die nicht zum Text gehören: Anfang des Hinweises über Kap.
-# 2–5 (filters/ech_platzhalter.lua, AP26)
-docx_ignorieren = ["Text überführt, noch nicht in Bausteine zerlegt."]
+# 2–5 (filters/ech_platzhalter.lua, AP27)
+docx_ignorieren = ["In grobe Bausteine gegliedert; die Klauseln sind noch nicht als feine Bausteine erfasst."]
 # Registry (filters/ech_registry.lua) und Daten von Anhang A
 registry = "_site/ech-0003/v11.1.0/bausteine.json"
 # Übersichtsseite «Beziehungen» (AP21): liest die Registry der Standardseite und
@@ -142,18 +142,18 @@ bis = "sec-standard"
 rohtext = "original/text/kap01-1.4.txt"
 zaehlung = { "MUSS" = 0, "SOLLTE" = 0, "DARF NICHT" = 1 }
 
-# Kap. 2–5 (AP26, E54): Text überführt, noch nicht in Bausteine zerlegt. Je
-# Kapitel ein Rohtext; der Textvergleich umfasst die Überschriften der
-# Unterkapitel, ein Absatz unter der falschen Überschrift fällt also auf.
-# `nur_text = true`: Hinweis auf der Website und im Word, kein Baustein,
-# Feedback über die feedback-id des Kapitels.
+# Kap. 2–5 (AP26, AP27, E56): Unterkapitel als grobe Bausteine, die Klauseln in
+# deren Text, keine feinen Bausteine. Je Kapitel ein Rohtext; der Textvergleich
+# umfasst die Überschriften der Unterkapitel, ein Absatz unter der falschen
+# Überschrift fällt also auf. `klauseln_im_text = true`: Hinweis auf der
+# Website und im Word, keine feinen Bausteine.
 [[standard.kapitel]]
 name = "2 Standard"
 von = "sec-standard"
 bis = "sec-best-practice"
 rohtext = "original/text/kap02.txt"
 zaehlung = { "MUSS" = 11, "SOLLTE" = 10, "DARF NICHT" = 1 }
-nur_text = true
+klauseln_im_text = true
 
 [[standard.kapitel]]
 name = "3 Best Practice"
@@ -161,7 +161,7 @@ von = "sec-best-practice"
 bis = "sec-hilfsmittel"
 rohtext = "original/text/kap03.txt"
 zaehlung = { "MUSS" = 10, "SOLLTE" = 2, "DARF NICHT" = 0 }
-nur_text = true
+klauseln_im_text = true
 
 [[standard.kapitel]]
 name = "4 Hilfsmittel"
@@ -169,7 +169,7 @@ von = "sec-hilfsmittel"
 bis = "sec-white-paper"
 rohtext = "original/text/kap04.txt"
 zaehlung = { "MUSS" = 7, "SOLLTE" = 1, "DARF NICHT" = 0 }
-nur_text = true
+klauseln_im_text = true
 
 [[standard.kapitel]]
 name = "5 White Paper"
@@ -177,7 +177,7 @@ von = "sec-white-paper"
 bis = "sec-fachgruppendokument"
 rohtext = "original/text/kap05.txt"
 zaehlung = { "MUSS" = 10, "SOLLTE" = 2, "DARF NICHT" = 0 }
-nur_text = true
+klauseln_im_text = true
 
 [[standard.kapitel]]
 name = "6 Fachgruppendokument"

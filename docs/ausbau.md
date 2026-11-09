@@ -116,7 +116,7 @@ Die Aufwände sind Schätzungen.
 
 ### J. Kap. 2–5 in Bausteine umbauen (E54)
 
-- **Heute:** Kap. 2–5 sind seit AP26 als Text überführt, aber noch nicht in Bausteine zerlegt: Wortlaut, Kennzeichnungen im Text, erzeugte Querverweise, Abbildungen 3–6, Feedback je Kapitel (`ech-0003-kapitel-…`). Ihre Querverweise zählen noch nicht als Beziehungen.
+- **Heute:** Kap. 2–5 sind seit AP27 in grobe Bausteine gegliedert, eines je Unterkapitel mit Feedback und Beziehungen (E56); die Klauseln stehen im Text und sind noch nicht als feine Bausteine erfasst (`.klauseln-im-text`). Pfeile aus Kap. 2–5 stehen nur in der Tabelle der Beziehungen.
 - **Erste Frage: F26.** Kap. 2–5 wiederholen fast wörtlich dieselben Klauseln, mit Unterschieden in Antragsform, Frist (fünf oder drei Jahre), Deklination und Verbindlichkeit ([SOLLTE] in 2.3.7, [MUSS] in 3.3.7, 4.3.4, 5.3.7). Parametrisierte Bausteine, Mehrfachverwendung (E27) oder getrennte Bausteine? Davon hängen Zuschnitt, Kurznamen und Beziehungen ab. Gleich danach F59: was mit den vier Kennungen und ihren Issues geschieht.
 - **Was dann:** ID-Liste wie in AP22 bis AP25 (Grenzregeln G1–G4, `bezug`), Durchsicht durch die Projektleitung, Umbau per Skript aus den Rohtexten, die schon da sind. Die Prüfungen gegen das Word-Original laufen bereits je Kapitel.
 - **Wert:** Feedback, Registry, Beziehungen und Steckbrief decken dann den ganzen Standard ab; die Wiederholungen aus 1.3.3 [DARF NICHT] werden sichtbar. Passt zu G (Abbildungen aus den Prozessschritten).

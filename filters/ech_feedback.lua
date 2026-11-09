@@ -66,7 +66,7 @@ end
 -- Tabelle der Referenzen).
 -- Nicht Teil des Texts: Hinweise des Demonstrators und die versteckten
 -- Blöcke, die Quarto am Ende des Dokuments anhängt (Navigation, Metadaten)
-local KEIN_TEXT = { "platzhalter-hinweis", "nur-text-hinweis", "vorlagentext-hinweis", "hidden" }
+local KEIN_TEXT = { "platzhalter-hinweis", "klauseln-hinweis", "vorlagentext-hinweis", "hidden" }
 
 local function ohne_feine(blocks, teile)
   for _, b in ipairs(blocks) do
@@ -165,6 +165,15 @@ end
 local function info_span(k, id, anker, kurzname)
   return string.format('<span class="baustein-info"><a class="baustein-id" href="#%s">%s</a> · <a class="baustein-alle" href="%s" target="_blank" rel="noopener">Alle Rückmeldungen</a></span>',
     esc(anker), esc(id), esc(alle_url(k, kurzname)))
+end
+
+-- Name im Issue-Titel mit der Nummer der Überschrift, bei der der Knopf steht,
+-- z.B. «Feedback zu 2.3.1 Erarbeitung (…)»: Gleiche Titel wie «Erarbeitung»
+-- kommen in Kap. 1–5 mehrfach vor (E56, Nachtrag). Anhänge tragen ihren
+-- Buchstaben schon im Titel («Anhang C – Glossar») und bleiben ohne Nummer.
+local function mit_nummer(nummer, name)
+  if nummer and nummer:match("^%d[%d%.]*$") then return nummer .. " " .. name end
+  return name
 end
 
 -- Knopf auf der Zeile der Überschrift: grober Baustein, Anhang A
@@ -268,16 +277,17 @@ function Pandoc(doc)
         stelle = { nummer = b.attributes["number"], anker = b.identifier, titel = titel_ohne_nummer(b) }
         ergebnis:insert(b)
         local bb, fid = b.attributes["bb"], b.attributes["feedback-id"]
+        local name = mit_nummer(stelle.nummer, stelle.titel)
         if bb then
-          ergebnis:insert(bedienung_ueberschrift(k, bb, bb, kurzname(bb), titel_ohne_nummer(b), eigener_text(blocks, i)))
+          ergebnis:insert(bedienung_ueberschrift(k, bb, bb, kurzname(bb), name, eigener_text(blocks, i)))
         elseif fid and not b.classes:includes("platzhalter") then
-          ergebnis:insert(bedienung_ueberschrift(k, fid, b.identifier, fid:sub(#k.standard + 2), titel_ohne_nummer(b),
+          ergebnis:insert(bedienung_ueberschrift(k, fid, b.identifier, fid:sub(#k.standard + 2), name,
             eigener_text(blocks, i)))
         end
       elseif b.t == "Div" and b.attributes["bb"] then
         local bb = b.attributes["bb"]
         local text = block_text(b)
-        local name = common.baustein_name(b)
+        local name = mit_nummer(stelle and stelle.nummer, common.baustein_name(b))
         local inhalt = pandoc.Blocks({ bedienung_fein(k, bb, kurzname(bb), name, text) })
         inhalt:extend(bearbeite(b.content, stelle))
         local auch = hinweis_auch(fundstellen[bb], stelle)

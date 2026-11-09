@@ -46,9 +46,8 @@ format:
 Gerüst von eCH-0003 V11.1.0 (E05): alle Überschriften des Originals in
 dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
-- Feste Anker (#sec-…) nur für überführte Kapitel und Verweisziele (Kap. 1,
-  Kap. 2–5, 2.1.1–2.1.4, 2.2); alle übrigen Überschriften erhalten einen
-  provisorischen Anker. Gleichlautende Überschriften in Kap. 2–6 tragen die
+- Feste Anker (#sec-…) nur für überführte Kapitel und Verweisziele; alle
+  übrigen Überschriften erhalten einen provisorischen Anker. Gleichlautende Überschriften in Kap. 2–6 tragen die
   Antragsform im Anker (z.B. sec-standard-datenschemata,
   sec-fachgruppendokument-einleitung).
 - `.platzhalter`: Inhalt nicht überführt; filters/ech_platzhalter.lua setzt
@@ -59,9 +58,10 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
   (filters/ech_abbildungen.lua, AP26).
 - Überführte Kapitel ersetzen ihre Überschrift durch ein include der Datei
   bausteine/<kurzname>.md, Vorlagentexte durch den Shortcode vorlagentext.
-- Kap. 2–5 sind als Text überführt, noch nicht in Bausteine zerlegt (E54):
-  include von text/<kapitel>.md; Überschriften mit `.nur-text`, das Kapitel
-  mit `.nur-text-kapitel` und `feedback-id` (Hinweis: ech_platzhalter.lua).
+- Kap. 2–5 sind in grobe Bausteine gegliedert, die Klauseln stehen in deren
+  Text und sind noch keine feinen Bausteine (E55, E56): Klasse
+  `.klauseln-im-text` an der Kapitelüberschrift (Hinweis: ech_platzhalter.lua)
+  und an jedem dieser groben Bausteine (Ausnahme in tools/pruefe.py).
   (Keine Shortcodes in diesem Kommentar: Quarto wertet sie auch hier aus.)
 -->
 
@@ -99,13 +99,111 @@ dessen Reihenfolge, Seitenzahl aus dem Inhaltsverzeichnis in `original-seite`.
 
 {{< include bausteine/fristen-und-termine.md >}}
 
-{{< include text/standard.md >}}
+# Standard {#sec-standard .klauseln-im-text original-seite="14"}
 
-{{< include text/best-practice.md >}}
+{{< include bausteine/standard-einleitung.md >}}
 
-{{< include text/hilfsmittel.md >}}
+{{< include bausteine/standard-interoperabilitaetsstandard.md >}}
 
-{{< include text/white-paper.md >}}
+{{< include bausteine/standard-verfahrensstandard.md >}}
+
+{{< include bausteine/standard-referenzierter-fremdstandard.md >}}
+
+{{< include bausteine/standard-datenschemata.md >}}
+
+{{< include bausteine/standard-antragstellende.md >}}
+
+{{< include bausteine/standard-prozess.md >}}
+
+{{< include bausteine/standard-erarbeitung.md >}}
+
+{{< include bausteine/standard-formale-qualitaetssicherung-1.md >}}
+
+{{< include bausteine/standard-inhaltliche-qualitaetssicherung-1.md >}}
+
+{{< include bausteine/standard-konsultation-und-einarbeitung.md >}}
+
+{{< include bausteine/standard-formale-qualitaetssicherung-2.md >}}
+
+{{< include bausteine/standard-inhaltliche-qualitaetssicherung-2.md >}}
+
+{{< include bausteine/standard-genehmigung-ablehnung.md >}}
+
+{{< include bausteine/standard-publikation.md >}}
+
+{{< include bausteine/standard-ueberpruefung.md >}}
+
+# Best Practice {#sec-best-practice .klauseln-im-text original-seite="18"}
+
+{{< include bausteine/best-practice-einleitung.md >}}
+
+{{< include bausteine/best-practice-antragstellende.md >}}
+
+{{< include bausteine/best-practice-prozess.md >}}
+
+{{< include bausteine/best-practice-erarbeitung.md >}}
+
+{{< include bausteine/best-practice-formale-qualitaetssicherung-1.md >}}
+
+{{< include bausteine/best-practice-inhaltliche-qualitaetssicherung-1.md >}}
+
+{{< include bausteine/best-practice-konsultation-und-einarbeitung.md >}}
+
+{{< include bausteine/best-practice-formale-qualitaetssicherung-2.md >}}
+
+{{< include bausteine/best-practice-inhaltliche-qualitaetssicherung-2.md >}}
+
+{{< include bausteine/best-practice-genehmigung-ablehnung.md >}}
+
+{{< include bausteine/best-practice-publikation.md >}}
+
+{{< include bausteine/best-practice-ueberpruefung.md >}}
+
+# Hilfsmittel {#sec-hilfsmittel .klauseln-im-text original-seite="21"}
+
+{{< include bausteine/hilfsmittel-einleitung.md >}}
+
+{{< include bausteine/hilfsmittel-antragstellende.md >}}
+
+{{< include bausteine/hilfsmittel-prozess.md >}}
+
+{{< include bausteine/hilfsmittel-erarbeitung.md >}}
+
+{{< include bausteine/hilfsmittel-formale-qualitaetssicherung-1.md >}}
+
+{{< include bausteine/hilfsmittel-inhaltliche-qualitaetssicherung-1.md >}}
+
+{{< include bausteine/hilfsmittel-genehmigung-ablehnung.md >}}
+
+{{< include bausteine/hilfsmittel-publikation.md >}}
+
+{{< include bausteine/hilfsmittel-ueberpruefung.md >}}
+
+# White Paper {#sec-white-paper .klauseln-im-text original-seite="23"}
+
+{{< include bausteine/white-paper-einleitung.md >}}
+
+{{< include bausteine/white-paper-antragstellende.md >}}
+
+{{< include bausteine/white-paper-prozess.md >}}
+
+{{< include bausteine/white-paper-erarbeitung.md >}}
+
+{{< include bausteine/white-paper-formale-qualitaetssicherung-1.md >}}
+
+{{< include bausteine/white-paper-inhaltliche-qualitaetssicherung-1.md >}}
+
+{{< include bausteine/white-paper-konsultation-und-einarbeitung.md >}}
+
+{{< include bausteine/white-paper-formale-qualitaetssicherung-2.md >}}
+
+{{< include bausteine/white-paper-inhaltliche-qualitaetssicherung-2.md >}}
+
+{{< include bausteine/white-paper-genehmigung-ablehnung.md >}}
+
+{{< include bausteine/white-paper-publikation.md >}}
+
+{{< include bausteine/white-paper-ueberpruefung.md >}}
 
 # Fachgruppendokument {#sec-fachgruppendokument original-seite="26"}
 

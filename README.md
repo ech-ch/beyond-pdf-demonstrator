@@ -30,7 +30,8 @@ Begriffe: [CONTEXT.md](CONTEXT.md). Umfang, Entscheide und Arbeitspakete: [docs/
 | Kap. 6 als 2 grobe und 4 feine Bausteine; Anhänge B, C, D als grobe Bausteine, Anhang C mit einer Klausel (IDs freigegeben: [docs/bausteine-kap6-anhaenge.md](docs/bausteine-kap6-anhaenge.md)) | vorhanden |
 | 1.3.4, 1.3.9, 1.3.10 als 3 grobe und 18 feine Bausteine (IDs freigegeben: [docs/bausteine-1-3.md](docs/bausteine-1-3.md)) | vorhanden |
 | Rest von 1.3 und 1.4 als 9 grobe und 45 feine Bausteine, Abbildung 1 und 2 als Bild aus dem Original-PDF mit Alternativtext; Kap. 1 damit vollständig (IDs freigegeben: [docs/bausteine-1-3-und-1-4.md](docs/bausteine-1-3-und-1-4.md)) | vorhanden |
-| Kap. 2–5 als Text, überführt, noch nicht in Bausteine zerlegt: Wortlaut, Kennzeichnungen im Text, Querverweise erzeugt, Abbildungen 3–6 aus dem Original-PDF, Hinweis über jedem Kapitel, Feedback je Kapitel (E54); der ganze Standard ist damit abgebildet | vorhanden |
+| Kap. 2–5 in 49 grobe Bausteine gegliedert, je Unterkapitel einer, mit Feedback, Querverweisen als Beziehungen und Abbildungen 3–6 aus dem Original-PDF; die Klauseln stehen im Text und sind noch nicht als feine Bausteine erfasst (E54, E56; IDs zur Durchsicht: [docs/bausteine-kap2-5.md](docs/bausteine-kap2-5.md)); der ganze Standard ist damit abgebildet | vorhanden |
+| Feedback auf grobe Bausteine mit ihrem eigenen Text als Wortlaut (ohne die feinen Bausteine), gekürzt, damit die URL unter dem Limit von GitHub bleibt (E56) | vorhanden |
 | Anhang E (Abbildungsverzeichnis) erzeugt aus den sechs Abbildungen; im Word mit Seitenzahlen (Feld PAGEREF) | vorhanden |
 | [Steckbrief](ech-0003/v11.1.0/de/steckbrief.qmd) nach dem Raster «eCH Steckbrief Standardisierungsinhalte» (V0.9): Angaben in `steckbrief.yml`, Raster als Vokabular in `vorlage/steckbrief/`, Bezüge und Strukturierung erzeugt; Texte und Auswahlen als Vorschlag | vorhanden |
 
@@ -47,7 +48,6 @@ ech-0003/v11.1.0/
   steckbrief.yml            Steckbrief, sprachneutral (Raster-Fassung, Auswahlen, offene Felder)
   de/index.qmd              Gerüst; Kopfzeile mit sprachabhängiger Ebene 0
   de/bausteine/             eine Datei je grobem Baustein; mehrfach/ für Mehrfachbausteine
-  de/text/                  Kap. 2–5 als Text, noch nicht in Bausteine zerlegt (E54)
   de/abbildungen/           Abbildungen aus dem Original-PDF (tools/schneide_abbildungen.py)
   de/beziehungen.qmd        Übersichtsseite «Beziehungen»; Graph und Tabelle aus bausteine.json
   de/steckbrief.qmd         Steckbrief; Texte in der Kopfzeile, Rest aus Daten und bausteine.json
@@ -116,7 +116,7 @@ py -3.11 tools/schneide_abbildungen.py
 - Kennzeichnung und Verbindlichkeit
 - Beziehungen: Einbettung, Verweise, Rückbezüge; jede mit Umkehrung
 
-Dazu die Gliederung: jede Überschrift des Gerüsts mit ihrem Stand (Baustein, Text ohne Bausteine, Platzhalter, Vorlagentext, Statustext, Daten, Verzeichnis, ohne eigenen Text). Text ohne Bausteine (Kap. 2–5) ist keine Quelle von Beziehungen: Seine Querverweise erscheinen erst in der Registry, wenn er in Bausteine zerlegt ist (E54). Daneben schreibt der Build `steckbrief.json`, den Steckbrief als Daten.
+Dazu die Gliederung: jede Überschrift des Gerüsts mit ihrem Stand (Baustein, Platzhalter, Vorlagentext, Statustext, Daten, Verzeichnis, ohne eigenen Text). Die groben Bausteine von Kap. 2–5 und ihre Kapitel tragen `klauseln_im_text`: Ihre Klauseln stehen im Text und sind noch keine feinen Bausteine; die Verbindlichkeit zählt sie trotzdem (E56). Daneben schreibt der Build `steckbrief.json`, den Steckbrief als Daten.
 
 Aufbau und Beispiel: [Spezifikation 3.3](docs/mvp-spezifikation.md#33-metadaten-e09-adr-0003). Die Registry ist von der Startseite und der Standardseite aus verlinkt. Wie bei den IDs gilt: Felder und Beziehungstypen sind ein Vorschlag.
 

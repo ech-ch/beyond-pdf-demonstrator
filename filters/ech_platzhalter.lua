@@ -1,5 +1,6 @@
 -- Platzhalter unter nicht überführten Überschriften des Gerüsts (E05) und
--- Hinweis über Kapiteln, die nur als Text überführt sind (AP26, E54).
+-- Hinweis über Kapiteln, deren Klauseln noch keine feinen Bausteine sind
+-- (Kap. 2–5, AP27, E56).
 --
 -- Eine Überschrift mit der Klasse `.platzhalter` und dem Attribut
 -- `original-seite` erhält darunter den Hinweis
@@ -14,17 +15,17 @@
 -- absolut auf die Website (`demonstrator-url` in _quarto.yml), weil das Word
 -- heruntergeladen und ohne die Website geöffnet wird.
 --
--- Text ohne Bausteine (AP26, E54): Eine Überschrift mit der Klasse
--- `.nur-text-kapitel` (Kap. 2–5) erhält darunter den Hinweis
+-- Klauseln im Text (AP27, E56): Eine Kapitelüberschrift (Ebene 1) mit der
+-- Klasse `.klauseln-im-text` (Kap. 2–5) erhält darunter den Hinweis
 --
---   Text überführt, noch nicht in Bausteine zerlegt. Dieses Kapitel steht
---   wörtlich wie im Original (eCH-0003 V11.1.0, ab Seite N), aber noch ohne
---   Baustein-IDs.
+--   In grobe Bausteine gegliedert; die Klauseln sind noch nicht als feine
+--   Bausteine erfasst. Wortlaut wie im Original (eCH-0003 V11.1.0, ab Seite N).
 --
 -- Auf der Website im selben Kasten wie der Platzhalter (Klasse
--- .nur-text-hinweis) und mit dem Satz zum Feedback, das es dort für das ganze
--- Kapitel gibt (feedback-id, ech_feedback.lua); im Word kursiv ohne diesen Satz.
--- tools/pruefe.py nimmt den Hinweis vom Textvergleich aus.
+-- .klauseln-hinweis) und mit dem Satz zum Feedback je Unterkapitel; im Word
+-- kursiv ohne diesen Satz. tools/pruefe.py nimmt den Hinweis vom Textvergleich
+-- aus. Dieselbe Klasse an einem groben Baustein erlaubt Kennzeichnungen in
+-- dessen Text (Ausnahme in tools/pruefe.py).
 --
 -- Läuft VOR dem quarto-Filter. Fehlen `original-seite` oder die Metadaten,
 -- bricht der Build ab.
@@ -50,7 +51,7 @@ local function site_url(meta)
   return (url:gsub("/*$", "/"))
 end
 
-local NUR_TEXT = "Text überführt, noch nicht in Bausteine zerlegt."
+local KLAUSELN = "In grobe Bausteine gegliedert; die Klauseln sind noch nicht als feine Bausteine erfasst."
 
 function Pandoc(doc)
   local meta = doc.meta
@@ -61,25 +62,24 @@ function Pandoc(doc)
   local blocks = pandoc.Blocks({})
   for _, block in ipairs(doc.blocks) do
     blocks:insert(block)
-    if block.t == "Header" and block.classes:includes("nur-text-kapitel") then
+    if block.t == "Header" and block.level == 1 and block.classes:includes("klauseln-im-text") then
       local seite = block.attributes["original-seite"]
       if not (seite and original and pdf) then
-        error(string.format("Text ohne Bausteine «%s»: `original-seite` an der Überschrift oder `original`/`original-pdf` in den Metadaten fehlt",
+        error(string.format("Klauseln im Text «%s»: `original-seite` an der Überschrift oder `original`/`original-pdf` in den Metadaten fehlt",
           stringify(block.content)))
       end
       local base = docx and site_url(meta) or to_project_root()
       local link = pandoc.Link(original .. ", ab Seite " .. seite, base .. pdf .. "#page=" .. seite)
       local text = pandoc.Inlines({
-        pandoc.Str(NUR_TEXT), pandoc.Space(),
-        pandoc.Str("Dieses Kapitel steht wörtlich wie im Original ("), link,
-        pandoc.Str("), aber noch ohne Baustein-IDs."),
+        pandoc.Str(KLAUSELN), pandoc.Space(),
+        pandoc.Str("Wortlaut wie im Original ("), link, pandoc.Str(")."),
       })
       if docx then
         blocks:insert(pandoc.Para({ pandoc.Emph(text) }))
       else
-        text[1] = pandoc.Strong(pandoc.Str(NUR_TEXT))
-        text:extend({ pandoc.Space(), pandoc.Str("Feedback gibt es vorerst für das ganze Kapitel; Vorschläge zum Zuschnitt in Bausteine sind willkommen.") })
-        blocks:insert(pandoc.Div({ pandoc.Para(text) }, pandoc.Attr("", { "nur-text-hinweis" })))
+        text[1] = pandoc.Strong(pandoc.Str(KLAUSELN))
+        text:extend({ pandoc.Space(), pandoc.Str("Feedback gibt es je Unterkapitel; Vorschläge, wie die Klauseln als feine Bausteine geschnitten werden sollen, sind willkommen.") })
+        blocks:insert(pandoc.Div({ pandoc.Para(text) }, pandoc.Attr("", { "klauseln-hinweis" })))
       end
     elseif block.t == "Header" and block.classes:includes("platzhalter") then
       local seite = block.attributes["original-seite"]

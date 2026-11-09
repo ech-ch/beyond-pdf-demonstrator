@@ -615,9 +615,10 @@ $grid-margin-width: 375px;
 // Platzhalter unter nicht überführten Überschriften (E05,
 // filters/ech_platzhalter.lua): grauer Hinweiskasten. Die Klasse .platzhalter
 // selbst trägt Quarto auf das section-Element der Überschrift. Gleich der
-// Hinweis über Kap. 2–5, die nur als Text überführt sind (.nur-text-hinweis, AP26).
+// Hinweis über Kap. 2–5, deren Klauseln noch keine feinen Bausteine sind
+// (.klauseln-hinweis, AP27).
 #quarto-content div.platzhalter-hinweis,
-#quarto-content div.nur-text-hinweis {
+#quarto-content div.klauseln-hinweis {
   background: $ech-stripe;
   border-left: 3px solid $ech-muted;
   color: $ech-muted;

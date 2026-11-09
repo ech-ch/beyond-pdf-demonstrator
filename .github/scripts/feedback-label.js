@@ -55,8 +55,8 @@ function leseFormular(text) {
 }
 
 // Alle Baustein-IDs eines Standards aus der Quelle (Attribut bb="…"), dazu
-// die Kennungen für Feedback ohne Baustein (Attribut feedback-id="…": Anhang A,
-// Kap. 2–5 als Text, AP26). Die Standard-ID ist an dieser Stelle bereits gegen
+// die Kennungen für Feedback ohne Baustein (Attribut feedback-id="…", heute nur
+// Anhang A; bis AP27 auch Kap. 2–5). Die Standard-ID ist an dieser Stelle bereits gegen
 // STANDARD_ID geprüft.
 function leseBausteinIds(wurzel, standard) {
   const ordner = path.join(wurzel, standard);
@@ -84,7 +84,7 @@ function bausteinLabel(id, standard, quelle) {
   if (standard === null || quelle === null || id.length > ID_MAX) return UNBEKANNT;
   let label;
   if (quelle.ohneBaustein.has(id) && id.startsWith(`${standard}-`)) {
-    // ohne Baustein: Anhang A ergibt bb:referenzen (E15), Kap. 2 bb:kapitel-standard (AP26)
+    // ohne Baustein: Anhang A ergibt bb:referenzen (E15)
     label = `bb:${id.slice(standard.length + 1)}`;
   } else {
     const praefix = `${standard}-bb-`;
