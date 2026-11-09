@@ -260,10 +260,36 @@ function M.statustext(meta)
   return to_inlines(texte[status])
 end
 
--- Klartext eines Blocks: Absätze durch Leerzeile getrennt, Aufzählung mit «- ».
+-- Klartext eines Blocks: Absätze durch Leerzeile getrennt, Aufzählung mit «- »,
+-- Tabellen zeilenweise mit Tabulator zwischen den Zellen wie im Rohtext. Ein
+-- Absatz, der nur ein Bild ist, hat keinen Text; von einer Abbildung bleibt so
+-- die Bildunterschrift (AP27).
 local function block_text(block)
   if block.t == "Para" or block.t == "Plain" then
+    if #block.content > 0 and block.content:find_if(function(x)
+          return not (x.t == "Image" or x.t == "Space" or x.t == "SoftBreak" or x.t == "RawInline")
+        end) == nil then
+      return ""
+    end
     return stringify(block.content)
+  elseif block.t == "Table" then
+    local zeilen = {}
+    local function zeile(row)
+      local zellen = {}
+      for _, cell in ipairs(row.cells) do
+        local teile = {}
+        for _, b in ipairs(cell.contents) do table.insert(teile, block_text(b)) end
+        table.insert(zellen, table.concat(teile, " "))
+      end
+      table.insert(zeilen, table.concat(zellen, "\t"))
+    end
+    for _, row in ipairs(block.head.rows) do zeile(row) end
+    for _, body in ipairs(block.bodies) do
+      for _, row in ipairs(body.head) do zeile(row) end
+      for _, row in ipairs(body.body) do zeile(row) end
+    end
+    for _, row in ipairs(block.foot.rows) do zeile(row) end
+    return table.concat(zeilen, "\n")
   elseif block.t == "BulletList" or block.t == "OrderedList" then
     local punkte = {}
     for _, item in ipairs(block.content) do

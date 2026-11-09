@@ -122,6 +122,28 @@ Die Aufwände sind Schätzungen.
 - **Wert:** Feedback, Registry, Beziehungen und Steckbrief decken dann den ganzen Standard ab; die Wiederholungen aus 1.3.3 [DARF NICHT] werden sichtbar. Passt zu G (Abbildungen aus den Prozessschritten).
 - **Aufwand:** ca. 1 Tag nach dem Entscheid zu F26. E53 gilt: Auch dieser Zuschnitt ist ein initialer Vorschlag.
 
+### K. Automatische Antwort beim Schliessen eines Issues (E55)
+
+- **Stand:** grobe Idee aus dem Fremdtest (9.11.2026); die Projektleitung präzisiert Zweck und Ablauf.
+- **Was:** Wer Feedback gibt, soll erfahren, ob und was damit geschehen ist, ohne dass bei über 100 Rückmeldungen jede von Hand beantwortet werden muss. Beim Schliessen eines Issues schreibt eine Action je nach Status einen Standardtext, z.B. «Rückmeldung umgesetzt in Version x» mit Link auf die Änderung. Status über Labels (z.B. umgesetzt, abgelehnt, zurückgestellt, Duplikat) oder den Grund des Schliessens bei GitHub.
+- **Bezug zum Standard:** eCH-0003 verlangt in 1.3.5, die Ablehnung eines Änderungsvorschlags konkret und nachvollziehbar zu begründen; allgemeine Begründungen sind nicht zulässig. Für «umgesetzt» genügt ein Standardtext, für «abgelehnt» nicht: Die Action könnte dort eine Begründung verlangen.
+- **Aufwand:** ca. 1–2 Stunden, nach dem Muster der Action für die Feedback-Labels.
+
+### L. Übersicht der Rückmeldungen aus den Issues (E55)
+
+- **Stand:** grobe Idee aus dem Fremdtest (9.11.2026); die Projektleitung präzisiert Zweck und Ablauf.
+- **Was:** Eine Tabelle, automatisch aus den Issues: Stelle (Baustein), Wortlaut, Vorschlag, Status (offen, umgesetzt, abgelehnt usw.). Für die Verantwortlichen eines Standards als Arbeitsübersicht, für die Übersetzung als Kontext. Die Labels `bb:…` verbinden jedes Issue schon heute mit einem Baustein der Registry. Möglich als Seite «Rückmeldungen», die der Build erzeugt, oder als Tabellenansicht in GitHub Projects.
+- **Bezug zum Standard:** 1.3.5 verlangt, die Rückmeldungen zusammenzufassen und an die Antragstellenden zurückzumelden.
+- **Aufwand:** ca. ½ Tag; der Status kommt aus K.
+
+### M. Anhang D aus Änderungen und Rückmeldungen erzeugen (E55)
+
+- **Stand:** grobe Idee aus dem Fremdtest (9.11.2026); die Projektleitung präzisiert Zweck und Ablauf.
+- **Was:** Zwei Teile. (1) Erzeugt: welche Bausteine sich zwischen zwei Versionen geändert haben, neu sind oder wegfallen, über die Registry beider Versionen. (2) Vorschlag: Eine KI fasst daraus und aus den verknüpften Issues und Änderungen einen Text für Anhang D zusammen; Menschen prüfen und entscheiden.
+- **Bezug zum Standard:** 1.3.2 verlangt, die Änderungen zur Vorversion im Einzelnen aufzuführen und zu erläutern.
+- **Voraussetzung:** eine zweite Version (C) und Issues, die mit ihren Änderungen verknüpft sind (K, L).
+- **Aufwand:** offen; ein erster Versuch ca. 1 Tag nach C.
+
 ## Empfohlene Reihenfolge, wenn der MVP steht
 
 1. J (Kap. 2–5 in Bausteine), zuerst F26 klären; der MVP zeigt den ganzen Standard, aber Kap. 2–5 noch ohne Bausteine
@@ -130,5 +152,6 @@ Die Aufwände sind Schätzungen.
 4. A
 5. B, falls freigegeben; sonst D
 6. C, sobald V12.0.0 publiziert oder freigegeben ist
+7. K, L, M in dieser Reihenfolge, weil sie aufeinander aufbauen; M erst nach C
 
 Anhang C, Vorlage-Fassung 2025 und PDF aus Stufe 2 fallen damit nach hinten.

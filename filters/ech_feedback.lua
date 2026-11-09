@@ -9,7 +9,8 @@
 -- tools/pruefe.py vom Textvergleich ausnimmt.
 --
 --   grober Baustein     nach der Überschrift: Knopf «Feedback», Baustein-ID,
---                       «Alle Rückmeldungen»
+--                       «Alle Rückmeldungen»; Wortlaut ist der eigene Text
+--                       (AP27, siehe eigener_text)
 --   feiner Baustein     am Anfang des Blocks: Symbol am Rand, ID und «Alle
 --                       Rückmeldungen» beim Darüberfahren oder mit Tastatur
 --   Mehrfachbaustein    an jeder Fundstelle dasselbe Symbol, dazu am Ende des
@@ -31,7 +32,10 @@ local stringify = pandoc.utils.stringify
 local block_text, titel_ohne_nummer = common.block_text, common.titel_ohne_nummer
 
 local WORTLAUT_MAX = 2000   -- Zeichen (E37)
+local URL_MAX = 6000        -- bis hier antwortet GitHub normal (E37); tools/pruefe.py prüft dasselbe
 local LEER = "[ \t\r\n]"
+-- Wortlaut eines groben Bausteins ohne eigenen Text (AP27)
+local OHNE_EIGENEN_TEXT = "(Kein eigener Text. Rückmeldungen zu einzelnen Klauseln bitte über deren Symbol am Rand.)"
 
 local function urlencode(s)
   return (s:gsub("[^A-Za-z0-9%-%._~]", function(c)
@@ -45,12 +49,51 @@ end
 
 -- Klartext ------------------------------------------------------------------
 
--- Wortlaut für das Formular; über WORTLAUT_MAX Zeichen an einer Wortgrenze
--- gekürzt. pandoc.text zählt Zeichen, nicht Bytes.
-local function wortlaut(text)
-  if pandoc.text.len(text) <= WORTLAUT_MAX then return text end
-  local kurz = pandoc.text.sub(text, 1, WORTLAUT_MAX)
+-- Wortlaut für das Formular; über `max` Zeichen (WORTLAUT_MAX) an einer
+-- Wortgrenze gekürzt. pandoc.text zählt Zeichen, nicht Bytes.
+local function wortlaut(text, max)
+  max = max or WORTLAUT_MAX
+  if pandoc.text.len(text) <= max then return text end
+  local kurz = pandoc.text.sub(text, 1, max)
   return (kurz:gsub(LEER .. "+[^ \t\r\n]*$", "")) .. " …"
+end
+
+-- Eigener Text eines groben Bausteins (AP27): die Blöcke nach der Überschrift
+-- bis zur nächsten Überschrift, also ohne Unterkapitel, und ohne feine
+-- Bausteine, die einen eigenen Knopf haben. Von einer Abbildung bleibt die
+-- Bildunterschrift (block_text): Sie nennt die Abbildung, die sonst keinen
+-- Knopf hat. Gilt auch für Überschriften mit `feedback-id` (Anhang A: die
+-- Tabelle der Referenzen).
+-- Nicht Teil des Texts: Hinweise des Demonstrators und die versteckten
+-- Blöcke, die Quarto am Ende des Dokuments anhängt (Navigation, Metadaten)
+local KEIN_TEXT = { "platzhalter-hinweis", "nur-text-hinweis", "vorlagentext-hinweis", "hidden" }
+
+local function ohne_feine(blocks, teile)
+  for _, b in ipairs(blocks) do
+    if b.t == "Div" and b.attributes["bb"] then
+      -- feiner Baustein: eigener Knopf
+    elseif b.t == "Div" and (b.identifier:match("^quarto%-")
+        or b.classes:find_if(function(c) for _, x in ipairs(KEIN_TEXT) do if c == x then return true end end end)) then
+      -- kein Text des Standards
+    elseif b.t == "Div" then
+      ohne_feine(b.content, teile)
+    else
+      local t = block_text(b)
+      if t ~= "" then table.insert(teile, t) end
+    end
+  end
+  return teile
+end
+
+local function eigener_text(blocks, i)
+  local folgende = {}
+  for j = i + 1, #blocks do
+    if blocks[j].t == "Header" then break end
+    table.insert(folgende, blocks[j])
+  end
+  local teile = ohne_feine(folgende, {})
+  if #teile == 0 then return OHNE_EIGENEN_TEXT end
+  return table.concat(teile, "\n\n")
 end
 
 -- Kontext des Dokuments -----------------------------------------------------
@@ -81,14 +124,27 @@ local function kontext(meta)
   }
 end
 
-local function formular_url(k, felder)
-  local teile = { "template=feedback.yml" }
-  for _, feld in ipairs(felder) do
-    if feld[2] and feld[2] ~= "" then
-      table.insert(teile, feld[1] .. "=" .. urlencode(feld[2]))
+local function formular_url(k, felder, text)
+  local function url(w)
+    local teile = { "template=feedback.yml" }
+    for _, feld in ipairs(felder) do
+      if feld[2] and feld[2] ~= "" then
+        table.insert(teile, feld[1] .. "=" .. urlencode(feld[2]))
+      end
     end
+    if w then table.insert(teile, "wortlaut=" .. urlencode(w)) end
+    return k.repo .. "/issues/new?" .. table.concat(teile, "&")
   end
-  return k.repo .. "/issues/new?" .. table.concat(teile, "&")
+  if not text then return url(nil) end
+  -- Wortlaut höchstens WORTLAUT_MAX Zeichen; wird die URL trotzdem zu lang
+  -- (Umlaute und Satzzeichen kosten kodiert bis 6 Zeichen), weiter kürzen
+  local max = WORTLAUT_MAX
+  local u = url(wortlaut(text, max))
+  while #u > URL_MAX and max > 100 do
+    max = math.floor(max * 0.9)
+    u = url(wortlaut(text, max))
+  end
+  return u
 end
 
 local function alle_url(k, kurzname)
@@ -112,12 +168,12 @@ local function info_span(k, id, anker, kurzname)
 end
 
 -- Knopf auf der Zeile der Überschrift: grober Baustein, Anhang A
-local function bedienung_ueberschrift(k, id, anker, kurzname, name)
+local function bedienung_ueberschrift(k, id, anker, kurzname, name, text)
   local url = formular_url(k, {
     { "title", string.format("Feedback zu %s (%s)", name, id) },
     { "standard", k.standard }, { "baustein", id }, { "stand", k.stand },
     { "stelle", k.seite .. "#" .. anker },
-  })
+  }, text)
   local knopf = feedback_a(url, "baustein-knopf", string.format('data-feedback-bb="%s"', esc(id)),
     string.format("Feedback zu %s (%s) geben", name, id),
     SYMBOL .. ' <span class="baustein-knopf-text">Feedback</span>')
@@ -131,8 +187,8 @@ local function bedienung_fein(k, id, kurzname, name, text)
   local url = formular_url(k, {
     { "title", string.format("Feedback zu %s (%s)", name, id) },
     { "standard", k.standard }, { "baustein", id }, { "stand", k.stand },
-    { "stelle", k.seite .. "#" .. id }, { "wortlaut", wortlaut(text) },
-  })
+    { "stelle", k.seite .. "#" .. id },
+  }, text)
   local symbol = feedback_a(url, "baustein-symbol", string.format('data-feedback-bb="%s"', esc(id)),
     string.format("Feedback zu %s (%s) geben", name, id), SYMBOL)
   return pandoc.RawBlock("html", string.format(
@@ -207,15 +263,16 @@ function Pandoc(doc)
 
   local function bearbeite(blocks, stelle)
     local ergebnis = pandoc.Blocks({})
-    for _, b in ipairs(blocks) do
+    for i, b in ipairs(blocks) do
       if b.t == "Header" then
         stelle = { nummer = b.attributes["number"], anker = b.identifier, titel = titel_ohne_nummer(b) }
         ergebnis:insert(b)
         local bb, fid = b.attributes["bb"], b.attributes["feedback-id"]
         if bb then
-          ergebnis:insert(bedienung_ueberschrift(k, bb, bb, kurzname(bb), titel_ohne_nummer(b)))
+          ergebnis:insert(bedienung_ueberschrift(k, bb, bb, kurzname(bb), titel_ohne_nummer(b), eigener_text(blocks, i)))
         elseif fid and not b.classes:includes("platzhalter") then
-          ergebnis:insert(bedienung_ueberschrift(k, fid, b.identifier, fid:sub(#k.standard + 2), titel_ohne_nummer(b)))
+          ergebnis:insert(bedienung_ueberschrift(k, fid, b.identifier, fid:sub(#k.standard + 2), titel_ohne_nummer(b),
+            eigener_text(blocks, i)))
         end
       elseif b.t == "Div" and b.attributes["bb"] then
         local bb = b.attributes["bb"]

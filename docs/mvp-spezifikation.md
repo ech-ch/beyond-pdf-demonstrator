@@ -709,7 +709,7 @@ Solange `vorschlag: true` steht, trägt jeder Abschnitt mit Texten oder Auswahle
 | Baustein-ID | vorbefüllt | z.B. `ech-0003-bb-schema-eigene-version`; `ech-0003-referenzen` bei Anhang A; `ech-0003-kapitel-standard` usw. bei Kap. 2–5 (E54); leer beim Standard als Ganzes |
 | Stand | vorbefüllt | «eCH-0003 V11.1.0, Build 2026-11-09 (a05c2c3)» |
 | Link zur Stelle | vorbefüllt | `…/ech-0003/v11.1.0/de/index.html#<baustein-id>` |
-| Wortlaut | vorbefüllt, nur bei feinen Bausteinen | Text der Klausel; über 2 000 Zeichen gekürzt, mit «…» |
+| Wortlaut | vorbefüllt | feiner Baustein: Text der Klausel; grober Baustein und Anhang A: eigener Text ohne die feinen Bausteine, mit Bildunterschriften, ohne eigenen Text ein Hinweis (E56); über 2 000 Zeichen gekürzt, mit «…», und so weit, dass die URL höchstens 6 000 Zeichen hat |
 | Art | Auswahl, Pflicht | Zum Inhalt / Zum Zuschnitt oder zu Beziehungen / Zum Demonstrator / Frage |
 | Kommentar | Text, Pflicht | |
 | Vorschlag | Text, freiwillig | |
@@ -850,7 +850,8 @@ Was heute nicht fertig wird, rückt auf Mo 9.11. vormittags.
 |---|---|---|
 | AP14 | Registry-Filter `bausteine.json` mit Fundstelle, Herkunft, Verbindlichkeit und Beziehungen; F43 | E09, E10, E30 |
 | AP15 | Feinschliff Deckblatt (Tabellenformat aus dem Word-Original), README fertig | E17, E36 |
-| AP16 | Fremdtest mit einer unbeteiligten Person, nach der Stichzeit | Stufe 1 DoD, E47 |
+| AP16 | Fremdtest mit einer unbeteiligten Person, nach der Stichzeit. Erledigt am 9.11.; Ergebnis und Entscheid in E55 | Stufe 1 DoD, E47, E55 |
+| AP27 | Nachbesserungen aus dem Fremdtest (E55): (1) Wortlaut beim Knopf des groben Bausteins, umgesetzt 9.11., nicht committet (E56); (2) Feedback je Unterkapitel in Kap. 2–5 als grobe Bausteine, in Arbeit | E55, E56 |
 | AP17 | Inhalt des Materials gemeinsam festlegen und erstellen (Informationen, Visualisierungen, Storyline, Screenshots, QR-Code); Tag `v0.3-material` (E44); **abends an den Vorgesetzten** | E36 |
 | — | F45 entscheiden: Was von der Projektdoku bleibt öffentlich? | E36 |
 
@@ -874,7 +875,7 @@ Was im Material gezeigt wird, muss ab Montagabend stabil sein. Für Sichtbares l
 | # | Aufgabe | Wann |
 |---|---|---|
 | D4 | Kap. 7 im Word neben dem PDF auf Struktur und Layout durchsehen | vor AP17 |
-| AP16 | Vertrauensperson für den Fremdtest anfragen; sie kennt den Ablauf noch nicht | Mo 9.11. |
+| AP16 | Vertrauensperson für den Fremdtest anfragen; sie kennt den Ablauf noch nicht | erledigt 9.11. (E55) |
 
 ### Abhängigkeiten
 

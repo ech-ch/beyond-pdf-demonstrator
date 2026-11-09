@@ -50,6 +50,9 @@ Ausgabe (gerendertes HTML und Word, je überführtem Kapitel):
      Standard, Umkehrungen vollständig, keine Selbstverweise
   5. Feedback (E37, E39): je Fundstelle genau ein Link, ein Link zum Standard
      als Ganzes, keine `labels=` in der URL, Wortlaut gleich wie der Rohtext;
+     der Knopf eines groben Bausteins und einer Überschrift mit feedback-id hat
+     einen Wortlaut (AP27): jeder Absatz daraus im Rohtext, kein Wortlaut eines
+     feinen Bausteins darin, sonst der Hinweis «Kein eigener Text»;
      die Bedienelemente stehen im HTML und sind vom Textvergleich ausgenommen;
      im Word gibt es keine
      Kapitel als Text ohne Bausteine (AP26, E54): Hinweis «Text überführt, noch
@@ -110,7 +113,9 @@ LEERRAUM = re.compile(r"[ \t\r\n]+")   # nur ASCII-Leerraum, nicht U+00A0
 LABEL_MAX = 50                         # Grenze von GitHub für Labels (E38)
 URL_MAX = 6000                         # bis hier antwortet GitHub normal (E37)
 WORTLAUT_MAX = 2000                    # Zeichen (E37)
-FEEDBACK_LINK = re.compile(r'<a class="baustein-feedback[^"]*" data-feedback-(bb|standard)="([^"]*)" href="([^"]*)"')
+FEEDBACK_LINK = re.compile(r'<a class="baustein-feedback([^"]*)" data-feedback-(bb|standard)="([^"]*)" href="([^"]*)"')
+# Wortlaut eines groben Bausteins ohne eigenen Text (filters/ech_feedback.lua, AP27)
+OHNE_EIGENEN_TEXT = "(Kein eigener Text. Rückmeldungen zu einzelnen Klauseln bitte über deren Symbol am Rand.)"
 
 
 # --- Befunde -----------------------------------------------------------------
@@ -718,14 +723,30 @@ def vergleiche(name: str, ist: str, soll: str, quelle: Path, b: Befunde, max_ste
         b.fehler_(f"{name}: {len(stellen) - max_stellen} weitere Abweichungen", quelle)
 
 
-def feedback_links(t: str) -> list[tuple[str, str, str, dict]]:
-    """(Art, ID, URL, Parameter) je Feedback-Link eines HTML-Ausschnitts."""
+def feedback_links(t: str) -> list[tuple[str, str, str, dict, bool]]:
+    """(Art, ID, URL, Parameter, Knopf?) je Feedback-Link eines HTML-Ausschnitts.
+    Knopf: auf der Zeile einer Überschrift (grober Baustein, feedback-id,
+    Standard), sonst das Symbol eines feinen Bausteins."""
     links = []
     for m in FEEDBACK_LINK.finditer(t):
-        url = html.unescape(m[3])
+        url = html.unescape(m[4])
         parameter = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query, keep_blank_values=True)
-        links.append((m[1], html.unescape(m[2]), url, {k: v[0] for k, v in parameter.items()}))
+        links.append((m[2], html.unescape(m[3]), url, {k: v[0] for k, v in parameter.items()},
+                      "baustein-knopf" in m[1].split()))
     return links
+
+
+def wortlaut_teile(text: str) -> tuple[list[str], bool]:
+    """Absätze eines Wortlauts, normalisiert und ohne «- » der Aufzählung; ob gekürzt."""
+    gekuerzt = text.endswith(" …")
+    if gekuerzt:
+        text = text[:-2]
+    teile = []
+    for absatz in text.split("\n\n"):
+        zeilen = [z[2:] if z.startswith("- ") else z for z in absatz.split("\n")]
+        if norm("\n".join(zeilen)):
+            teile.append(norm("\n".join(zeilen)))
+    return teile, gekuerzt
 
 
 def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befunde) -> None:
@@ -740,7 +761,7 @@ def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befu
     for bb in re.findall(r'<(?:div|section)\b[^>]*\sdata-(?:bb|feedback-id)="([^"]+)"', t):
         fundstellen[bb] = fundstellen.get(bb, 0) + 1
     je_id: dict[str, int] = {}
-    for art, wert, _, _ in links:
+    for art, wert, _, _, _ in links:
         if art == "bb":
             je_id[wert] = je_id.get(wert, 0) + 1
     for bb in sorted(set(fundstellen) | set(je_id)):
@@ -750,8 +771,16 @@ def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befu
         b.fehler_("HTML: Es braucht genau einen Knopf «Feedback zum Standard» (E39)", html_pfad)
 
     # jeder Link
-    for art, wert, url, p in links:
+    knoepfe_mit_wortlaut, ohne_text, gekuerzt_n = 0, 0, 0
+    for art, wert, url, p, knopf in links:
         laengste = max(laengste, len(url))
+        if art == "bb" and knopf:
+            if not p.get("wortlaut"):
+                b.fehler_(f"HTML: Knopf zu «{wert}» ohne Wortlaut (AP27)", html_pfad)
+            else:
+                knoepfe_mit_wortlaut += 1
+                ohne_text += p["wortlaut"] == OHNE_EIGENEN_TEXT
+                gekuerzt_n += p["wortlaut"].endswith(" …")
         name = wert or "Standard"
         if not url.startswith(ziel) or p.get("template") != "feedback.yml":
             b.fehler_(f"HTML: Feedback-Link zu «{name}» führt nicht aufs Formular: {url[:80]}", html_pfad)
@@ -802,15 +831,29 @@ def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befu
                 or "noch nicht in Bausteine zerlegt" in mit:
             b.fehler_(f"{kap['name']}: Bedienelemente stehen im Klartext (html_ignorieren)", html_pfad)
         soll = rohtext(WURZEL / kap["rohtext"], None)
-        for art, wert, _, p in feedback_links(ausschnitt):
+        im_kapitel = feedback_links(ausschnitt)
+        feine = [wortlaut_teile(p["wortlaut"])[0] for _, _, _, p, knopf in im_kapitel if not knopf and p.get("wortlaut")]
+        for art, wert, _, p, knopf in im_kapitel:
             text = p.get("wortlaut")
             if text is None:
                 continue
-            gekuerzt = text.endswith(" …")
             if len(text) > WORTLAUT_MAX + 2:
                 b.fehler_(f"HTML: Wortlaut von «{wert}» hat {len(text)} Zeichen (höchstens {WORTLAUT_MAX}, E37)", html_pfad)
-            zeilen = [z[2:] if z.startswith("- ") else z for z in (text[:-2] if gekuerzt else text).split("\n")]
-            if norm("\n".join(zeilen)) not in soll:
+            if knopf:
+                # grober Baustein, feedback-id: eigener Text in Absätzen, ohne feine Bausteine (AP27)
+                if text == OHNE_EIGENEN_TEXT:
+                    continue
+                teile, _ = wortlaut_teile(text)
+                for teil in teile:
+                    if teil not in soll:
+                        b.fehler_(f"HTML: Wortlaut von «{wert}» weicht vom Rohtext ab: «{teil[:60]}…» (E19, AP27)", html_pfad)
+                ganz = " ".join(teile)
+                for f in feine:
+                    if f and f[0][:80] in ganz:
+                        b.fehler_(f"HTML: Wortlaut von «{wert}» enthält den feinen Baustein «{f[0][:50]}…» (AP27)", html_pfad)
+                continue
+            teile, _ = wortlaut_teile(text)
+            if " ".join(teile) not in soll:
                 b.fehler_(f"HTML: Wortlaut von «{wert}» weicht vom Rohtext ab (E19)", html_pfad)
 
     # Im Word gibt es kein Feedback
@@ -819,7 +862,9 @@ def pruefe_feedback(std: dict, t: str, html_pfad: Path, docx_pfad: Path, b: Befu
             xml = z.read(teil).decode("utf-8")
             if "/issues/new" in xml or "Alle Rückmeldungen" in xml or "baustein-feedback" in xml:
                 b.fehler_(f"Word: Feedback-Link in {teil} (E39)", docx_pfad)
-    print(f"Feedback: {len(links)} Links, {sum(fundstellen.values())} Fundstellen, längste URL {laengste} Zeichen")
+    print(f"Feedback: {len(links)} Links, {sum(fundstellen.values())} Fundstellen, längste URL {laengste} Zeichen "
+          f"(höchstens {URL_MAX}); {knoepfe_mit_wortlaut} Knöpfe mit Wortlaut, davon {ohne_text} «Kein eigener Text» "
+          f"und {gekuerzt_n} gekürzt")
 
 
 def lies_quelle(std: dict) -> list["Baustein"]:

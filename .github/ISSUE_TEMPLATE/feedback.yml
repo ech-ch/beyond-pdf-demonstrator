@@ -39,7 +39,7 @@ body:
     id: wortlaut
     attributes:
       label: Wortlaut
-      description: Vorbefüllt bei einzelnen Regeln. Hält fest, worauf sich Ihr Feedback bezieht.
+      description: Vorbefüllt bei Bausteinen, bei einem Kapitel mit dessen eigenem Text (ohne die einzelnen Regeln, die ein eigenes Symbol haben), bei langen Texten gekürzt. Hält fest, worauf sich Ihr Feedback bezieht.
   - type: dropdown
     id: art
     attributes:
